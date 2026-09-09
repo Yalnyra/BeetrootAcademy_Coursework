@@ -1,0 +1,19 @@
+* text=auto eol=lf
+
+*.c      text
+*.h      text
+*.cpp    text
+*.hpp    text
+*.ini    text
+*.md     text
+*.json   text
+*.ld     text linguist-language=Linker-Script
+*.s      text
+*.S      text
+
+*.pdf    binary
+*.png    binary
+*.jpg    binary
+*.bin    binary
+*.hex    binary
+*.elf    binary
