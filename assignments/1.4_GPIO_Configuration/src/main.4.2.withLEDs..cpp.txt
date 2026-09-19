@@ -1,0 +1,73 @@
+/**
+ * @author Yevhenii Vinokur @ 2026
+ * @file    main.cpp
+ * @brief   Pull-up, pull-down and floating pin demo, via button activating an LED
+ * Pull-up - Outputs HIGH on button press
+ * Pull-down - Outputs HIGH by default, outputs LOW on button press (Short circuit warning!)
+ * Floating - No control over input, activated by free-floating flux 
+ *
+ */
+
+#include <Arduino.h>
+#include <Adafruit_NeoPixel.h>
+#include <Arduino.h>
+
+const int buttonPullUp = 14;
+const int ledPullUp = 6;
+const int buttonPullDown = 12;
+const int ledPullDown = 5;
+const int buttonFloat = 15;
+const int ledFloat = 4;
+
+unsigned long previousMillis = 0;
+const long interval = 50;
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(buttonPullUp, INPUT_PULLUP);
+  pinMode(buttonPullDown, INPUT_PULLDOWN);
+  pinMode(buttonFloat, INPUT);
+
+  pinMode(ledPullUp, OUTPUT);
+  pinMode(ledPullDown, OUTPUT);
+  pinMode(ledFloat, OUTPUT);
+}
+
+void loop()
+{
+
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval)
+  {
+    previousMillis = currentMillis;
+
+    int upVal = digitalRead(buttonPullUp);
+    int downVal = digitalRead(buttonPullDown);
+    int floatVal = digitalRead(buttonFloat);
+    
+    if (upVal) {
+      digitalWrite(ledPullUp,1);
+    }else{
+      digitalWrite(ledPullUp,0);
+    }
+
+    if (downVal) {
+      digitalWrite(ledPullDown,1);
+    } else{
+      digitalWrite(ledPullDown,0);
+    }
+    
+    if (floatVal) {
+      digitalWrite(ledFloat,1);
+    } else{
+      digitalWrite(ledFloat,0);
+    }
+
+
+    Serial.printf("PullUp %d | ", upVal);
+    Serial.printf("PullDown %d | ", downVal);
+    Serial.printf("PullFloat %d \n", floatVal);
+  }
+}
