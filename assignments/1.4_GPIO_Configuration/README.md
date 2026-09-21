@@ -85,6 +85,8 @@ pio device monitor      # serial console @ 115200
 
 
 
-## Status
-
-- [] TODO 
+## TODO
+- [] Add hardware requirements
+- [] Add circuit diagram 
+- [] Add code function comments
+- [] Add debugging log (First no button activation at all, then wrong activation pattern due to pull-down misconfiguration)
