@@ -54,7 +54,7 @@ void setup()
 
   // In ESP32 Arduino, the GPIO number is the interrupt ID; No mapping needed
   attachInterrupt(buttonBoot, buttonBootPressed, FALLING);
-  attachInterrupt(buttonPullUp, buttonPullUpPressed, RISING);
+  attachInterrupt(buttonPullUp, buttonPullUpPressed, FALLING);
 }
 
 void loop()
@@ -88,10 +88,10 @@ void loop()
           
       } break;
       // Never should occur, but if it does, set valid state & skip
-      default: {
-        state = LEDStateSYNCHRONOUS;
-        delay(200);
-      } break;
+      // default: {
+      //   state = LEDStateSYNCHRONOUS;
+      //   delay(200);
+      // } break;
     }
     // Check button press & LED state for Debugging 
 
