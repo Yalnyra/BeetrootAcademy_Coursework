@@ -3,8 +3,20 @@
 > EMB_25 · Assignment <NN> — <topic>
 > Handout: [`assignments/EMB_25_HW<NN>.pdf`](../../assignments/EMB_25_HW<NN>.pdf)
 
-## Task (Модуль 1.4: Два світлодіоди, зовнішня кнопка та BOOT (ESP32))
 
+## Video Demo
+
+
+<video controls width="600">
+  <source src="./docs/Assignment_1.4.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+## Image of the Schema
+
+![Schema Image](docs/Assignment_1.4_schema.png)
+
+## Task (Модуль 1.4: Два світлодіоди, зовнішня кнопка та BOOT (ESP32))
 Мета роботи: Навчитися конфігурувати цифрові виводи мікроконтролера в режими входу та виходу, освоїти роботу з вбудованою підтяжкою (INPUT_PULLUP).
 
 ### 1. Апаратні вимоги (Схемотехніка):
@@ -41,15 +53,14 @@
 
 | Item | Detail |
 |------|--------|
-| Board | ESP32-S3-DevKitC-1 N16R8 (16 MB flash, 8 MB PSRAM) |
-| Programmer | Native USB (CDC) |
-| Extra parts | <sensors, resistors, wiring> |
+| Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
+| Resistors | x2 220 Om |
+| Button    | x1 |
+| LEDs      | x2 2.2V (Green) | 
 
 ### Wiring
 
-| Signal | MCU pin | Peripheral pin |
-|--------|---------|----------------|
-|        |         |                |
+[Assignment 4.1 Schema link](https://wokwi.com/projects/475852131057232897)
 
 ## Build & flash
 
@@ -73,20 +84,94 @@ pio device monitor      # serial console @ 115200
  При замиканні Кнопки на пін 14: PullUp 0 (Замикає)
  Пр
 
-Цікаво: 
-Спробував під'єднати послідовно до кнопок Pull-Up (Pin 14) та Pull-down (Pin 12) пінів додаткові світлодіоди для перевірки роботи GPIO під навантаженням струму. Це зазвичай не рекомендовано, бо GPIO виконують роль цифрової логіки, яка не потребує майже ніякого струму для керування. А отже не матиме достатньо потужності, щоб живити і LED, і Pull-up/Pull-down резистор в мультиплексері.  
+### Interesting observations: 
+- Спробував під'єднати послідовно до кнопок Pull-Up (Pin 14) та Pull-down (Pin 12) пінів додаткові світлодіоди для перевірки роботи GPIO під навантаженням струму. 
+
+Це зазвичай не рекомендовано, бо GPIO виконують роль цифрової логіки, яка не потребує майже ніякого струму для керування. А отже не матиме достатньо потужності, щоб живити і LED, і Pull-up/Pull-down резистор в мультиплексері.  
 
 При послідовному під'єднанні резистору на 220 Ом та LED вистачає напруги, щоб світився світлодіод при замкненні кнопки. АЛЕ зміни стану не відбувається 
+
 Тобто завжди входи залишаються у стані PullUp 1 | PullDown 0 
 Думаю, що GPIO мають замалу напругу для одночасного живлення LED та утримання напруги на цифровому вході на достатньому рівні для досягнення рівня напруги HIGH або LOW.
 
 Тобто у випадку Pull-up напруга не піднімається достатньо вище рівня землі через падіння з боку LED.
 А у випадку Pull-down світлодіод понижує напругу на референсі GPIO, через що абсолютне значення напруги відносно входу 3V3 при замиканні кола не реєструється достатньо низьким. 
 
+- Помилки з налаштуванням кнопок разом у Pull-up режимі
+
+1. Перша спроба: кнопка BOOT налаштована у режим Pull-down - в обох станах вхід залишається 0 відносно референсної напруги, кнопка ніколи не переходить в режим HIGH, триггер RISING ніколи не активується 
+
+```cpp
+
+void setup()
+{
+  Serial.begin(9600);
+  // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
+  // idle = HIGH, press pulls it LOW.
+  pinMode(buttonPullUp, INPUT_PULLUP);
+  pinMode(buttonBoot, INPUT_PULLDOWN);
+
+  pinMode(ledLeft, OUTPUT);
+  pinMode(ledRight, OUTPUT);
+
+  // In ESP32 Arduino, the GPIO number is the interrupt ID; No mapping needed
+  // RISING is a trigger of LOW-to-HIGH transition 
+  attachInterrupt(buttonBoot, buttonBootPressed, FALLING);
+  attachInterrupt(buttonPullUp, buttonPullUpPressed, RISING);
+}
+
+```
+
+2. BOOT Кнопка - Режим PULLDOWN, Триггер на RISING
+
+Зміна BOOT pinMode на `INPUT_PULLUP` вмикає активацію переривання, але не вимикає неочікуваної поведінки:
+
+Спостерігаємо триггер стану LEDStateSERIAL (1) в одному такті, але вже наступного такту (Напевно через брязкіт фронту) перехід назад у стан LEDStateSYNCHRONOUS (0)
+
+Вихід У терміналі: 
+
+```
+
+| State 0 | State 1 | State 1 | State 1 | State 0 | State 0 | State 1 | State 1 | State 0 | State 1 | State 1 | State 1 | State 1 | State 0 | State 0 | State 1 | State 1 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | State 0 | 
+
+```
+
+3. Необхідна заміна: Замінити тригер кнопки BOOT з `RISING` на `FALLING`
+
+ Тільки схема (pinMode INPUT_PULLUP + Pull-down підключення) почала видавати HIGH-to-LOW transition в обох випадках:
+Єдина заміна в коді: `attachInterrupt(buttonPullUp, buttonPullUpPressed, RISING);`
+
+
+```cpp
+ 
+void setup()
+{
+  Serial.begin(9600);
+  // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
+  // idle = HIGH, press pulls it LOW.
+  pinMode(buttonPullUp, INPUT_PULLUP);
+  pinMode(buttonBoot, INPUT_PULLUP);
+
+  pinMode(ledLeft, OUTPUT);
+  pinMode(ledRight, OUTPUT);
+
+  // In ESP32 Arduino, the GPIO number is the interrupt ID; No mapping needed
+  // FALLING is a trigger of HIGH-to-LOW transition 
+  // (Assumes transition high to low)
+  attachInterrupt(buttonBoot, buttonBootPressed, FALLING);
+  attachInterrupt(buttonPullUp, buttonPullUpPressed, FALLING);
+}
+
+```
+## What I would add
+
+Змінити процедуру main.cpp під парадигму Event-driven Programming
+
+![Схематичний опис архітектури](docs/Main.cpp_Architecture.png)
 
 
 ## TODO
-- [] Add hardware requirements
-- [] Add circuit diagram 
-- [] Add code function comments
+- [x] Add hardware requirements
+- [x] Add circuit diagram 
+- [x] Add code function comments
 - [] Add debugging log (First no button activation at all, then wrong activation pattern due to pull-down misconfiguration)
