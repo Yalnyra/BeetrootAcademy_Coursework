@@ -1,10 +1,9 @@
 /**
  * @author Yevhenii Vinokur @ 2026
  * @file    main.cpp
- * @brief   Pull-up, pull-down and floating pin demo, via button activating an LED
- * Pull-up Button - Externally attached to a GPIO pin, Outputs HIGH on button press
- * BOOT - Internal button, already attached in pull-down mode to the screen 
- * Two flashing modes 
+ * @brief   Control the binary state of the LED flashing routine via an external button interrupt
+ * Possible to add more states via expanding the LEDState_t enum struct
+ * 
  */
 
 #include <Arduino.h>
@@ -12,14 +11,19 @@
 #include <Arduino.h>
 
 /* Static definitions */
+// VCC of pull-up button
 const int buttonPullUp = 38;
+// GPIO 0 by default 
 const int buttonBoot = 0;
 // LED left of the button 
 const int ledLeft = 4;
 // LED right of the button 
 const int ledRight = 5;
 
-
+/* Two possible states 
+* 0 is Synchronous
+* 1 is Sequential (off-beat)
+*/
 typedef enum LEDState_t {
   LEDStateSYNCHRONOUS,
   LEDStateSERIAL,
@@ -28,15 +32,23 @@ typedef enum LEDState_t {
 /* Program state */
 unsigned long previousMillis = 0;
 const long interval = 50;
-// Controls to which state the button is held 
+// Controls the main LED routine 
+// 0 is Always default value upon reset 
 static volatile LEDState_t state = LEDStateSYNCHRONOUS;
 
+
+
+/**
+* @brief Changes LEDs State to flash in resonance with delay of 1 cycle
+* ІSR for on-PCB BOOT button
+*/
 void buttonBootPressed(void){
   state = LEDStateSERIAL;
 }
 
 /**
-* @brief ISR for pressing a button 
+* @brief Changes LEDs State to flash simulatenously
+* ІSR for external pin38 button
 */
 void buttonPullUpPressed(void){
   state = LEDStateSYNCHRONOUS;
@@ -46,6 +58,8 @@ void buttonPullUpPressed(void){
 void setup()
 {
   Serial.begin(9600);
+  // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
+  // idle = HIGH, press pulls it LOW.
   pinMode(buttonPullUp, INPUT_PULLUP);
   pinMode(buttonBoot, INPUT_PULLUP);
 
@@ -53,6 +67,8 @@ void setup()
   pinMode(ledRight, OUTPUT);
 
   // In ESP32 Arduino, the GPIO number is the interrupt ID; No mapping needed
+  // FALLING is a trigger of HIGH-to-LOW transition 
+  // (Assumes transition high to low)
   attachInterrupt(buttonBoot, buttonBootPressed, FALLING);
   attachInterrupt(buttonPullUp, buttonPullUpPressed, FALLING);
 }
