@@ -163,6 +163,38 @@ void setup()
 }
 
 ```
+
+### Instructor's request: Implement changes w/o interrupts
+
+Помилкою було підключення PIN 14 > Кнопка > GND. Це підключення Pull-down - При чому що небезпечно, бо при неправильному підключенні (Напряму від 3v3, не GND) - Створює КЗ, що триггерить RESET всього пристрою.
+
+Поміняв код, щоб перевіряти лише раз за цикл переривання. Поміняв підключення зовнішньої кнопки на Pull-up
+
+```cpp
+  // 1 when External button is pressed
+  int UpButtonVal = digitalRead(buttonPullUp);
+  // 0  when BOOT button is pressed
+  int BootButtonVal = digitalRead(buttonBoot);
+
+  
+  if (UpButtonVal && BootButtonVal){
+    state = LEDStateSYNCHRONOUS;
+  }
+  if (!UpButtonVal && !BootButtonVal){
+    state = LEDStateSERIAL;
+  }
+```
+
+Додав для дебаггінгу лог:
+
+```cpp
+    // Check button press & LED state for Debugging 
+    Serial.printf("\n Timestamp: %d | ", currentMillis);
+    Serial.printf("\n External Button: %d | ", UpButtonVal);
+    Serial.printf("\n BOOT Button: %d | ", BootButtonVal);
+    Serial.printf("\n State %d | ", state);
+```
+
 ## What I would add
 
 Змінити процедуру main.cpp під парадигму Event-driven Programming
@@ -174,4 +206,4 @@ void setup()
 - [x] Add hardware requirements
 - [x] Add circuit diagram 
 - [x] Add code function comments
-- [] Add debugging log (First no button activation at all, then wrong activation pattern due to pull-down misconfiguration)
+- [x] Add debugging log (First no button activation at all, then wrong activation pattern due to pull-down misconfiguration)
