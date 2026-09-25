@@ -7,18 +7,16 @@
  */
 
 #include <Arduino.h>
-#include <Adafruit_NeoPixel.h>
-#include <Arduino.h>
 
 /* Static definitions */
 // VCC of pull-up button
-const int buttonPullUp = 38;
+const int buttonPullUp = 21;
 // GPIO 0 by default 
 const int buttonBoot = 0;
 // LED left of the button 
-const int ledLeft = 4;
+const int ledLeft = 15;
 // LED right of the button 
-const int ledRight = 5;
+const int ledRight = 16;
 
 /* Two possible states 
 * 0 is Synchronous
@@ -60,7 +58,7 @@ void setup()
   Serial.begin(9600);
   // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
   // idle = HIGH, press pulls it LOW.
-  pinMode(buttonPullUp, INPUT_PULLUP);
+  pinMode(buttonPullUp, INPUT_PULLDOWN);
   pinMode(buttonBoot, INPUT_PULLUP);
 
   pinMode(ledLeft, OUTPUT);
@@ -69,8 +67,12 @@ void setup()
   // In ESP32 Arduino, the GPIO number is the interrupt ID; No mapping needed
   // FALLING is a trigger of HIGH-to-LOW transition 
   // (Assumes transition high to low)
-  attachInterrupt(buttonBoot, buttonBootPressed, FALLING);
-  attachInterrupt(buttonPullUp, buttonPullUpPressed, FALLING);
+
+  
+  // Edit (after commit 5d87db8c60ceb1d08626b65f535b7fc7374d7c62)
+  // Implement logical switch; remove handling via interrupts
+  // attachInterrupt(buttonBoot, buttonBootPressed, RISING);
+  // attachInterrupt(buttonPullUp, buttonPullUpPressed, FALLING);
 }
 
 void loop()
@@ -78,12 +80,25 @@ void loop()
 
   unsigned long currentMillis = millis();
 
+  // 1 when External button is pressed
+  int UpButtonVal = digitalRead(buttonPullUp);
+  // 0  when BOOT button is pressed
+  int BootButtonVal = digitalRead(buttonBoot);
+
+  
+  if (UpButtonVal && BootButtonVal){
+    state = LEDStateSYNCHRONOUS;
+  }
+  if (!UpButtonVal && !BootButtonVal){
+    state = LEDStateSERIAL;
+  }
+
+
   if (currentMillis - previousMillis >= interval)
   {
     previousMillis = currentMillis;
 
-    // TODO: Check bug: does calling an interrupt inside switch brackets 
-    // cause program to enter both sync & serial if statements? 
+    
     switch (state){
       case LEDStateSYNCHRONOUS: {
           // Handle simultaneous LED flashing
@@ -92,16 +107,18 @@ void loop()
           delay(200);      
           digitalWrite(ledLeft, 0);
           digitalWrite(ledRight, 0);
+          delay(200);
       } break;
       case LEDStateSERIAL: {
           // Handle light-in-the-tunnel LED flashing
 
           digitalWrite(ledLeft, 1);
           digitalWrite(ledRight, 0);
-          delay(200);
+          // Increase delay
+          delay(1000);
           digitalWrite(ledLeft, 0);
           digitalWrite(ledRight, 1);
-          
+          delay(1000);          
       } break;
       // Never should occur, but if it does, set valid state & skip
       // default: {
@@ -110,10 +127,10 @@ void loop()
       // } break;
     }
     // Check button press & LED state for Debugging 
+    Serial.printf("\n Timestamp: %d | ", currentMillis);
+    Serial.printf("\n External Button: %d | ", UpButtonVal);
+    Serial.printf("\n BOOT Button: %d | ", BootButtonVal);
+    Serial.printf("\n State %d | ", state);
 
-    Serial.printf("State %d | ", state);
-
-    //Reset LED state 
-    delay(200);
   }
 }
