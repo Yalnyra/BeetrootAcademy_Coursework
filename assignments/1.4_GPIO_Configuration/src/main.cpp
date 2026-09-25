@@ -93,39 +93,38 @@ void loop()
     state = LEDStateSERIAL;
   }
 
+  switch (state){
+    case LEDStateSYNCHRONOUS: {
+        // Handle simultaneous LED flashing
+        digitalWrite(ledLeft, 1);
+        digitalWrite(ledRight, 1);
+        delay(200);      
+        digitalWrite(ledLeft, 0);
+        digitalWrite(ledRight, 0);
+        delay(200);
+    } break;
+    case LEDStateSERIAL: {
+        // Handle light-in-the-tunnel LED flashing
+
+        digitalWrite(ledLeft, 1);
+        digitalWrite(ledRight, 0);
+        // Increase delay
+        delay(1000);
+        digitalWrite(ledLeft, 0);
+        digitalWrite(ledRight, 1);
+        delay(1000);          
+    } break;
+    // Never should occur, but if it does, set valid state & skip
+    // default: {
+    //   state = LEDStateSYNCHRONOUS;
+    //   delay(200);
+    // } break;
+  }
 
   if (currentMillis - previousMillis >= interval)
   {
     previousMillis = currentMillis;
-
     
-    switch (state){
-      case LEDStateSYNCHRONOUS: {
-          // Handle simultaneous LED flashing
-          digitalWrite(ledLeft, 1);
-          digitalWrite(ledRight, 1);
-          delay(200);      
-          digitalWrite(ledLeft, 0);
-          digitalWrite(ledRight, 0);
-          delay(200);
-      } break;
-      case LEDStateSERIAL: {
-          // Handle light-in-the-tunnel LED flashing
-
-          digitalWrite(ledLeft, 1);
-          digitalWrite(ledRight, 0);
-          // Increase delay
-          delay(1000);
-          digitalWrite(ledLeft, 0);
-          digitalWrite(ledRight, 1);
-          delay(1000);          
-      } break;
-      // Never should occur, but if it does, set valid state & skip
-      // default: {
-      //   state = LEDStateSYNCHRONOUS;
-      //   delay(200);
-      // } break;
-    }
     // Check button press & LED state for Debugging 
     Serial.printf("\n Timestamp: %d | ", currentMillis);
     Serial.printf("\n External Button: %d | ", UpButtonVal);
