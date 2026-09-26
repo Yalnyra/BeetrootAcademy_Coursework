@@ -1,0 +1,22 @@
+/**
+ * @author Yevhenii Vinokur @ 2026
+ * @file    main.cpp
+ * @brief   Button Logic Analyzer 
+ */
+#include <Arduino.h>
+const int buttonPullup = 12;
+
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(buttonPullup, INPUT);
+}
+
+void loop()
+{
+    int upVal = digitalRead(buttonPullup);
+
+    Serial.printf("buttonPullup %d \n ", upVal);
+    delay(1000);
+}
