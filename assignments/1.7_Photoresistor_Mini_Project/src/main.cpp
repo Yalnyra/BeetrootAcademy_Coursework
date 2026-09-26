@@ -2,15 +2,16 @@
 const int SENSOR_PIN = 6; // Пін підключення дільника з фоторезистором (GPIO In)
 const int RELAY_PIN = 4;  // Пін керування транзистором реле (GPIO Out)
 
-const int ADC_RESOLUTION = 12
+const int ADC_RESOLUTION = 12;
 const int THRESHOLD_DARK = 1000; 
 const int THRESHOLD_LIGHT = 2500;
+const float EMA_FILTER_ALPHA = 0.8;
 
 /* Program state */
 unsigned long previousMillis = 0;
 const long interval = 50;
 
-uint16_t previousOut = 4095 / 2 
+int prevOutValue = 4095 / 2;
 
 void setup() {
   Serial.begin(115200);
@@ -37,7 +38,10 @@ void loop() {
   unsigned long currentMillis = millis();
 
   int rstValue = analogRead(SENSOR_PIN);
-  
+  int outValue = ema_next(EMA_FILTER_ALPHA, rstValue, prevOutValue);
+  // Store the output
+  prevOutValue = outValue;
+
   if (rstValue > THRESHOLD_LIGHT){
     digitalWrite(RELAY_PIN, LOW);
   }
@@ -59,6 +63,10 @@ void loop() {
     // Serial.print("\n Timestamp: %d | ", currentMillis);
     Serial.printf(">Raw:");
     Serial.println(rstValue);
+    Serial.printf(">Filtered:");
+    Serial.println(outValue);
+    Serial.printf(">Relay IO:");
+    Serial.println(ctrl_input);
     // Serial.printf("\n Digital Ctrt value: %d | ", ctrl_input);
     
   }
