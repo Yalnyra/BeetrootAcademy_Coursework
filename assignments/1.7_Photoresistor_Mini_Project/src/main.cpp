@@ -28,7 +28,7 @@ void setup() {
 }
 
 /**
- @brief 
+ @brief Compare the next smoothing value 
 */
 float ema_next(float a, uint16_t x, uint16_t y){
     return int(a*x + (1-a)*y);
