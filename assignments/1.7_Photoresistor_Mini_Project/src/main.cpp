@@ -1,8 +1,11 @@
 #include <Arduino.h>
+#include <math.h> // Pow function 
 const int SENSOR_PIN = 6; // Пін підключення дільника з фоторезистором (GPIO In)
 const int RELAY_PIN = 4;  // Пін керування транзистором реле (GPIO Out)
 
 const int ADC_RESOLUTION = 12;
+const int ADC_MAX = (int)round(pow(2, ADC_RESOLUTION) - 1)
+// const int ADC_MAX = 4095 //default
 const int THRESHOLD_DARK = 1000; 
 const int THRESHOLD_LIGHT = 2500;
 const float EMA_FILTER_ALPHA = 0.8;
@@ -11,7 +14,7 @@ const float EMA_FILTER_ALPHA = 0.8;
 unsigned long previousMillis = 0;
 const long interval = 50;
 
-int prevOutValue = 4095 / 2;
+int prevOutValue = ADC_MAX / 2;
 
 void setup() {
   Serial.begin(115200);
@@ -21,7 +24,7 @@ void setup() {
   digitalWrite(RELAY_PIN, LOW); 
   
   // встановлення роздільної здатності АЦП (12 біт = 0...4095)
-  analogReadResolution(12);
+  analogReadResolution(ADC_RESOLUTION);
 }
 
 /**
@@ -41,7 +44,7 @@ void loop() {
   int outValue = ema_next(EMA_FILTER_ALPHA, rstValue, prevOutValue);
   // Store the output
   prevOutValue = outValue;
-
+  
   if (rstValue > THRESHOLD_LIGHT){
     digitalWrite(RELAY_PIN, LOW);
   }
