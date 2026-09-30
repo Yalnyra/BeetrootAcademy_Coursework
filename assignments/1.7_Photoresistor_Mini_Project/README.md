@@ -39,6 +39,14 @@ TODO
 
 Якщо значення між порогами -> нічого не змінювати (це захищає реле від брязкоту).
 
+### зміни до ТЗ
+Для діагностування під'єднання реле умови перемикання реле було змінено:
+
+Якщо ADC < THRESHOLD_DARK (темно) -> подати LOW на GPIO Out (вимкнути реле).
+
+Якщо ADC > THRESHOLD_LIGHT (світло) -> подати HIGH  на GPIO Out (ввімкнути реле).
+
+
 ## Набір деталей
 
 | Деталь | Опис |
@@ -50,6 +58,7 @@ TODO
 
 ### Вихід програми 
 
+Вивід програми 
 
 
 ## Швидкий старт
@@ -60,12 +69,47 @@ pio run -t upload       # flash
 pio device monitor      # serial console @ 115200
 ```
 
+## Згенерувати плоти 
+
+### Вимоги 
+- Python 1.13.13
+- pyserial 3.5
+- matplotlib==
+
+### Записати лог
+
+
+Задайте шлях до логів
+
+src\save_serial_output.py
+
+```python
+LOG_PATH = Path(__file__).parent / ".." / "dummy.log" # Шлях до логу
+SERIAL_PATH = "COM16" # Порт UART (JTAG) на USB32, має співпадати з 
+# platformio.ini: monitor_port = COM16
+```
+Видає тільки ./<logname>.log
+
+### Візуалізувати вхід з ADC/ Вихід в Реле
+
+src\save_serial_output.py
+
+Задайте шлях до логів
+```bash
+LOG_PATH = Path(__file__).parent / ".." / "dummy.log" # Шлях до логу
+SORTED_LOG_PATH = Path(__file__).parent / ".." / "sorted_dummy.log" # Лог з посортованою часовою шкалою (За Timestamp)
+FIGURE_PATH = Path(__file__).parent / ".." / "adc_error_vs_voltage.png" # 3 Графіки - зберігаються у docs\plots\***\adc_error_vs_voltage.png
+# Тип графіків (по вертикалі донизу)
+#1 - Чистий вхід ADC / #2 - фільтрований EMA вхід ADC, / #3 Вихід на керування реле 
+# Горизонтальним пунктиром обозначені ліміти THRESHOLD_DARK (Поріг ввимкнення), THRESHOLD_LIGHT - (Поріг ввімкнення)
+```
+
 ## Notes (Debriefing)
 
 ## What I would add
 
 ## TODO
-- [] Add hardware requirements
-- [] Add circuit diagram 
+- [x] Add hardware requirements
+- [x] Add circuit diagram 
 - [x] Add code function comments
-- [] Add debugging log (First no button activation at all, then wrong activation pattern due to pull-down misconfiguration)
+- [x] Add debugging log (First no button activation at all, then wrong activation pattern due to pull-down misconfiguration)
