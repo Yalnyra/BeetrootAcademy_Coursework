@@ -2,7 +2,7 @@
  @brief Measure the real (Analog) vs Digital Voltage and compute a precision error
  * Output files: output.log - Precision error for each ADC analogRead() value,
  * Table struct Elaborated at line 19 
- * sorted_output.log - Same log, but sorted by Digital ADC value descending
+ * sorted_output.log - Same log, but sorted by Analog ADC value descending
  * adc_error_vs_voltage.png - Precision error (Y) plotted against Analog ADC voltage (X)
  * Although the data for Voltage above 600 mV is lacking in the plot, 
  * Mean Error is climbing as Voltage drops from 500mV (Dark) to 300mV (Almost full blackness)
