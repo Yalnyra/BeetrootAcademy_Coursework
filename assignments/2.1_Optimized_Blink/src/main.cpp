@@ -16,28 +16,30 @@
 
 #include <Arduino.h>
 
-/* Static definitions */
-// GPIO 0 by default 
-constexpr int8_t buttonBoot = 0;
-// LED left of the button 
-constexpr int8_t ledLeft = 6;
-
 /* Program state */
 // Serial console
 // The serial console is stateless: does the same action in the task window
 // Averages over the last n loops
-constexpr uint16_t loop_cycles(1000);
+constexpr uint32_t loop_cycles(1000000);
 uint32_t loop_count(0);
 uint32_t loop_total(0); 
-// Serial output every n milliseconds, but only if 1000 loops were complete
-constexpr uint16_t serial_task_interval(1000);
+// Serial output every n microseconds, but only if 1000 loops were complete
+constexpr uint32_t serial_task_interval(1000000);
 uint32_t serial_task_count(0);
 
 // LED time delay in ms
-constexpr uint16_t led_task_interval(2000); 
+constexpr uint32_t led_task_interval(2000000); 
 // Serial print time
 uint32_t led_task_count(0);
 
+
+/* Static definitions */
+// GPIO 0 by default 
+// constexpr int8_t buttonBoot = 0;
+// LED 
+constexpr int8_t ledPin = 6;
+// Serial (JTAG) out
+constexpr int32_t JTAG_USB_BAUD = 115200;
 
 // Turns on off the computer 
 /* Two possible states 
@@ -51,33 +53,54 @@ typedef enum LEDState_t {
 
 static volatile LEDState_t state = LEDStateOFF;
 
+// LED Class definition;
+class LED {
+public:
 
+    LED(): pin(0){
 
-// /**
-// * @brief Changes LEDs State to flash in resonance with delay of 1 cycle
-// * ІSR for on-PCB BOOT button
-// */
-// void buttonBootPressed(void){
-//   state = LEDStateSERIAL;
-// }
+    }
+    // GPIO output pin constructor
+    explicit LED(uint8_t pin): pin(pin){
+      // GPIO pin mode by default
+      pinMode(pin, OUTPUT);
 
-// /**
-// * @brief Changes LEDs State to flash simulatenously
-// * ІSR for external pin38 button
-// */
-// void buttonPullUpPressed(void){
-//   state = LEDStateSYNCHRONOUS;
+    }
+    ~LED(){
 
-// }
+    }
+    void init(uint8_t pin){
+      this->pin = pin;
+      return;
+    }
+    void set(LEDState_t state){
+      Serial.printf("\n State %d | ", state);
+      digitalWrite(this->pin, state);
+      // digitalWrite(ledPin, state);
+      return;
+    }
+    uint8_t get(void){
+      return pin;
+    }
+private:
+    // Set the GPIO pin mode 
+    uint8_t pin; 
+    // bool pullup; TODO: add as an enum  
+};
+
+static LED led = LED();
+
 
 void setup()
 {
   Serial.begin(115200);
+  //Init LED object
+  led.init(ledPin);
   // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
   // idle = HIGH, press pulls it LOW.
-  pinMode(buttonBoot, INPUT_PULLUP);
-  pinMode(ledLeft, OUTPUT);
-  
+  // pinMode(buttonBoot, INPUT_PULLUP);  
+
+
   // Edit (after commit 5d87db8c60ceb1d08626b65f535b7fc7374d7c62)
   // Implement logical switch; remove handling via interrupts
   // attachInterrupt(buttonBoot, buttonBootPressed, RISING);
@@ -87,7 +110,7 @@ void setup()
 void loop()
 {
 
-  unsigned long startMillis = millis();
+  uint32_t startMillis = micros();
 
   // // 1 when External button is pressed
   // int UpButtonVal = digitalRead(buttonPullUp);
@@ -115,13 +138,15 @@ void loop()
           // will trigger on next task cycle 
           state = LEDStateON;
           // write LOW
-          digitalWrite(ledLeft, LEDStateOFF);
+          led.set(LEDStateOFF);
+          // digitalWrite(ledPin, 0);
       } break;
       case LEDStateON: {
           // will trigger on next task cycle 
           state = LEDStateOFF;
           // write HIGH
-          digitalWrite(ledLeft, LEDStateON); 
+          led.set(LEDStateON);
+          // digitalWrite(ledPin, 1);
       } break;
     }
 
@@ -134,7 +159,9 @@ void loop()
     // Output loop_cycles
     if (startMillis - serial_task_count >= serial_task_interval){
       serial_task_count = startMillis;
+      uint8_t temp_pin = led.get();
       Serial.printf("\n Timestamp: %d | ", startMillis);
+      Serial.printf("\n LED pin: %d | ", temp_pin);
       Serial.printf("\n State %d | ", state);
       Serial.printf("\n Avg Loop time from %d iterations: %d | ", loop_cycles, loop_total / loop_cycles);
       
@@ -143,6 +170,6 @@ void loop()
   }
 
   loop_count += 1;
-  unsigned long endMillis = millis();
-  loop_total += startMillis - endMillis;
+  uint32_t endMillis = micros();
+  loop_total += endMillis - startMillis;
 }

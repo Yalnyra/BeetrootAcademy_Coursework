@@ -45,10 +45,33 @@ Measure average cycle runtime for a LED blink, using superloop architecture
 | Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
 | Резистори | x1 220 Om |
 | Світлодіоди | x1 LED (3V) | 
-<!-- 
+
 ### Вихід програми 
 
-Вивід програми  -->
+Середній час loop(), з керування піном за допомогою constexpr - 4294967 ms
+
+```
+ | 
+17:25:06.901 >  Timestamp: 15010 | 
+17:25:06.901 >  LED pin: 6 | 
+17:25:06.901 >  State 1 | 
+17:25:06.901 >  Avg Loop time from 1000 iterations: 4294967 | 
+17:25:07.903 >  Timestamp: 16011 | 
+17:25:07.903 >  LED pin: 6 | 
+17:25:07.903 >  State 0 | 
+17:25:07.903 >  Avg Loop time from 1000 iterations: 4294967 | 
+17:25:08.904 >  Timestamp: 17011 | 
+17:25:08.904 >  LED pin: 6 | 
+17:25:08.904 >  State 0 | 
+17:25:08.904 >  Avg Loop time from 1000 iterations: 0 | 
+17:25:09.904 >  Timestamp: 18012 | 
+17:25:09.904 >  LED pin: 6 | 
+17:25:09.904 >  State 1 | 
+17:25:09.904 >  Avg Loop time from 1000 iterations: 0 | 
+17:25:10.905 >  Timestamp: 19013 | 
+17:25:10.905 >  LED pin: 6 | 
+17:25:10.905 >  State 1 | 
+17:25:10.905 >  Avg Loop time from 1000 iterations: 4294967 |
 
 
 ## Швидкий старт
