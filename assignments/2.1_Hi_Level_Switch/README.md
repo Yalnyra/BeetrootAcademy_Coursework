@@ -1,4 +1,4 @@
-# <1.7>
+# <2.2>
 
 > EMB_25 Завдання 2.2: Активні та Пасивні елементи
 > Завдання 1: Вимірювання часу спрацювання реле
@@ -101,20 +101,6 @@ SERIAL_PATH = "COM16" # Порт UART (JTAG) на USB32, має співпада
 # platformio.ini: monitor_port = COM16
 ```
 Видає тільки ./<logname>.log
-
-### Візуалізувати вхід з ADC/ Вихід в Реле
-
-src\save_serial_output.py
-
-Задайте шлях до логів
-```bash
-LOG_PATH = Path(__file__).parent / ".." / "dummy.log" # Шлях до логу
-SORTED_LOG_PATH = Path(__file__).parent / ".." / "sorted_dummy.log" # Лог з посортованою часовою шкалою (За Timestamp)
-FIGURE_PATH = Path(__file__).parent / ".." / "adc_error_vs_voltage.png" # 3 Графіки - зберігаються у docs\plots\***\adc_error_vs_voltage.png
-# Тип графіків (по вертикалі донизу)
-#1 - Чистий вхід ADC / #2 - фільтрований EMA вхід ADC, / #3 Вихід на керування реле 
-# Горизонтальним пунктиром обозначені ліміти THRESHOLD_DARK (Поріг ввимкнення), THRESHOLD_LIGHT - (Поріг ввімкнення)
-```
 
 ## Notes (Debriefing)
 
