@@ -8,6 +8,66 @@
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/cbfc5bbb-d66e-47b1-b398-5468194a6da2)
 
+TODO: Iterate over all leds in an array rather than individually
+
+Example
+
+```cpp
+#include <Arduino.h>
+
+// Використовуємо 1 байт пам'яті для пінів і обчислюємо на етапі компіляції
+constexpr uint8_t LED_PIN_1 = 4;
+constexpr uint8_t LED_PIN_2 = 5;
+constexpr uint8_t LED_PIN_3 = 6;
+
+struct Task {
+  uint32_t period; // як часто запускати, мс
+  uint32_t last;   // коли запускали востаннє
+  void (*run)();   // вказівник на функцію 
+};
+
+
+void blinkFast()   { static bool s; s = !s; digitalWrite(LED_PIN_1, s); }
+void blinkMiddle() { static bool s; s = !s; digitalWrite(LED_PIN_2, s); }
+void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
+
+void heartbeat()   { Serial.printf("alive @ %lu ms\n", millis()); }
+
+Task tasks[] = {
+  { 200,  0, blinkFast },
+  { 1000, 0, blinkMiddle },
+  { 1500, 0, blinkSlow },
+  { 2000, 0, heartbeat },
+};
+
+void setup() {
+    Serial.begin(115200);
+    
+    const uint8_t pins[] = {LED_PIN_1, LED_PIN_2, LED_PIN_3};
+    for (uint8_t pin : pins) {
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, LOW);
+    }
+}
+
+void loop() {
+  uint32_t now = millis();
+  
+  for (Task &t : tasks) { 
+    if (now - t.last >= t.period) { 
+      t.last = now;
+      t.run(); 
+    }
+  }
+}
+```
+
+TODO: Replace a enum switch statement with following:
+```cpp
+void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
+
+```
+
 [Вивід в консоль](output/2.3_output.log)
 ```
 
