@@ -8,33 +8,24 @@
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/e458f877-0795-4711-978f-bc68a347a704)
 
-![Electrical Schema of mini-project](output/Schema_2.2_Relay_Interrupt_Check.png)
-
-[Вивід в консоль](output/2.2_output.log)
+[Вивід в консоль](output/2.1_output.log)
 ```
-Цикл 2. Час OFF: 3677 мкс
-Цикл 3. Час ON:  4517 мкс
-Цикл 3. Час OFF: 3677 мкс
-Цикл 4. Час ON:  4516 мкс
-Цикл 4. Час OFF: 3675 мкс
-Цикл 5. Час ON:  4521 мкс
-Цикл 5. Час OFF: 3674 мкс
-Цикл 6. Час ON:  4536 мкс
-Цикл 6. Час OFF: 3671 мкс
-Цикл 7. Час ON:  4526 мкс
-Цикл 7. Час OFF: 3670 мкс
-Цикл 8. Час ON:  4521 мкс
-Цикл 8. Час OFF: 3669 мкс
-Цикл 9. Час ON:  4541 мкс
-Цикл 9. Час OFF: 3666 мкс
-Цикл 10. Час ON:  4542 мкс
-Цикл 10. Час OFF: 3665 мкс
-
-====== ПІДСУМКИ ======
-
-Середній час ON:  4562 мкс
-Середній час OFF: 3672 мкс
-======================
+13:35:34.550 >  Total Loop time in Microseconds over 1000 iterations: 889 | 
+13:35:34.651 >  Timestamp: 439892426 | 
+13:35:34.651 >  LED State Slow 1 | 
+13:35:34.651 >  Total Loop time in Microseconds over 1000 iterations: 901 | 
+13:35:34.752 >  Timestamp: 439993094 | 
+13:35:34.752 >  LED State Slow 1 | 
+13:35:34.752 >  Total Loop time in Microseconds over 1000 iterations: 875 | 
+13:35:34.852 >  Timestamp: 440093762 | 
+13:35:34.852 >  LED State Slow 0 | 
+13:35:34.852 >  Total Loop time in Microseconds over 1000 iterations: 889 | 
+13:35:34.953 >  Timestamp: 440194430 | 
+13:35:34.953 >  LED State Slow 0 | 
+13:35:34.953 >  Total Loop time in Microseconds over 1000 iterations: 902 | 
+13:35:35.053 >  Timestamp: 440295089 | 
+13:35:35.053 >  LED State Slow 1 | 
+13:35:35.053 >  Total Loop time in Microseconds over 1000 iterations: 911 |
 ```
 
 ### Відео демонстрація
