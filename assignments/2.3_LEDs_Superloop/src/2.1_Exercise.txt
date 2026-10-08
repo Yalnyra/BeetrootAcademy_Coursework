@@ -20,15 +20,15 @@
 // Serial console
 // The serial console is stateless: does the same action in the task window
 // Averages over the last n loops
-constexpr uint32_t loop_cycles(1000);
+constexpr uint32_t loop_cycles(1000000);
 uint32_t loop_count(0);
 uint32_t loop_total(0); 
 // Serial output every n microseconds, but only if 1000 loops were complete
-constexpr uint32_t serial_task_interval(1000);
+constexpr uint32_t serial_task_interval(1000000);
 uint32_t serial_task_count(0);
 
 // LED time delay in ms
-constexpr uint32_t led_task_interval_default(200); 
+constexpr uint32_t led_task_interval(2000000); 
 // Serial print time
 uint32_t led_task_count(0);
 
@@ -37,7 +37,7 @@ uint32_t led_task_count(0);
 // GPIO 0 by default 
 // constexpr int8_t buttonBoot = 0;
 // LED 
-constexpr int8_t led_pin_default = 6;
+constexpr int8_t ledPin = 6;
 // Serial (JTAG) out
 constexpr int32_t JTAG_USB_BAUD = 115200;
 
@@ -57,18 +57,11 @@ static volatile LEDState_t state = LEDStateOFF;
 class LED {
 public:
 
-    LED(): pin(led_pin_default), frequency(led_task_interval_default), state(LEDStateOFF){
+    LED(): pin(0){
 
     }
     // GPIO output pin constructor
-    explicit LED(uint8_t pin): pin(pin), frequency(led_task_interval_default), state(LEDStateOFF){
-      // GPIO pin mode by default
-      pinMode(pin, OUTPUT);
-
-    }
-
-    // GPIO output pin constructor
-    explicit LED(uint8_t pin, uint32_t frequency): pin(pin), frequency(frequency), state(LEDStateOFF){
+    explicit LED(uint8_t pin): pin(pin){
       // GPIO pin mode by default
       pinMode(pin, OUTPUT);
 
@@ -76,81 +69,33 @@ public:
     ~LED(){
 
     }
-    void init(uint8_t pin, uint32_t frequency){
+    void init(uint8_t pin){
       this->pin = pin;
-      this->frequency = frequency;
       return;
     }
-    void write_state(LEDState_t state){
-      digitalWrite(ledPin, state);
-      return;
-    } 
-
-    
-    void set_state(LEDState_t state){
-      this->state = state;
-      return;
-    } 
-
-    LEDState_t get_state(void){
-      return this->state;
-    } 
-
-    uint8_t get_pin(void){
-      return pin;
-    }
-
-    void set_pin(LEDState_t state){
+    void set(LEDState_t state){
       Serial.printf("\n State %d | ", state);
       digitalWrite(this->pin, state);
       // digitalWrite(ledPin, state);
       return;
-    } 
-
-    // @brief toggle the state 
-    void toggle(){
-      
-      switch (state){
-      case LEDStateOFF: {
-          // will trigger on next task cycle 
-          this->state = LEDStateON;
-          // write LOW
-          this->set_state(LEDStateOFF);
-          // digitalWrite(ledPin, 0);
-      } break;
-      case LEDStateON: {
-          // will trigger on next task cycle 
-          this->state = LEDStateOFF;
-          // write HIGH
-          this->set_state(LEDStateON);
-          // digitalWrite(ledPin, 1);
-      } break;
     }
-
-  }
-  
-    uint8_t pin; 
-    uint32_t frequency;
-    uint32_t task_count;
-    volatile LEDState_t state; 
+    uint8_t get(void){
+      return pin;
+    }
 private:
     // Set the GPIO pin mode 
+    uint8_t pin; 
     // bool pullup; TODO: add as an enum  
 };
 
-static LED led_slow = LED(6, 200);
-static LED led_medium = LED(5, 500);
-static LED led_fast = LED(4, 1000);
+static LED led = LED();
+
 
 void setup()
 {
   Serial.begin(115200);
   //Init LED object
-  led_slow.init(4, 200);
-
-  led_medium.init(5, 500);
-  
-  led_fast.init(6, 1000);
+  led.init(ledPin);
   // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
   // idle = HIGH, press pulls it LOW.
   // pinMode(buttonBoot, INPUT_PULLUP);  
@@ -182,10 +127,29 @@ void loop()
 
   // FSM with a transfer window interval of led_task_interval
 
-  if (startMillis - led_fast.task_count  >= led_fast.frequency){
+  if (startMillis - led_task_count >= led_task_interval){
       
-    led_fast.task_count = startMillis;
-    led_fast.toggle();
+    led_task_count = startMillis;
+    switch (state){
+      
+      // Where to store total time passed? 
+
+      case LEDStateOFF: {
+          // will trigger on next task cycle 
+          state = LEDStateON;
+          // write LOW
+          led.set(LEDStateOFF);
+          // digitalWrite(ledPin, 0);
+      } break;
+      case LEDStateON: {
+          // will trigger on next task cycle 
+          state = LEDStateOFF;
+          // write HIGH
+          led.set(LEDStateON);
+          // digitalWrite(ledPin, 1);
+      } break;
+    }
+
   }
 
   //Serial print task
@@ -195,10 +159,10 @@ void loop()
     // Output loop_cycles
     if (startMillis - serial_task_count >= serial_task_interval){
       serial_task_count = startMillis;
+      uint8_t temp_pin = led.get();
       Serial.printf("\n Timestamp: %d | ", startMillis);
-      Serial.printf("\n State Slow %d | ", led_slow.get_state());
-      Serial.printf("\n State Medium %d | ", led_medium.get_state());
-      Serial.printf("\n State Fast %d | ", led_fast.get_state());
+      Serial.printf("\n LED pin: %d | ", temp_pin);
+      Serial.printf("\n State %d | ", state);
       Serial.printf("\n Avg Loop time from %d iterations: %d | ", loop_cycles, loop_total / loop_cycles);
       
     }

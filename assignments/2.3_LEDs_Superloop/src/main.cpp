@@ -1,0 +1,213 @@
+/**
+ * @author Yevhenii Vinokur @ 2026
+ * @file    main.cpp
+ * @brief Optimize LED flashing routine via compilation-time memory alloc:
+ 1. Переписати “класичний Arduino blink” у Embedded C++
+ * Використати enum class для стану LED (On / Off).
+*  Використати constexpr для номера піну та інтервалу блимання.
+*  Уникнути глобальних змінних (крім мінімально необхідних для стану/ISR).
+2. Використати static const / constexpr для параметрів**
+- Створити клас-конфігурацію або структуру з static const / constexpr для додаткових налаштувань.
+- Повністю усунути «магічні числа», винісши їх у константи.
+3. Виміряти час виконання superloop (Опційно)
+- Виміряти час однієї ітерації loop() без delay().
+- Виводити середній час або показники у Serial Monitor кожні 1000 ітерацій.
+ */
+
+#include <Arduino.h>
+
+/* Program state */
+// Serial console
+// The serial console is stateless: does the same action in the task window
+// Averages over the last n loops
+constexpr uint32_t loop_cycles(1000);
+uint32_t loop_count(0);
+uint32_t loop_total(0); 
+// Serial output every n microseconds, but only if 1000 loops were complete
+constexpr uint32_t serial_task_interval(200000);
+uint32_t serial_task_count(0);
+
+// LED time delay in ms
+constexpr uint32_t led_task_interval_default(200000); 
+// Serial print time
+uint32_t led_task_count(0);
+
+
+/* Static definitions */
+// GPIO 0 by default 
+// constexpr int8_t buttonBoot = 0;
+// LED 
+constexpr int8_t led_pin_default = 6;
+// Serial (JTAG) out
+constexpr int32_t JTAG_USB_BAUD = 115200;
+
+// LED Blink state (TODO: Rewrite with a bool)
+/* Two possible states 
+* 0 is HIGH Output Voltage (Turns on)
+* 1 is LOW Output Voltage (Turns off)
+*/
+typedef enum LEDState_t {
+  LEDStateOFF,
+  LEDStateON,
+} LEDState_t;
+
+
+// LED Class definition;
+class LED {
+public:
+
+    LED(): pin(led_pin_default), frequency(led_task_interval_default), state(LEDStateOFF){
+
+    }
+    // GPIO output pin constructor
+    explicit LED(uint8_t pin): pin(pin), frequency(led_task_interval_default), state(LEDStateOFF){
+      // GPIO pin mode by default
+      pinMode(pin, OUTPUT);
+
+    }
+
+    // GPIO output pin constructor
+    explicit LED(uint8_t pin, uint32_t frequency): pin(pin), frequency(frequency), state(LEDStateOFF){
+      // GPIO pin mode by default
+      pinMode(pin, OUTPUT);
+
+    }
+    ~LED(){
+
+    }
+    void init(uint8_t pin, uint32_t frequency){
+      this->pin = pin;
+      this->frequency = frequency;
+      return;
+    }
+    void write_state(LEDState_t state){
+      digitalWrite(this->pin, state);
+      return;
+    } 
+    
+    void set_state(LEDState_t state){
+      this->state = state;
+      digitalWrite(this->pin, state);
+      return;
+    } 
+
+    LEDState_t get_state(void){
+      return this->state;
+    } 
+
+    uint8_t get_pin(void){
+      return pin;
+    }
+
+    void set_pin(LEDState_t state){
+      digitalWrite(this->pin, state);
+      // digitalWrite(ledPin, state);
+      return;
+    } 
+
+    // @brief toggle the state 
+    void toggle(){
+      
+      switch (this->state){
+      case LEDStateOFF: {
+          // will trigger on next task cycle 
+          this->state = LEDStateON;
+          // write LOW
+          this->write_state(LEDStateOFF);
+          // digitalWrite(ledPin, 0);
+      } break;
+      case LEDStateON: {
+          // will trigger on next task cycle 
+          this->state = LEDStateOFF;
+          // write HIGH
+          this->write_state(LEDStateON);
+          // digitalWrite(ledPin, 1);
+      } break;
+
+      Serial.printf("\n State %d | ", this->state);
+    }
+
+  }
+  
+    uint8_t pin; 
+    uint32_t frequency;
+    uint32_t task_count;
+    volatile LEDState_t state;
+    // Set the GPIO pin mode 
+    // bool pullup; TODO: add as an enum  
+};
+
+static LED led_slow = LED(6, 200000);
+static LED led_medium = LED(5, 500000);
+static LED led_fast = LED(4, 1000000);
+
+void setup()
+{
+  Serial.begin(115200);
+  //Init LED object
+  // led_slow.init(4, 200);
+
+  // led_medium.init(5, 500);
+  
+  // led_fast.init(6, 1000);
+  // With INPUT_PULLUP: (In case DigitalPin -> button -> GND) 
+  // idle = HIGH, press pulls it LOW.
+  // pinMode(buttonBoot, INPUT_PULLUP);  
+
+
+  // Edit (after commit 5d87db8c60ceb1d08626b65f535b7fc7374d7c62)
+  // Implement logical switch; remove handling via interrupts
+  // attachInterrupt(buttonBoot, buttonBootPressed, RISING);
+  // attachInterrupt(buttonPullUp, buttonPullUpPressed, FALLING);
+}
+
+void loop()
+{
+
+  uint32_t startMillis = micros();
+
+  // FSM with a transfer window interval of led_task_interval
+
+  // TODO: Rewrite with a single loop 
+  if (startMillis - led_fast.task_count  >= led_fast.frequency){
+      
+    led_fast.task_count = startMillis;
+    led_fast.toggle();
+  }
+
+  if (startMillis - led_medium.task_count  >= led_medium.frequency){
+      
+    led_medium.task_count = startMillis;
+    led_medium.toggle();
+  }
+
+  
+  if (startMillis - led_slow.task_count  >= led_slow.frequency){
+      
+    led_slow.task_count = startMillis;
+    led_slow.toggle();
+  }
+
+  //Serial print task
+  if (loop_count > loop_cycles)
+  {
+    loop_count = 0; 
+    // Output loop_cycles
+    if (startMillis - serial_task_count >= serial_task_interval){
+      serial_task_count = startMillis;
+      Serial.printf("\n Timestamp: %d | ", startMillis);
+      Serial.printf("\n State Slow %d | ", led_slow.get_state());
+      Serial.printf("\n State Medium %d | ", led_medium.get_state());
+      Serial.printf("\n State Fast %d | ", led_fast.get_state());
+      Serial.printf("\n Total Loop time in Microseconds over %d iterations: %d | ", loop_cycles, loop_total);
+      
+    }
+    loop_total = 0; 
+  }
+
+  loop_count += 1;
+  uint32_t endMillis = micros();
+  uint32_t duration = endMillis - startMillis;
+  loop_total += duration;
+
+}
