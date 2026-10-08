@@ -14,9 +14,9 @@ homework handouts that go with them are kept together under `assignments/`.
 ├── _template/            Copy one of these to start a new assignment
 │   ├── stm32f411ce/      STM32Cube HAL, Black Pill
 │   └── esp32s3/          Arduino / ESP-IDF, ESP32-S3-N16R8
-├── stm32f411ce/          Projects targeting the Black Pill
-├── esp32s3/              Projects targeting the ESP32-S3
-├── stm32f411re/          Earlier work on the F411RE board
+├── stm32f411ce/          (Currently unused) Projects targeting the Black Pill
+├── esp32s3/              (Currently unused) Projects targeting the ESP32-S3
+├── stm32f411re/          Earlier work on the STM32-F411RE board
 ├── .gitignore            Shared by every project — projects carry no own copy
 └── .gitattributes
 ```
@@ -39,6 +39,53 @@ NN_ProjectName/
 |-------|--------|-----------|----------|
 | STM32F411CEU6 "Black Pill" | `stm32f411ce/` | `stm32cube` | Cortex-M programming, registers, HAL, interrupts, timers |
 | ESP32-S3-DevKitC-1 N16R8 | `esp32s3/` | `arduino` (or `espidf`) | Wi-Fi, GPIO, ADC, PWM, I²C, SPI, UART |
+
+## Projects 
+
+# Mini project #1 (Assignment): Twilight light switch 
+
+## Link to the project 
+
+Код знаходиться за посиланням та опис
+
+` .\assignments\1.7_Photoresistor_Mini_Project\src`
+
+Опис реалізації проєкту знаходиться за посиланням: 
+
+` .\assignments\1.7_Photoresistor_Mini_Project\README.md`
+
+
+## Schema. 
+
+Platform: ESP32-S3
+
+[Electric Diagram link](https://app.cirkitdesigner.com/project/93914e23-96de-43bc-9be2-04c2cfafc54f)
+
+![Electrical Schema of mini-project](docs/Assignment_1.7_schema.png)
+
+Зберіть схему на макетній платі згідно з наданим кресленням:
+
+Вхід (Фоторезистор): Підключіть дільник R1(LDR) + R2 (10 кОм) до шини +3.3V. Точку з'єднання підключіть до GPIO In (ADC).
+
+Ключ (Узгодження 3.3V -> 5V): Підключіть GPIO Out через R3 (10 кОм) до бази транзистора BC547B (VT1). Колектор підтягніть до +5V через R4(10 кОм) та підключіть до входу IN модуля реле.
+
+Вихід (Навантаження): До контактів реле OUT NO підключіть будь-яке безпечне низьковольтне навантаження (світлодіод, LED-стрічку 5V/12V).
+
+### Software requirements
+Напишіть просту програму, яка виконує 3 кроки у головному циклі:
+
+Зчитати значення ADC з піна GPIO IN (діапазон 0...4095).
+
+Порівняти значення з порогами (Гістерезис):
+
+Якщо ADC < THRESHOLD_DARK (темно) -> подати HIGH на GPIO Out (увімкнути реле).
+
+Якщо ADC > THRESHOLD_LIGHT (світло) -> подати LOW на GPIO Out (вимкнути реле).
+
+Якщо значення між порогами -> нічого не змінювати (це захищає реле від брязкоту).
+
+
+# Templates 
 
 ## Starting a new assignment
 

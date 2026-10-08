@@ -29,7 +29,7 @@ typedef enum LEDState_t {
 
 /* Program state */
 unsigned long previousMillis = 0;
-const long interval = 50;
+const long interval = 500;
 // Controls the main LED routine 
 // 0 is Always default value upon reset 
 static volatile LEDState_t state = LEDStateSYNCHRONOUS;
