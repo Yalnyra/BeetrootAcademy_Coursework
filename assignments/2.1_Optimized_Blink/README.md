@@ -1,22 +1,50 @@
-# <1.7>
+# <2.2>
 
-> EMB_25 Мініпроєкт <1> підключення сенсора і актуатора, відладчик
-> Мініпроєкт: Сутінковий перемикач на ESP32-S3
+> EMB_25 Завдання 2.2: Активні та Пасивні елементи
+> Завдання 1: Вимірювання часу спрацювання реле
 
-
-## Video Demo
-TODO
-<!-- 
-<video controls width="600">
-  <source src="./docs/Assignment_1.4.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video> -->
 
 ### Схемотехніка
 
-[Посилання на Діаграму](https://app.cirkitdesigner.com/project/93914e23-96de-43bc-9be2-04c2cfafc54f)
+[Посилання на Діаграму](https://app.cirkitdesigner.com/project/e458f877-0795-4711-978f-bc68a347a704)
+
+![Electrical Schema of mini-project](output/Schema_2.2_Relay_Interrupt_Check.png)
+
+[Вивід в консоль](output/2.2_output.log)
+```
+Цикл 2. Час OFF: 3677 мкс
+Цикл 3. Час ON:  4517 мкс
+Цикл 3. Час OFF: 3677 мкс
+Цикл 4. Час ON:  4516 мкс
+Цикл 4. Час OFF: 3675 мкс
+Цикл 5. Час ON:  4521 мкс
+Цикл 5. Час OFF: 3674 мкс
+Цикл 6. Час ON:  4536 мкс
+Цикл 6. Час OFF: 3671 мкс
+Цикл 7. Час ON:  4526 мкс
+Цикл 7. Час OFF: 3670 мкс
+Цикл 8. Час ON:  4521 мкс
+Цикл 8. Час OFF: 3669 мкс
+Цикл 9. Час ON:  4541 мкс
+Цикл 9. Час OFF: 3666 мкс
+Цикл 10. Час ON:  4542 мкс
+Цикл 10. Час OFF: 3665 мкс
+
+====== ПІДСУМКИ ======
+
+Середній час ON:  4562 мкс
+Середній час OFF: 3672 мкс
+======================
+```
+
+### Відео демонстрація
+<video controls width="600">
+  <source src="./output/Assignment_2.2.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ### Вимоги до програми (Код)
+
 
 **1. Переписати “класичний Arduino blink” у Embedded C++**
 
@@ -43,35 +71,12 @@ Measure average cycle runtime for a LED blink, using superloop architecture
 | Деталь | Опис |
 |------|--------|
 | Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
-| Резистори | x1 220 Om |
-| Світлодіоди | x1 LED (3V) | 
+| Резистори | x3 220 Om |
+| Світлодіоди | x3 Green |
 
 ### Вихід програми 
 
-Середній час loop(), з керування піном за допомогою constexpr - 4294967 ms
-
-```
- | 
-17:25:06.901 >  Timestamp: 15010 | 
-17:25:06.901 >  LED pin: 6 | 
-17:25:06.901 >  State 1 | 
-17:25:06.901 >  Avg Loop time from 1000 iterations: 4294967 | 
-17:25:07.903 >  Timestamp: 16011 | 
-17:25:07.903 >  LED pin: 6 | 
-17:25:07.903 >  State 0 | 
-17:25:07.903 >  Avg Loop time from 1000 iterations: 4294967 | 
-17:25:08.904 >  Timestamp: 17011 | 
-17:25:08.904 >  LED pin: 6 | 
-17:25:08.904 >  State 0 | 
-17:25:08.904 >  Avg Loop time from 1000 iterations: 0 | 
-17:25:09.904 >  Timestamp: 18012 | 
-17:25:09.904 >  LED pin: 6 | 
-17:25:09.904 >  State 1 | 
-17:25:09.904 >  Avg Loop time from 1000 iterations: 0 | 
-17:25:10.905 >  Timestamp: 19013 | 
-17:25:10.905 >  LED pin: 6 | 
-17:25:10.905 >  State 1 | 
-17:25:10.905 >  Avg Loop time from 1000 iterations: 4294967 |
+Вивід програми 
 
 
 ## Швидкий старт
@@ -82,7 +87,7 @@ pio run -t upload       # flash
 pio device monitor      # serial console @ 115200
 ```
 
-<!-- ## Згенерувати плоти 
+## Згенерувати плоти 
 
 ### Вимоги 
 - Python 1.13.13
@@ -102,20 +107,6 @@ SERIAL_PATH = "COM16" # Порт UART (JTAG) на USB32, має співпада
 # platformio.ini: monitor_port = COM16
 ```
 Видає тільки ./<logname>.log
-
-### Візуалізувати вхід з ADC/ Вихід в Реле
-
-src\save_serial_output.py
-
-Задайте шлях до логів
-```bash
-LOG_PATH = Path(__file__).parent / ".." / "dummy.log" # Шлях до логу
-SORTED_LOG_PATH = Path(__file__).parent / ".." / "sorted_dummy.log" # Лог з посортованою часовою шкалою (За Timestamp)
-FIGURE_PATH = Path(__file__).parent / ".." / "adc_error_vs_voltage.png" # 3 Графіки - зберігаються у docs\plots\***\adc_error_vs_voltage.png
-# Тип графіків (по вертикалі донизу)
-#1 - Чистий вхід ADC / #2 - фільтрований EMA вхід ADC, / #3 Вихід на керування реле 
-# Горизонтальним пунктиром обозначені ліміти THRESHOLD_DARK (Поріг ввимкнення), THRESHOLD_LIGHT - (Поріг ввімкнення)
-``` -->
 
 ## Notes (Debriefing)
 
