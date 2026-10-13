@@ -59,23 +59,22 @@ public:
     }
     // GPIO output pin constructor
     explicit LED(uint8_t pin): pin(pin), frequency(Config::LED_TASK_INTERVAL), state(LEDStateOFF){
-      // GPIO pin mode by default
-      pinMode(pin, OUTPUT);
 
     }
 
     // GPIO output pin constructor
     explicit LED(uint8_t pin, uint32_t frequency): pin(pin), frequency(frequency), state(LEDStateOFF){
-      // GPIO pin mode by default
-      pinMode(pin, OUTPUT);
 
     }
     ~LED(){
 
     }
+    // don't call before setup() call - See issue #2:
+    // https://github.com/Yalnyra/BeetrootAcademy_Coursework/issues/2
     void init(uint8_t pin, uint32_t frequency){
       this->pin = pin;
       this->frequency = frequency;
+      pinMode(pin, OUTPUT);
       return;
     }
     void write_state(LEDState_t state){
@@ -154,19 +153,18 @@ void loop()
   }
 
   //Serial print task
-  if (loop_count > Config::LOOP_CYCLES)
+  if (loop_count >= Config::LOOP_CYCLES)
   {
-    loop_count = 0; 
     if (startMillis - serial_task_count >= Config::SERIAL_TASK_INTERVAL){
       serial_task_count = startMillis;
       Serial.printf("\n Timestamp: %d | ", startMillis);
       Serial.printf("\n LED State Slow %d | ", led_slow.get_state());
       // The average time is smaller than microsecond;
       // Thus to not get 0, output the total time over [LOOP_CYCLES] iterations
-      Serial.printf("\n Total Loop time in Microseconds over %d iterations: %d | ", Config::LOOP_CYCLES, loop_total);
-      
+      Serial.printf("\n Total Loop time: %d | Avg Loop time over %d iterations: %d | ", loop_total, Config::LOOP_CYCLES, loop_total / loop_count);
+      loop_total = 0; 
     }
-    loop_total = 0; 
+    loop_count = 0; 
   }
   // Update the total sum of loop durations
   loop_count += 1;
