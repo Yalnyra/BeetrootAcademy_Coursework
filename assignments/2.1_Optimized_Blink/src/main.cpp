@@ -162,8 +162,8 @@ void loop()
       // The average time is smaller than microsecond;
       // Thus to not get 0, output the total time over [LOOP_CYCLES] iterations
       Serial.printf("\n Total Loop time: %d | Avg Loop time over %d iterations: %d | ", loop_total, Config::LOOP_CYCLES, loop_total / loop_count);
+      loop_total = 0; 
     }
-    loop_total = 0; 
     loop_count = 0; 
   }
   // Update the total sum of loop durations
