@@ -1,116 +1,22 @@
 # <2.2>
 
-> EMB_25 Завдання 2.2: Активні та Пасивні елементи
-> Завдання 1: Вимірювання часу спрацювання реле
+> EMB_25 Завдання 2.3: Superloop: Як змусити MCU робити кілька справ одночасно
 
 
 ### Схемотехніка
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/cbfc5bbb-d66e-47b1-b398-5468194a6da2)
 
-TODO: Iterate over all leds in an array rather than individually
-
-Example
-
-```cpp
-#include <Arduino.h>
-
-// Використовуємо 1 байт пам'яті для пінів і обчислюємо на етапі компіляції
-constexpr uint8_t LED_PIN_1 = 4;
-constexpr uint8_t LED_PIN_2 = 5;
-constexpr uint8_t LED_PIN_3 = 6;
-
-struct Task {
-  uint32_t period; // як часто запускати, мс
-  uint32_t last;   // коли запускали востаннє
-  void (*run)();   // вказівник на функцію 
-};
-
-
-void blinkFast()   { static bool s; s = !s; digitalWrite(LED_PIN_1, s); }
-void blinkMiddle() { static bool s; s = !s; digitalWrite(LED_PIN_2, s); }
-void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
-
-void heartbeat()   { Serial.printf("alive @ %lu ms\n", millis()); }
-
-Task tasks[] = {
-  { 200,  0, blinkFast },
-  { 1000, 0, blinkMiddle },
-  { 1500, 0, blinkSlow },
-  { 2000, 0, heartbeat },
-};
-
-void setup() {
-    Serial.begin(115200);
-    
-    const uint8_t pins[] = {LED_PIN_1, LED_PIN_2, LED_PIN_3};
-    for (uint8_t pin : pins) {
-        pinMode(pin, OUTPUT);
-        digitalWrite(pin, LOW);
-    }
-}
-
-void loop() {
-  uint32_t now = millis();
-  
-  for (Task &t : tasks) { 
-    if (now - t.last >= t.period) { 
-      t.last = now;
-      t.run(); 
-    }
-  }
-}
-```
-
-TODO: Replace a enum switch statement with following:
-```cpp
-void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
-
-```
-
 [Вивід в консоль](output/2.3_output.log)
 ```
-
- Total Loop time in Microseconds over 1000 iterations: 975 | 
- Timestamp: 29179463 | 
- State Slow 1 | 
- State Medium 0 | 
- State Fast 1 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 29379465 | 
- State Slow 0 | 
- State Medium 0 | 
- State Fast 1 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 29579472 | 
- State Slow 1 | 
- State Medium 1 | 
- State Fast 1 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 29779482 | 
- State Slow 0 | 
- State Medium 1 | 
- State Fast 1 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 29979486 | 
- State Slow 1 | 
- State Medium 1 | 
- State Fast 1 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 30179497 | 
- State Slow 0 | 
- State Medium 0 | 
- State Fast 0 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 30379503 | 
- State Slow 1 | 
- State Medium 0 | 
- State Fast 0 | 
- Total Loop time in Microseconds over 1000 iterations: 976 | 
- Timestamp: 30579506 | 
- State Slow 0 | 
- State Medium 1 | 
- State Fast 0 | 
+ alive @ 62050 ms | Total Loop time:  105505 | Avg over 447 iterations 236 
+ State of pin= 5: 0
+ State of pin= 6: 1
+ State of pin= 6: 0
+ State of pin= 5: 1
+ State of pin= 6: 1
+ State of pin= 6: 0
+ State of pin= 4: 1
 ... (Цикл повторюється)
 ```
 
