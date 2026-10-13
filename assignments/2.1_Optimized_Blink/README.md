@@ -10,27 +10,32 @@
 
 [Вивід в консоль](output/2.1_output.log)
 ```
-13:35:34.550 >  Total Loop time in Microseconds over 1000 iterations: 889 | 
-13:35:34.651 >  Timestamp: 439892426 | 
-13:35:34.651 >  LED State Slow 1 | 
-13:35:34.651 >  Total Loop time in Microseconds over 1000 iterations: 901 | 
-13:35:34.752 >  Timestamp: 439993094 | 
-13:35:34.752 >  LED State Slow 1 | 
-13:35:34.752 >  Total Loop time in Microseconds over 1000 iterations: 875 | 
-13:35:34.852 >  Timestamp: 440093762 | 
-13:35:34.852 >  LED State Slow 0 | 
-13:35:34.852 >  Total Loop time in Microseconds over 1000 iterations: 889 | 
-13:35:34.953 >  Timestamp: 440194430 | 
-13:35:34.953 >  LED State Slow 0 | 
-13:35:34.953 >  Total Loop time in Microseconds over 1000 iterations: 902 | 
-13:35:35.053 >  Timestamp: 440295089 | 
-13:35:35.053 >  LED State Slow 1 | 
-13:35:35.053 >  Total Loop time in Microseconds over 1000 iterations: 911 |
+Timestamp: 10865599 | 
+ LED State Slow 0 | 
+ Total Loop time: 49835 | Avg Loop time over 1000 iterations: 49 | 
+ Timestamp: 10966196 | 
+ LED State Slow 0 | 
+ Total Loop time: 49976 | Avg Loop time over 1000 iterations: 49 | 
+ Timestamp: 11066783 | 
+ LED State Slow 1 | 
+ Total Loop time: 49824 | Avg Loop time over 1000 iterations: 49 | 
+ Timestamp: 11167385 | 
+ LED State Slow 1 | 
+ Total Loop time: 49831 | Avg Loop time over 1000 iterations: 49 | 
+ Timestamp: 11267974 | 
+ LED State Slow 0 | 
+ Total Loop time: 49921 | Avg Loop time over 1000 iterations: 49 | 
+ Timestamp: 11368568 | 
+ LED State Slow 0 | 
+ Total Loop time: 49838 | Avg Loop time over 1000 iterations: 49 | 
+ Timestamp: 11469165 | 
+ LED State Slow 1 | 
+ Total Loop time: 49870 | Avg Loop time over 1000 iterations: 49 | 
 ```
 
 ### Відео демонстрація
 <video controls width="600">
-  <source src="./output/Assignment_2.2.mp4" type="video/mp4">
+  <source src="./output/Assignment_2.1.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
