@@ -49,25 +49,6 @@ void IRAM_ATTR onTimer() {
   timerAlarmEnable(timer);               // 4. Re-enable the alarm
 }
 
-// (Unused) Ця функція автоматично викликається системою, якщо Watchdog таймер вийшов.
-// extern "C" обов'язкове, щоб компілятор C++ правильно зв'язав цю функцію з ядром ESP-IDF.
-// extern "C" void esp_task_wdt_isr_user_handler() {
-
-//   // 1. Аварійно ВИМИКАЄМО небезпечне навантаження
-//   digitalWrite(RELAY_PIN, LOW);
-
-//   // 2. Вмикаємо візуальну індикацію аварії
-//   digitalWrite(ALARM_LED_PIN, HIGH);
-
-//   // 3. Збільшуємо лічильник аварій у енергонезалежній пам'яті
-//   crash_counter++;
-
-//   // 4. Оскільки ми встановили panic = false, система сама не перезавантажиться.
-//   // Але залишати її завислою назавжди не можна, тому ми самі викликаємо ресет
-//   // ПІСЛЯ того, як убезпечили обладнання.
-//   esp_restart();
-// }
-
 
 void setup() {
   Serial.begin(115200);
@@ -87,15 +68,6 @@ void setup() {
   // Активація апаратного переривання таймера
   timerAlarmEnable(timer);
 
-  
-  // Serial.printf("\n--- Запуск. Кількість попередніх аварій: %d ---\n", crash_counter);
-
-  // // Ініціалізуємо Watchdog на 3 секунди, panic = FALSE
-  // esp_task_wdt_init(3, false);
-  // esp_task_wdt_add(NULL); 
-
-  // Serial.printf("\n--- Запуск. Кількість попередніх аварій: %d ---\n", crash_counter);
-
   //По черзі вимикаємо піни 
     const uint8_t pins[] = {ALARM_LED_PIN, RELAY_PIN};
     for (uint8_t pin : pins) {
@@ -104,12 +76,8 @@ void setup() {
     }
 
 }
-// TODO: read the elapsed time during both (RelayOn/RelayOff) phases
 
-// Опційно
-
-// Watchdog
-// Логування станів
+// TODO: 
 // Захист від повторного запуску
 // ЛЕД індикатори, що дублюють поточний стан
 void loop() {
