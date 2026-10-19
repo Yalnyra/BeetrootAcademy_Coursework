@@ -17,8 +17,8 @@ hw_timer_t *timer = NULL;
 constexpr uint8_t HW_TIMER_TICKS_DIVIDER = 80;
 constexpr uint32_t COUNTER_DUTY_CYCLE = 1000000; // timer for relay NO mode; in microseconds
 constexpr uint32_t COUNTER_IDLE = 4000000; // timer for relay NC mode; in microseconds
-const int ALARM_LED_PIN = 4;   // Alarm activation switch 
-const int RELAY_PIN = 5; // Relay control pin 
+const int ALARM_LED_PIN = 4;   // Alternative PIN 
+const int RELAY_PIN = 5; // Alarm activation switch 
 // Змінна лічильника, доступна з контексту переривання
 uint32_t last_count = 0; // Did counter update last? 
 volatile uint32_t counter = 0;
@@ -27,12 +27,10 @@ volatile uint32_t counter = 0;
 volatile bool relayIsOn = false; 
 
 
-void blinkAlarm()   { static bool s; s = !s; digitalWrite(ALARM_LED_PIN, s); }
-void blinkRelay()   { static bool s; s = !s; digitalWrite(RELAY_PIN, s); }
+void blink(const int pin)   { static bool s; s = !s; digitalWrite(pin, s); }
 
 
 void IRAM_ATTR onTimer() {
-  timerAlarmDisable(timer);              // 1. Pause the alarm generation
   relayIsOn = !relayIsOn;
   counter++;
   if (relayIsOn){
@@ -42,11 +40,7 @@ void IRAM_ATTR onTimer() {
   else{
     timerAlarmWrite(timer, COUNTER_IDLE, true);  // 2. Write the duty cycle target value  
   }
-  // relayToggle();=
-  blinkAlarm();  
-  blinkRelay();
-  timerWrite(timer, 0);                  // 3. Optional: Reset counter to 0 to avoid overshoot
-  timerAlarmEnable(timer);               // 4. Re-enable the alarm
+  blink(RELAY_PIN);  
 }
 
 
@@ -84,9 +78,9 @@ void loop() {
    
   if (counter != last_count ) {
     last_count = counter;
-    int alarm_led_state = digitalRead(ALARM_LED_PIN);
+    // int alarm_led_state = digitalRead(ALARM_LED_PIN);
     int relay_led_state = digitalRead(RELAY_PIN);
-    Serial.printf("Time: %ld ms | Timer counter: %ld | LED ALARM  State %d", millis(), counter, alarm_led_state);
+    Serial.printf("Time: %ld ms | Timer counter: %ld | LED ALARM  State %d", millis(), counter, relay_led_state);
 }
 
 }
