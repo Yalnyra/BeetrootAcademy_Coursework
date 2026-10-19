@@ -56,7 +56,7 @@
 
 ### Відео демонстрація
 <video controls width="600">
-  <source src="./output/Assignment_2.3.mp4" type="video/mp4">
+  <source src="./output/Assignment_2.5.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 

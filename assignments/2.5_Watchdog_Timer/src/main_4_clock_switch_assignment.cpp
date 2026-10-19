@@ -80,7 +80,7 @@ void loop() {
     last_count = counter;
     // int alarm_led_state = digitalRead(ALARM_LED_PIN);
     int relay_led_state = digitalRead(RELAY_PIN);
-    Serial.printf("Time: %ld ms | Timer counter: %ld | LED ALARM  State %d", millis(), counter, relay_led_state);
+    Serial.printf("Time: %ld ms | Timer counter: %ld | LED ALARM  State %d \n", millis(), counter, relay_led_state);
 }
 
 }
