@@ -3,27 +3,20 @@
  * @file    main.cpp
  * @brief Implement long and short relay work cycles using a single hardware counter
 0. Use existing LED setup for control signal test 
-0. Assemble PJB Transistor + Relay schema
- 1. Use existing hardware timer to trigger an interrupt
- 2. Upon interrupt:
+ 2. Upon timer interrupt:
   2.1 Reset the hardware time
   2.2 Update the hardware clock duration upon interrupt
   2.3 toggle the relay
-3. Reassmeble 
+3. Reassmeble in Relay schema 
 
  */
 
 #include <Arduino.h>
 // Вказівник на екземпляр апаратного таймера
 hw_timer_t *timer = NULL;
-// Налаштовуємо вивід на світлодіоди 
-// Використовуємо 1 байт пам'яті для пінів і обчислюємо на етапі компіляції
-// Для налагодження можна:
-// замінити 1 годину на кілька секунд (Порахувати скільки в годиннику займає 1 година)
-// 15 хв замінити на пропорційно менший відрізок часу
 constexpr uint8_t HW_TIMER_TICKS_DIVIDER = 80;
 constexpr uint32_t COUNTER_DUTY_CYCLE = 1000000; // timer for relay NO mode; in microseconds
-constexpr uint32_t COUNTER_IDLE = 3000000; // timer for relay NC mode; in microseconds
+constexpr uint32_t COUNTER_IDLE = 4000000; // timer for relay NC mode; in microseconds
 const int ALARM_LED_PIN = 4;   // Alarm activation switch 
 const int RELAY_PIN = 5; // Relay control pin 
 // Змінна лічильника, доступна з контексту переривання
@@ -33,19 +26,11 @@ volatile uint32_t counter = 0;
 // Unneeded to use ENUM, since we only have states on/off 
 volatile bool relayIsOn = false; 
 
-// struct Task {
-//   uint32_t period; // як часто запускати, мс
-//   uint32_t last;   // коли запускали востаннє
-//   void (*run)();   // вказівник на функцію 
-// };
-
 
 void blinkAlarm()   { static bool s; s = !s; digitalWrite(ALARM_LED_PIN, s); }
 void blinkRelay()   { static bool s; s = !s; digitalWrite(RELAY_PIN, s); }
-void heartbeat()   { Serial.printf("alive @ %lu ms\n", millis()); }
 
-// Обробник переривання в пам'яті IRAM (критично для стабільності RTOS)
-// Todo: check that is edited correclty 
+
 void IRAM_ATTR onTimer() {
   timerAlarmDisable(timer);              // 1. Pause the alarm generation
   relayIsOn = !relayIsOn;
@@ -55,7 +40,7 @@ void IRAM_ATTR onTimer() {
     timerAlarmWrite(timer, COUNTER_DUTY_CYCLE, true);  // 2. Write the duty cycle target value 
   }
   else{
-    timerAlarmWrite(timer, COUNTER_DUTY_CYCLE, true);  // 2. Write the duty cycle target value  
+    timerAlarmWrite(timer, COUNTER_IDLE, true);  // 2. Write the duty cycle target value  
   }
   // relayToggle();=
   blinkAlarm();  
@@ -119,9 +104,6 @@ void setup() {
     }
 
 }
-
-
-// const uint32_t INTERVAL_MS = 1000;
 // TODO: read the elapsed time during both (RelayOn/RelayOff) phases
 
 // Опційно
@@ -131,20 +113,12 @@ void setup() {
 // Захист від повторного запуску
 // ЛЕД індикатори, що дублюють поточний стан
 void loop() {
-  // for (Task &t : tasks) { 
-  //   if (counter % t.period == 0 && t.last != counter) { 
-  //     t.last = counter;
-  //     t.run(); 
-  //   }
-  // } 
-
    
   if (counter != last_count ) {
     last_count = counter;
-    int alarm_led_state = digitalRead(RELAY_PIN);
-    int relay_led_state = digitalRead(ALARM_LED_PIN);
-    Serial.println("Time: %ld, Timer counter: %ld, LED ALARM  State %d", millis(), counter, alarm_led_state);
-    heartbeat();
+    int alarm_led_state = digitalRead(ALARM_LED_PIN);
+    int relay_led_state = digitalRead(RELAY_PIN);
+    Serial.printf("Time: %ld ms | Timer counter: %ld | LED ALARM  State %d", millis(), counter, alarm_led_state);
 }
 
 }
