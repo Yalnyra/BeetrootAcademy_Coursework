@@ -6,6 +6,7 @@
 #include "freertos/task.h"
 #include "driver/gpio.h"
 #include "esp_timer.h"
+#include "esp_log.h"
 
 #define LED          GPIO_NUM_4
 #define BUTTON       GPIO_NUM_16
@@ -59,7 +60,7 @@ void app_main(void)
                 
                 // Це реальне натискання, а не шум!
                 led_on = !led_on;
-                ESP_LOGI(TAG, "LED Status: ", led_on);
+                ESPI_LOGI(TAG, "LED Status: ", led_on);
                 gpio_set_level(LED, led_on);
                 
                 // Запам'ятовуємо час цього дійсного натискання

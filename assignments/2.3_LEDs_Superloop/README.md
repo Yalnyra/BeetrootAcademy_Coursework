@@ -1,55 +1,55 @@
 # <2.2>
 
-> EMB_25 Завдання 2.3: Superloop: Як змусити MCU робити кілька справ одночасно
+  > EMB_25 Завдання 2.3: Superloop: Як змусити MCU робити кілька справ одночасно
 
 
-### Схемотехніка
+  ### Схемотехніка
 
-[Посилання на Діаграму](https://app.cirkitdesigner.com/project/cbfc5bbb-d66e-47b1-b398-5468194a6da2)
+  [Посилання на Діаграму](https://app.cirkitdesigner.com/project/cbfc5bbb-d66e-47b1-b398-5468194a6da2)
 
-[Вивід в консоль](output/2.3_output.log)
-```
- alive @ 62050 ms | Total Loop time:  105505 | Avg over 447 iterations 236 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
-... (Цикл повторюється)
-```
+  [Вивід в консоль](output/2.3_output.log)
+  ```
+  alive @ 62050 ms | Total Loop time:  105505 | Avg over 447 iterations 236 
+  State of pin= 5: 0
+  State of pin= 6: 1
+  State of pin= 6: 0
+  State of pin= 5: 1
+  State of pin= 6: 1
+  State of pin= 6: 0
+  State of pin= 4: 1
+  ... (Цикл повторюється)
+  ```
 
-### Відео демонстрація
-<video controls width="600">
-  <source src="./output/Assignment_2.3.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+  ### Відео демонстрація
+  <video controls width="600">
+    <source src="./output/Assignment_2.3.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-### Вимоги до програми (Код)
+  ### Вимоги до програми (Код)
 
 
-**Керувати кількома незалежними процесами в одному loop() без блокування.**
+  **Керувати кількома незалежними процесами в одному loop() без блокування.**
 
-Є 3 світлодіоди:
+  Є 3 світлодіоди:
 
-LED1 блимає кожні 200 мс
-LED2 блимає кожні 500 мс
-LED3 блимає кожні 1000 мс
+  LED1 блимає кожні 200 мс
+  LED2 блимає кожні 500 мс
+  LED3 блимає кожні 1000 мс
 
-**Обмеження**
+  **Обмеження**
 
-❌ Заборонено використовувати delay()
-❌ Заборонено використовувати while() для очікування часу у loop() 
-✅ Дозволено використовувати millis()
+  ❌ Заборонено використовувати delay()
+  ❌ Заборонено використовувати while() для очікування часу у loop() 
+  ✅ Дозволено використовувати millis()
 
-## Набір деталей
+  ## Набір деталей
 
-| Деталь | Опис |
-|------|--------|
-| Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
-| Резистори | x3 220 Om |
-| Світлодіоди | x3 Green |
+  | Деталь | Опис |
+  |------|--------|
+  | Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
+  | Резистори | x3 220 Om |
+  | Світлодіоди | x3 Green |
 
 ### Вихід програми 
 
