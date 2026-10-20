@@ -5,7 +5,7 @@ Parse the Serial log into a file
 import serial
 from pathlib import Path
 
-LOG_PATH = Path(__file__).parent / ".." / output / "2.7_output.log"
+LOG_PATH = Path(__file__)/ "output" / "2.6" / "5.log"
 SERIAL_PATH = "COM16"
 ser = serial.Serial('COM16', 115200, timeout=1)
 
