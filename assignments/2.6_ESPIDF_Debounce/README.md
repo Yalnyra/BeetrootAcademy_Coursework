@@ -4,6 +4,9 @@
 >   Урок 28 Вимірювання часу спрацювання реле
 
 
+> Завдання по дебрязкіту кнопки: 2.4 і 2.6 : [main\lesson_2.6\*.c](.\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
+
+
 ### Схемотехніка
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/4b9e888e-fe7f-4cd1-8d9f-bb6672065835)
@@ -43,10 +46,33 @@
 | Світлодіоди | x3 Green |
 
 ### Вихід програми 
-
-Вивід програми 
-
-
+```
+I (13264) TRAFFIC: -> state 2 (3000 ms)
+I (16264) TRAFFIC: -> state 3 (10000 ms)
+I (26264) TRAFFIC: -> state 4 (2000 ms)
+I (28264) TRAFFIC: -> state 0 (10000 ms)
+I (35234) TRAFFIC: button
+I (35234) TRAFFIC: -> state 5 (0 ms)
+I (37734) TRAFFIC: button
+I (37734) TRAFFIC: -> state 3 (10000 ms)
+I (47734) TRAFFIC: -> state 4 (2000 ms)
+I (49734) TRAFFIC: -> state 0 (10000 ms)
+I (59734) TRAFFIC: -> state 1 (3000 ms)
+I (62734) TRAFFIC: -> state 2 (3000 ms)
+I (63464) TRAFFIC: button
+I (63464) TRAFFIC: -> state 5 (0 ms)
+I (66974) TRAFFIC: button
+I (66974) TRAFFIC: -> state 3 (10000 ms)
+I (69034) TRAFFIC: button
+I (69034) TRAFFIC: -> state 5 (0 ms)
+I (72604) TRAFFIC: button
+I (72604) TRAFFIC: -> state 3 (10000 ms)
+I (82604) TRAFFIC: -> state 4 (2000 ms)
+I (83504) TRAFFIC: button
+I (83504) TRAFFIC: -> state 5 (0 ms)
+I (87834) TRAFFIC: button
+I (87834) TRAFFIC: -> state 3 (10000 ms)
+```
 ## Передумови (версії, з якими зібрано проєкт)
 
 | Компонент | Версія / шлях |
