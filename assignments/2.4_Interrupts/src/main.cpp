@@ -7,7 +7,7 @@
 *  3. ISR = Event; Loop only sets button to ON if button is still in HIGH state; otherwise button is OFF '
 *  4. Full FSM with a delay between IDLE -> DEBOUNCE_PRESSED -> IGNORE_TRANSITIONS
 *  5. 1 with Hardware pull-up resistor + capacitor sequence 
-*
+* CODE FOR 2., 3. BROKEN SINCE COMMIT 
     Method        | Additional counts | Delay                                | Complexity | Comment
     No Debounce   | 1-4               | 0                                    | Easy.      | This is easy implementing but there are additional triggers
     With Debounce | interaction ended | ~50ms                                | Easy.      | Is easy implementing and more accurate than previous method
