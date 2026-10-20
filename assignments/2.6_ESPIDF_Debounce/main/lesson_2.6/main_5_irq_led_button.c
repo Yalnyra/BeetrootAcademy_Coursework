@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -14,13 +15,18 @@
 
 
 volatile bool button_event_flag = false;
+volatile uint32_t stateEnteredAt = 0; // Час першого фронту (з ISR), мс
+static uint32_t counter = 0;          // Кількість зарахованих натискань
 
 static const char *TAG = "BUTTON";
 
 static void IRAM_ATTR button_isr_handler(void* arg) 
 {
-    // Просто ставимо прапорець. Ніяких обчислень часу!
-    button_event_flag = true; 
+    // Ставимо прапорець і запам'ятовуємо час першого фронту
+    if (!button_event_flag) {
+        stateEnteredAt = (uint32_t)(esp_timer_get_time() / 1000);
+    }
+    button_event_flag = true;
 }
 
 void app_main(void)
@@ -41,11 +47,14 @@ void app_main(void)
 
     // Всі змінні для логіки тепер живуть локально і безпечно
     bool led_on = false;
-    uint32_t last_button_time = 0; // Час останнього успішного натискання
+    uint32_t last_valid_press = 0; // Час останнього успішного натискання (debounce)
+    uint32_t last_button_time = 0; // Попередній перший фронт (для логу)
 
     // Головний цикл
     while (1)
     {
+        uint32_t last_counter = counter;
+
         // Якщо преривання повідомило про зміну сигналу (навіть про брязкіт)
         if (button_event_flag) {
             
@@ -56,15 +65,24 @@ void app_main(void)
             uint32_t now = (uint32_t)(esp_timer_get_time() / 1000);
             
             // Перевіряємо антибрязкіт тут, у безпечній зоні
-            if (now - last_button_time > DEBOUNCE_MS) {
+            if (now - last_valid_press > DEBOUNCE_MS) {
                 
                 // Це реальне натискання, а не шум!
                 led_on = !led_on;
-                ESPI_LOGI(TAG, "LED Status: ", led_on);
                 gpio_set_level(LED, led_on);
+                counter++;
+                // ESP_LOGI(TAG, "LED Status: %" PRIu32, led_on);
+
+                if (last_counter != counter){
+                    // if counter has incremented, add a new time log:
+                    ESP_LOGI(TAG, "Press! Time %" PRIu32, now);
+                    ESP_LOGI(TAG, "Count: %" PRIu32, last_counter);
+                    ESP_LOGI(TAG, "Interrupt latency: %" PRIu32, stateEnteredAt - last_button_time);
+                }
+                last_button_time = stateEnteredAt; // Check first transition by interrupt
                 
                 // Запам'ятовуємо час цього дійсного натискання
-                last_button_time = now;
+                last_valid_press = now;
             }
             // Якщо пройшло менше 50 мс, if просто не виконається,
             // шум буде проігноровано, а прапорець ми вже скинули.

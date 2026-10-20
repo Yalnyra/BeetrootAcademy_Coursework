@@ -1,13 +1,17 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
 #include "esp_timer.h"
+#include "esp_log.h"
 
 #define LED          GPIO_NUM_4
 #define BUTTON       GPIO_NUM_7
 #define DEBOUNCE_MS  30
+
+static const char *TAG = "BUTTON";
 
 static inline uint32_t millis(void)
 {
@@ -30,10 +34,20 @@ void app_main(void)
     int buttonState = 1;             // Поточний стабільний стан кнопки
     int lastButtonState = 1;         // Попереднє зчитане значення
     uint32_t lastDebounceTime = 0;   // Час останньої зміни стану
+    uint32_t counter = 0;            // Кількість зарахованих натискань
+    uint32_t stateEnteredAt = 0;     // Час першого фронту від стабільного стану
+    uint32_t last_button_time = 0;   // Попередній перший фронт (для логу)
 
     while (1)
     {
+        uint32_t last_counter = counter;
+        uint32_t now = millis();
         int reading = gpio_get_level(BUTTON);
+
+        // Перший фронт після стабільного стану
+        if (reading != buttonState && lastButtonState == buttonState) {
+            stateEnteredAt = now;
+        }
 
         // Якщо стан змінився (через шум або реальне натискання)
         if (reading != lastButtonState) {
@@ -51,6 +65,16 @@ void app_main(void)
                 if (buttonState == 0) {
                     led_on = !led_on;
                     gpio_set_level(LED, led_on);
+                    // ESP_LOGI(TAG, "LED Status: %" PRIu32, led_on);
+                    counter++;
+
+                    if (last_counter != counter){
+                        // if counter has incremented, add a new time log:
+                        ESP_LOGI(TAG, "Press! Time %" PRIu32, now);
+                        ESP_LOGI(TAG, "Count: %" PRIu32, last_counter);
+                        ESP_LOGI(TAG, "Interrupt latency: %" PRIu32, stateEnteredAt - last_button_time);
+                    }
+                    last_button_time = stateEnteredAt; // Check first transition by interrupt
                 }
             }
         }
