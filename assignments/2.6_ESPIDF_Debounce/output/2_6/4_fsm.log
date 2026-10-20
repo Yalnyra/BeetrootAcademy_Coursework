@@ -1,0 +1,41 @@
+I (25673) BUTTON: Count: 2
+I (25673) BUTTON: Interrupt latency: 550
+I (26323) BUTTON: Press! Time 26100
+I (26323) BUTTON: Count: 3
+I (26323) BUTTON: Interrupt latency: 650
+I (26723) BUTTON: Press! Time 26500
+I (26723) BUTTON: Count: 4
+I (26723) BUTTON: Interrupt latency: 400
+I (27573) BUTTON: Press! Time 27350
+I (27573) BUTTON: Count: 5
+I (27573) BUTTON: Interrupt latency: 850
+I (28123) BUTTON: Press! Time 27900
+I (28123) BUTTON: Count: 6
+I (28123) BUTTON: Interrupt latency: 550
+I (28473) BUTTON: Press! Time 28250
+I (28473) BUTTON: Count: 7
+I (28473) BUTTON: Interrupt latency: 350
+I (29273) BUTTON: Press! Time 29050
+I (29273) BUTTON: Count: 8
+I (29273) BUTTON: Interrupt latency: 800
+I (29773) BUTTON: Press! Time 29550
+I (29773) BUTTON: Count: 9
+I (29773) BUTTON: Interrupt latency: 500
+I (30223) BUTTON: Press! Time 30000
+I (30223) BUTTON: Count: 10
+I (30223) BUTTON: Interrupt latency: 450
+I (37523) BUTTON: Press! Time 37300
+I (37523) BUTTON: Count: 11
+I (37523) BUTTON: Interrupt latency: 7300
+I (40273) BUTTON: Press! Time 40050
+I (40273) BUTTON: Count: 12
+I (40273) BUTTON: Interrupt latency: 2750
+I (41923) BUTTON: Press! Time 41700
+I (41923) BUTTON: Count: 13
+I (41923) BUTTON: Interrupt latency: 1650
+I (42673) BUTTON: Press! Time 42450
+I (42673) BUTTON: Count: 14
+I (42673) BUTTON: Interrupt latency: 750
+I (44823) BUTTON: Press! Time 44600
+I (44823) BUTTON: Count: 15
+I (44823) BUTTON: Interrupt latency: 2150
