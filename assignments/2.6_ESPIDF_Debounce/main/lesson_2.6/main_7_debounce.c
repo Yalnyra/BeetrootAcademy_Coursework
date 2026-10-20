@@ -10,8 +10,8 @@
 
 #define LED          GPIO_NUM_4
 #define BUTTON       GPIO_NUM_16
-#define POLL_MS 50 
-#define DEBOUNCE_MS  50
+#define POLL_MS 5 
+#define DEBOUNCE_MS  10
 
 static const char *TAG = "BUTTON";
 

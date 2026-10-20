@@ -11,7 +11,7 @@
 
 #define LED          GPIO_NUM_4
 #define BUTTON       GPIO_NUM_16
-#define DEBOUNCE_MS  50
+#define DEBOUNCE_MS  10
 
 
 volatile bool button_event_flag = false;

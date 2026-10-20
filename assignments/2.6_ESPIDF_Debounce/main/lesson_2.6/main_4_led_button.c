@@ -8,8 +8,8 @@
 #include "esp_log.h"
 
 #define LED          GPIO_NUM_4
-#define BUTTON       GPIO_NUM_7
-#define DEBOUNCE_MS  30
+#define BUTTON       GPIO_NUM_16
+#define DEBOUNCE_MS  10
 
 static const char *TAG = "BUTTON";
 
