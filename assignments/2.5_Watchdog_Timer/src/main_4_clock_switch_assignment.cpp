@@ -19,28 +19,19 @@ constexpr uint32_t COUNTER_DUTY_CYCLE = 1000000; // timer for relay NO mode; in 
 constexpr uint32_t COUNTER_IDLE = 4000000; // timer for relay NC mode; in microseconds
 const int ALARM_LED_PIN = 4;   // Alternative PIN 
 const int RELAY_PIN = 5; // Alarm activation switch 
-// Змінна лічильника, доступна з контексту переривання
-uint32_t last_count = 0; // Did counter update last? 
-volatile uint32_t counter = 0;
 // TODO: Change to static var once 
 // Unneeded to use ENUM, since we only have states on/off 
-volatile bool relayIsOn = false; 
+// Доступна змінна з контексту переривання 
+static volatile bool timerEventFlag = false;
+//False - ввимкнене реле, True - ввімкнене реле
 
 
 void blink(const int pin)   { static bool s; s = !s; digitalWrite(pin, s); }
 
 
 void IRAM_ATTR onTimer() {
-  relayIsOn = !relayIsOn;
-  counter++;
-  if (relayIsOn){
-    // Turn on the relay 
-    timerAlarmWrite(timer, COUNTER_DUTY_CYCLE, true);  // 2. Write the duty cycle target value 
-  }
-  else{
-    timerAlarmWrite(timer, COUNTER_IDLE, true);  // 2. Write the duty cycle target value  
-  }
-  blink(RELAY_PIN);  
+  // just create an event flag, no driver operation inside ISR
+  timerEventFlag = true;
 }
 
 
@@ -75,9 +66,23 @@ void setup() {
 // Захист від повторного запуску
 // ЛЕД індикатори, що дублюють поточний стан
 void loop() {
-   
-  if (counter != last_count ) {
-    last_count = counter;
+  static bool relayIsOn = false; 
+  static uint32_t counter = 0;
+
+  if (timerEventFlag) {
+    timerEventFlag = false; // Clear the flag 
+    relayIsOn = !relayIsOn; // Switch the timer
+    if (relayIsOn){
+      // Turn on the relay 
+      timerAlarmWrite(timer, COUNTER_DUTY_CYCLE, true);  // 2. Write the duty cycle target value 
+    }
+    else{
+      timerAlarmWrite(timer, COUNTER_IDLE, true);  // 2. Write the idle target value  
+    }
+    blink(RELAY_PIN);  
+    // blink(ALARM_LED_PIN);  
+
+    counter++;
     // int alarm_led_state = digitalRead(ALARM_LED_PIN);
     int relay_led_state = digitalRead(RELAY_PIN);
     Serial.printf("Time: %ld ms | Timer counter: %ld | LED ALARM  State %d \n", millis(), counter, relay_led_state);
