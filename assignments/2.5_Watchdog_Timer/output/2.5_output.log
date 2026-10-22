@@ -1,28 +1,217 @@
-Time: 14100 ms | Timer counter: 5 | LED ALARM  State 1
-Time: 15100 ms | Timer counter: 6 | LED ALARM  State 0
-Time: 19100 ms | Timer counter: 7 | LED ALARM  State 1
-Time: 20100 ms | Timer counter: 8 | LED ALARM  State 0
-Time: 24100 ms | Timer counter: 9 | LED ALARM  State 1
-Time: 25100 ms | Timer counter: 10 | LED ALARM  State 0
-Time: 29100 ms | Timer counter: 11 | LED ALARM  State 1
-Time: 30100 ms | Timer counter: 12 | LED ALARM  State 0
-Time: 34100 ms | Timer counter: 13 | LED ALARM  State 1
-Time: 35100 ms | Timer counter: 14 | LED ALARM  State 0
-Time: 39100 ms | Timer counter: 15 | LED ALARM  State 1
-Time: 40100 ms | Timer counter: 16 | LED ALARM  State 0
-Time: 44100 ms | Timer counter: 17 | LED ALARM  State 1
-Time: 45100 ms | Timer counter: 18 | LED ALARM  State 0
-Time: 49100 ms | Timer counter: 19 | LED ALARM  State 1
-Time: 50100 ms | Timer counter: 20 | LED ALARM  State 0
-Time: 54100 ms | Timer counter: 21 | LED ALARM  State 1
-Time: 55100 ms | Timer counter: 22 | LED ALARM  State 0
-Time: 59100 ms | Timer counter: 23 | LED ALARM  State 1
-Time: 60100 ms | Timer counter: 24 | LED ALARM  State 0
-Time: 64100 ms | Timer counter: 25 | LED ALARM  State 1
-Time: 65100 ms | Timer counter: 26 | LED ALARM  State 0
-Time: 69100 ms | Timer counter: 27 | LED ALARM  State 1
-Time: 70100 ms | Timer counter: 28 | LED ALARM  State 0
-Time: 74100 ms | Timer counter: 29 | LED ALARM  State 1
-Time: 75100 ms | Timer counter: 30 | LED ALARM  State 0
-Time: 79100 ms | Timer counter: 31 | LED ALARM  State 1
-Time: 80100 ms | Timer counter: 32 | LED ALARM  State 0
+12:17:45.810 > Time: 4097 ms | Timer counter: 1 | LED ALARM  State 1 
+12:17:46.810 > Time: 5097 ms | Timer counter: 2 | LED ALARM  State 0 
+12:17:50.809 > Time: 9097 ms | Timer counter: 3 | LED ALARM  State 1 
+12:17:51.810 > Time: 10097 ms | Timer counter: 4 | LED ALARM  State 0 
+12:17:55.811 > Time: 14097 ms | Timer counter: 5 | LED ALARM  State 1 
+12:17:56.810 > Time: 15097 ms | Timer counter: 6 | LED ALARM  State 0 
+12:18:00.810 > Time: 19097 ms | Timer counter: 7 | LED ALARM  State 1 
+12:18:01.810 > Time: 20097 ms | Timer counter: 8 | LED ALARM  State 0 
+12:18:05.810 > Time: 24097 ms | Timer counter: 9 | LED ALARM  State 1 
+12:18:06.810 > Time: 25097 ms | Timer counter: 10 | LED ALARM  State 0 
+12:18:10.810 > Time: 29097 ms | Timer counter: 11 | LED ALARM  State 1 
+12:18:11.810 > Time: 30097 ms | Timer counter: 12 | LED ALARM  State 0 
+12:18:15.811 > Time: 34097 ms | Timer counter: 13 | LED ALARM  State 1 
+12:18:16.810 > Time: 35097 ms | Timer counter: 14 | LED ALARM  State 0 
+12:18:20.811 > Time: 39097 ms | Timer counter: 15 | LED ALARM  State 1 
+12:18:21.810 > Time: 40097 ms | Timer counter: 16 | LED ALARM  State 0 
+12:18:25.811 > Time: 44097 ms | Timer counter: 17 | LED ALARM  State 1 
+12:18:26.811 > Time: 45097 ms | Timer counter: 18 | LED ALARM  State 0 
+12:18:30.811 > Time: 49097 ms | Timer counter: 19 | LED ALARM  State 1 
+12:18:31.810 > Time: 50097 ms | Timer counter: 20 | LED ALARM  State 0 
+12:18:35.811 > Time: 54097 ms | Timer counter: 21 | LED ALARM  State 1 
+12:18:36.811 > Time: 55097 ms | Timer counter: 22 | LED ALARM  State 0 
+12:18:40.811 > Time: 59097 ms | Timer counter: 23 | LED ALARM  State 1 
+12:18:41.811 > Time: 60097 ms | Timer counter: 24 | LED ALARM  State 0 
+12:18:45.811 > Time: 64097 ms | Timer counter: 25 | LED ALARM  State 1 
+12:18:46.811 > Time: 65097 ms | Timer counter: 26 | LED ALARM  State 0 
+12:18:50.811 > Time: 69097 ms | Timer counter: 27 | LED ALARM  State 1 
+12:18:51.811 > Time: 70097 ms | Timer counter: 28 | LED ALARM  State 0 
+12:18:55.811 > Time: 74097 ms | Timer counter: 29 | LED ALARM  State 1 
+12:18:56.811 > Time: 75097 ms | Timer counter: 30 | LED ALARM  State 0 
+12:19:00.811 > Time: 79097 ms | Timer counter: 31 | LED ALARM  State 1 
+12:19:01.811 > Time: 80097 ms | Timer counter: 32 | LED ALARM  State 0 
+12:19:05.811 > Time: 84097 ms | Timer counter: 33 | LED ALARM  State 1 
+12:19:06.811 > Time: 85097 ms | Timer counter: 34 | LED ALARM  State 0 
+12:19:10.811 > Time: 89097 ms | Timer counter: 35 | LED ALARM  State 1 
+12:19:11.811 > Time: 90097 ms | Timer counter: 36 | LED ALARM  State 0 
+12:19:15.811 > Time: 94097 ms | Timer counter: 37 | LED ALARM  State 1 
+12:19:16.811 > Time: 95097 ms | Timer counter: 38 | LED ALARM  State 0 
+12:19:20.812 > Time: 99097 ms | Timer counter: 39 | LED ALARM  State 1 
+12:19:21.811 > Time: 100097 ms | Timer counter: 40 | LED ALARM  State 0 
+12:19:25.811 > Time: 104097 ms | Timer counter: 41 | LED ALARM  State 1 
+12:19:26.811 > Time: 105097 ms | Timer counter: 42 | LED ALARM  State 0 
+12:19:30.811 > Time: 109097 ms | Timer counter: 43 | LED ALARM  State 1 
+12:19:31.811 > Time: 110097 ms | Timer counter: 44 | LED ALARM  State 0 
+12:19:35.811 > Time: 114097 ms | Timer counter: 45 | LED ALARM  State 1 
+12:19:36.812 > Time: 115097 ms | Timer counter: 46 | LED ALARM  State 0 
+12:19:40.812 > Time: 119097 ms | Timer counter: 47 | LED ALARM  State 1 
+12:19:41.812 > Time: 120097 ms | Timer counter: 48 | LED ALARM  State 0 
+12:19:45.812 > Time: 124097 ms | Timer counter: 49 | LED ALARM  State 1 
+12:19:46.811 > Time: 125097 ms | Timer counter: 50 | LED ALARM  State 0 
+12:19:50.812 > Time: 129097 ms | Timer counter: 51 | LED ALARM  State 1 
+12:19:51.812 > Time: 130097 ms | Timer counter: 52 | LED ALARM  State 0 
+12:19:55.812 > Time: 134097 ms | Timer counter: 53 | LED ALARM  State 1 
+12:19:56.812 > Time: 135097 ms | Timer counter: 54 | LED ALARM  State 0 
+12:20:00.812 > Time: 139097 ms | Timer counter: 55 | LED ALARM  State 1 
+12:20:01.812 > Time: 140097 ms | Timer counter: 56 | LED ALARM  State 0 
+12:20:05.813 > Time: 144097 ms | Timer counter: 57 | LED ALARM  State 1 
+12:20:06.812 > Time: 145097 ms | Timer counter: 58 | LED ALARM  State 0 
+12:20:10.812 > Time: 149097 ms | Timer counter: 59 | LED ALARM  State 1 
+12:20:11.812 > Time: 150097 ms | Timer counter: 60 | LED ALARM  State 0 
+12:20:15.813 > Time: 154097 ms | Timer counter: 61 | LED ALARM  State 1 
+12:20:16.813 > Time: 155097 ms | Timer counter: 62 | LED ALARM  State 0 
+12:20:20.812 > Time: 159097 ms | Timer counter: 63 | LED ALARM  State 1 
+12:20:21.811 > Time: 160097 ms | Timer counter: 64 | LED ALARM  State 0 
+12:20:25.813 > Time: 164097 ms | Timer counter: 65 | LED ALARM  State 1 
+12:20:26.812 > Time: 165097 ms | Timer counter: 66 | LED ALARM  State 0 
+12:20:30.813 > Time: 169097 ms | Timer counter: 67 | LED ALARM  State 1 
+12:20:31.813 > Time: 170097 ms | Timer counter: 68 | LED ALARM  State 0 
+12:20:35.813 > Time: 174097 ms | Timer counter: 69 | LED ALARM  State 1 
+12:20:36.812 > Time: 175097 ms | Timer counter: 70 | LED ALARM  State 0 
+12:20:40.813 > Time: 179097 ms | Timer counter: 71 | LED ALARM  State 1 
+12:20:41.813 > Time: 180097 ms | Timer counter: 72 | LED ALARM  State 0 
+12:20:45.813 > Time: 184097 ms | Timer counter: 73 | LED ALARM  State 1 
+12:20:46.813 > Time: 185097 ms | Timer counter: 74 | LED ALARM  State 0 
+12:20:50.813 > Time: 189097 ms | Timer counter: 75 | LED ALARM  State 1 
+12:20:51.813 > Time: 190097 ms | Timer counter: 76 | LED ALARM  State 0 
+12:20:55.813 > Time: 194097 ms | Timer counter: 77 | LED ALARM  State 1 
+12:20:56.812 > Time: 195097 ms | Timer counter: 78 | LED ALARM  State 0 
+12:21:00.814 > Time: 199097 ms | Timer counter: 79 | LED ALARM  State 1 
+12:21:01.813 > Time: 200097 ms | Timer counter: 80 | LED ALARM  State 0 
+12:21:05.813 > Time: 204097 ms | Timer counter: 81 | LED ALARM  State 1 
+12:21:06.813 > Time: 205097 ms | Timer counter: 82 | LED ALARM  State 0 
+12:21:10.813 > Time: 209097 ms | Timer counter: 83 | LED ALARM  State 1 
+12:21:11.813 > Time: 210097 ms | Timer counter: 84 | LED ALARM  State 0 
+12:21:15.814 > Time: 214097 ms | Timer counter: 85 | LED ALARM  State 1 
+12:21:16.812 > Time: 215097 ms | Timer counter: 86 | LED ALARM  State 0 
+12:21:20.814 > Time: 219097 ms | Timer counter: 87 | LED ALARM  State 1 
+12:21:21.814 > Time: 220097 ms | Timer counter: 88 | LED ALARM  State 0 
+12:21:25.814 > Time: 224097 ms | Timer counter: 89 | LED ALARM  State 1 
+12:21:26.814 > Time: 225097 ms | Timer counter: 90 | LED ALARM  State 0 
+12:21:30.814 > Time: 229097 ms | Timer counter: 91 | LED ALARM  State 1 
+12:21:31.814 > Time: 230097 ms | Timer counter: 92 | LED ALARM  State 0 
+12:21:35.814 > Time: 234097 ms | Timer counter: 93 | LED ALARM  State 1 
+12:21:36.814 > Time: 235097 ms | Timer counter: 94 | LED ALARM  State 0 
+12:21:40.814 > Time: 239097 ms | Timer counter: 95 | LED ALARM  State 1 
+12:21:41.814 > Time: 240097 ms | Timer counter: 96 | LED ALARM  State 0 
+12:21:45.815 > Time: 244097 ms | Timer counter: 97 | LED ALARM  State 1 
+12:21:46.814 > Time: 245097 ms | Timer counter: 98 | LED ALARM  State 0 
+12:21:50.814 > Time: 249097 ms | Timer counter: 99 | LED ALARM  State 1 
+12:21:51.814 > Time: 250097 ms | Timer counter: 100 | LED ALARM  State 0 
+12:21:55.815 > Time: 254097 ms | Timer counter: 101 | LED ALARM  State 1 
+12:21:56.814 > Time: 255097 ms | Timer counter: 102 | LED ALARM  State 0 
+12:22:00.815 > Time: 259097 ms | Timer counter: 103 | LED ALARM  State 1 
+12:22:01.815 > Time: 260097 ms | Timer counter: 104 | LED ALARM  State 0 
+12:22:05.815 > Time: 264097 ms | Timer counter: 105 | LED ALARM  State 1 
+12:22:06.815 > Time: 265097 ms | Timer counter: 106 | LED ALARM  State 0 
+12:22:10.815 > Time: 269097 ms | Timer counter: 107 | LED ALARM  State 1 
+12:22:11.815 > Time: 270097 ms | Timer counter: 108 | LED ALARM  State 0 
+12:22:15.815 > Time: 274097 ms | Timer counter: 109 | LED ALARM  State 1 
+12:22:16.815 > Time: 275097 ms | Timer counter: 110 | LED ALARM  State 0 
+12:22:20.815 > Time: 279097 ms | Timer counter: 111 | LED ALARM  State 1 
+12:22:21.815 > Time: 280097 ms | Timer counter: 112 | LED ALARM  State 0 
+12:22:25.815 > Time: 284097 ms | Timer counter: 113 | LED ALARM  State 1 
+12:22:26.815 > Time: 285097 ms | Timer counter: 114 | LED ALARM  State 0 
+12:22:30.814 > Time: 289097 ms | Timer counter: 115 | LED ALARM  State 1 
+12:22:31.815 > Time: 290097 ms | Timer counter: 116 | LED ALARM  State 0 
+12:22:35.815 > Time: 294097 ms | Timer counter: 117 | LED ALARM  State 1 
+12:22:36.815 > Time: 295097 ms | Timer counter: 118 | LED ALARM  State 0 
+12:22:40.816 > Time: 299097 ms | Timer counter: 119 | LED ALARM  State 1 
+12:22:41.815 > Time: 300097 ms | Timer counter: 120 | LED ALARM  State 0 
+12:22:45.815 > Time: 304097 ms | Timer counter: 121 | LED ALARM  State 1 
+12:22:46.815 > Time: 305097 ms | Timer counter: 122 | LED ALARM  State 0 
+12:22:50.816 > Time: 309097 ms | Timer counter: 123 | LED ALARM  State 1 
+12:22:51.815 > Time: 310097 ms | Timer counter: 124 | LED ALARM  State 0 
+12:22:55.816 > Time: 314097 ms | Timer counter: 125 | LED ALARM  State 1 
+12:22:56.816 > Time: 315097 ms | Timer counter: 126 | LED ALARM  State 0 
+12:23:00.816 > Time: 319097 ms | Timer counter: 127 | LED ALARM  State 1 
+12:23:01.815 > Time: 320097 ms | Timer counter: 128 | LED ALARM  State 0 
+12:23:05.816 > Time: 324097 ms | Timer counter: 129 | LED ALARM  State 1 
+12:23:06.816 > Time: 325097 ms | Timer counter: 130 | LED ALARM  State 0 
+12:23:10.816 > Time: 329097 ms | Timer counter: 131 | LED ALARM  State 1 
+12:23:11.815 > Time: 330097 ms | Timer counter: 132 | LED ALARM  State 0 
+12:23:15.816 > Time: 334097 ms | Timer counter: 133 | LED ALARM  State 1 
+12:23:16.816 > Time: 335097 ms | Timer counter: 134 | LED ALARM  State 0 
+12:23:20.816 > Time: 339097 ms | Timer counter: 135 | LED ALARM  State 1 
+12:23:21.816 > Time: 340097 ms | Timer counter: 136 | LED ALARM  State 0 
+12:23:25.817 > Time: 344097 ms | Timer counter: 137 | LED ALARM  State 1 
+12:23:26.816 > Time: 345097 ms | Timer counter: 138 | LED ALARM  State 0 
+12:23:30.817 > Time: 349097 ms | Timer counter: 139 | LED ALARM  State 1 
+12:23:31.816 > Time: 350097 ms | Timer counter: 140 | LED ALARM  State 0 
+12:23:35.816 > Time: 354097 ms | Timer counter: 141 | LED ALARM  State 1 
+12:23:36.816 > Time: 355097 ms | Timer counter: 142 | LED ALARM  State 0 
+12:23:40.816 > Time: 359097 ms | Timer counter: 143 | LED ALARM  State 1 
+12:23:41.815 > Time: 360097 ms | Timer counter: 144 | LED ALARM  State 0 
+12:23:45.817 > Time: 364097 ms | Timer counter: 145 | LED ALARM  State 1 
+12:23:46.817 > Time: 365097 ms | Timer counter: 146 | LED ALARM  State 0 
+12:23:50.816 > Time: 369097 ms | Timer counter: 147 | LED ALARM  State 1 
+12:23:51.817 > Time: 370097 ms | Timer counter: 148 | LED ALARM  State 0 
+12:23:55.817 > Time: 374097 ms | Timer counter: 149 | LED ALARM  State 1 
+12:23:56.817 > Time: 375097 ms | Timer counter: 150 | LED ALARM  State 0 
+12:24:00.816 > Time: 379097 ms | Timer counter: 151 | LED ALARM  State 1 
+12:24:01.817 > Time: 380097 ms | Timer counter: 152 | LED ALARM  State 0 
+12:24:05.817 > Time: 384097 ms | Timer counter: 153 | LED ALARM  State 1 
+12:24:06.817 > Time: 385097 ms | Timer counter: 154 | LED ALARM  State 0 
+12:24:10.817 > Time: 389097 ms | Timer counter: 155 | LED ALARM  State 1 
+12:24:11.817 > Time: 390097 ms | Timer counter: 156 | LED ALARM  State 0 
+12:24:15.817 > Time: 394097 ms | Timer counter: 157 | LED ALARM  State 1 
+12:24:16.817 > Time: 395097 ms | Timer counter: 158 | LED ALARM  State 0 
+12:24:20.818 > Time: 399097 ms | Timer counter: 159 | LED ALARM  State 1 
+12:24:21.817 > Time: 400097 ms | Timer counter: 160 | LED ALARM  State 0 
+12:24:25.818 > Time: 404097 ms | Timer counter: 161 | LED ALARM  State 1 
+12:24:26.817 > Time: 405097 ms | Timer counter: 162 | LED ALARM  State 0 
+12:24:30.817 > Time: 409097 ms | Timer counter: 163 | LED ALARM  State 1 
+12:24:31.817 > Time: 410097 ms | Timer counter: 164 | LED ALARM  State 0 
+12:24:35.818 > Time: 414097 ms | Timer counter: 165 | LED ALARM  State 1 
+12:24:36.818 > Time: 415097 ms | Timer counter: 166 | LED ALARM  State 0 
+12:24:40.817 > Time: 419097 ms | Timer counter: 167 | LED ALARM  State 1 
+12:24:41.818 > Time: 420097 ms | Timer counter: 168 | LED ALARM  State 0 
+12:24:45.818 > Time: 424097 ms | Timer counter: 169 | LED ALARM  State 1 
+12:24:46.818 > Time: 425097 ms | Timer counter: 170 | LED ALARM  State 0 
+12:24:50.818 > Time: 429097 ms | Timer counter: 171 | LED ALARM  State 1 
+12:24:51.818 > Time: 430097 ms | Timer counter: 172 | LED ALARM  State 0 
+12:24:55.818 > Time: 434097 ms | Timer counter: 173 | LED ALARM  State 1 
+12:24:56.818 > Time: 435097 ms | Timer counter: 174 | LED ALARM  State 0 
+12:25:00.818 > Time: 439097 ms | Timer counter: 175 | LED ALARM  State 1 
+12:25:01.818 > Time: 440097 ms | Timer counter: 176 | LED ALARM  State 0 
+12:25:05.818 > Time: 444097 ms | Timer counter: 177 | LED ALARM  State 1 
+12:25:06.819 > Time: 445097 ms | Timer counter: 178 | LED ALARM  State 0 
+12:25:10.818 > Time: 449097 ms | Timer counter: 179 | LED ALARM  State 1 
+12:25:11.818 > Time: 450097 ms | Timer counter: 180 | LED ALARM  State 0 
+12:25:15.818 > Time: 454097 ms | Timer counter: 181 | LED ALARM  State 1 
+12:25:16.818 > Time: 455097 ms | Timer counter: 182 | LED ALARM  State 0 
+12:25:20.818 > Time: 459097 ms | Timer counter: 183 | LED ALARM  State 1 
+12:25:21.818 > Time: 460097 ms | Timer counter: 184 | LED ALARM  State 0 
+12:25:25.818 > Time: 464097 ms | Timer counter: 185 | LED ALARM  State 1 
+12:25:26.818 > Time: 465097 ms | Timer counter: 186 | LED ALARM  State 0 
+12:25:30.819 > Time: 469097 ms | Timer counter: 187 | LED ALARM  State 1 
+12:25:31.819 > Time: 470097 ms | Timer counter: 188 | LED ALARM  State 0 
+12:25:35.819 > Time: 474097 ms | Timer counter: 189 | LED ALARM  State 1 
+12:25:36.819 > Time: 475097 ms | Timer counter: 190 | LED ALARM  State 0 
+12:25:40.819 > Time: 479097 ms | Timer counter: 191 | LED ALARM  State 1 
+12:25:41.818 > Time: 480097 ms | Timer counter: 192 | LED ALARM  State 0 
+12:25:45.819 > Time: 484097 ms | Timer counter: 193 | LED ALARM  State 1 
+12:25:46.819 > Time: 485097 ms | Timer counter: 194 | LED ALARM  State 0 
+12:25:50.819 > Time: 489097 ms | Timer counter: 195 | LED ALARM  State 1 
+12:25:51.819 > Time: 490097 ms | Timer counter: 196 | LED ALARM  State 0 
+12:25:55.819 > Time: 494097 ms | Timer counter: 197 | LED ALARM  State 1 
+12:25:56.819 > Time: 495097 ms | Timer counter: 198 | LED ALARM  State 0 
+12:26:00.819 > Time: 499097 ms | Timer counter: 199 | LED ALARM  State 1 
+12:26:01.819 > Time: 500097 ms | Timer counter: 200 | LED ALARM  State 0 
+12:26:05.819 > Time: 504097 ms | Timer counter: 201 | LED ALARM  State 1 
+12:26:06.819 > Time: 505097 ms | Timer counter: 202 | LED ALARM  State 0 
+12:26:10.819 > Time: 509097 ms | Timer counter: 203 | LED ALARM  State 1 
+12:26:11.819 > Time: 510097 ms | Timer counter: 204 | LED ALARM  State 0 
+12:26:15.819 > Time: 514097 ms | Timer counter: 205 | LED ALARM  State 1 
+12:26:16.819 > Time: 515097 ms | Timer counter: 206 | LED ALARM  State 0 
+12:26:20.819 > Time: 519097 ms | Timer counter: 207 | LED ALARM  State 1 
+12:26:21.819 > Time: 520097 ms | Timer counter: 208 | LED ALARM  State 0 
+12:26:25.820 > Time: 524097 ms | Timer counter: 209 | LED ALARM  State 1 
+12:26:26.819 > Time: 525097 ms | Timer counter: 210 | LED ALARM  State 0 
+12:26:30.819 > Time: 529097 ms | Timer counter: 211 | LED ALARM  State 1 
+12:26:31.820 > Time: 530097 ms | Timer counter: 212 | LED ALARM  State 0 
+12:26:35.820 > Time: 534097 ms | Timer counter: 213 | LED ALARM  State 1 
+12:26:36.819 > Time: 535097 ms | Timer counter: 214 | LED ALARM  State 0 
+12:26:40.820 > Time: 539097 ms | Timer counter: 215 | LED ALARM  State 1 
+12:26:41.819 > Time: 540097 ms | Timer counter: 216 | LED ALARM  State 0 
+12:26:45.819 > Time: 544097 ms | Timer counter: 217 | LED ALARM  State 1 
