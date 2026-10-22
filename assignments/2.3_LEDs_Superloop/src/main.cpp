@@ -55,18 +55,20 @@ class Task {
 public:
 
     Task(): frequency(Config::LED_PIN_SLOW), last(0), func(nullptr){}
-    // GPIO output pin constructor
-    // GPIO output pin constructor
-    explicit Task(uint32_t frequency): frequency(frequency), last(0), func(nullptr){}
+    explicit Task(uint32_t frequency): pin(0), frequency(frequency), last(0), func(nullptr){}
     
-    // GPIO output pin constructor
-    explicit Task(uint32_t frequency,  void (*const func)()): frequency(frequency), last(0), func(func){}
+    explicit Task(uint32_t frequency,  void (*const func)()): pin(0), frequency(frequency), last(0), func(func){}
+    // GPIO output pin enabled 
+    explicit Task(uint8_t pin, uint32_t frequency,  void (*const func)()): pin(pin), frequency(frequency), last(0), func(func){}
+
     ~Task(){
 
     }
-    void init(void (*const func)()){
-      this->func = func; 
-      return;
+    bool init(uint8_t pin){
+      if(!pin) { return false; }
+      this->pin = pin; 
+      pinMode(pin, OUTPUT);
+      return true;
     }
     bool execute(){
       bool valid = (bool)func;
@@ -109,9 +111,9 @@ Task tasks[] = {
 void setup()
 {
   Serial.begin(115200);  
-  pinMode(Config::LED_PIN_SLOW, OUTPUT);
-  pinMode(Config::LED_PIN_MEDIUM, OUTPUT);
-  pinMode(Config::LED_PIN_FAST, OUTPUT);
+  tasks[0].init(Config::LED_PIN_SLOW);
+  tasks[1].init(Config::LED_PIN_MEDIUM);
+  tasks[2].init(Config::LED_PIN_FAST);
 }
 
 void loop()
