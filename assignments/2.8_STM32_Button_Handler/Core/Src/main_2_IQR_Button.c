@@ -19,12 +19,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"
+#include "usbd_cdc_if.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <string.h>
-#include "usbd_cdc_if.h"
 
 /* USER CODE END Includes */
 
@@ -47,8 +46,10 @@
 
 /* USER CODE BEGIN PV */
 
+/*UART buffer variables */
 char buf[64];
-int value = 0;
+int value = 0; // Input char
+volatile uint8_t button_flag = 0;
 
 /* USER CODE END PV */
 
@@ -63,7 +64,7 @@ static void MX_GPIO_Init(void);
 /* USER CODE BEGIN 0 */
 int serial_print(char *ptr, int len) {
     CDC_Transmit_FS((uint8_t*)ptr, len);
-    HAL_Delay(1); // без паузы при частой отправке данные теряются
+    HAL_Delay(1);
     return len;
 }
 /* USER CODE END 0 */
@@ -100,26 +101,34 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  uint8_t button_pressed = 0;
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
+    {
+      /* USER CODE END WHILE */
 
-	  int len = snprintf(buf, sizeof(buf), "Counter = %d\r\n", value);
-
-	  serial_print (buf, len);
-	  value++;
-	  HAL_Delay(500);
+      /* USER CODE BEGIN 3 */
 
 
-    /* USER CODE END WHILE */
+  	  if (button_flag == 1)
+  	       {
+  	           button_flag = 0;
 
-    /* USER CODE BEGIN 3 */
-  }
+  	           int len = snprintf(buf, sizeof(buf), "Button pushed.\r\n");
+
+  	           serial_print(buf, len);
+
+  	           HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+  	       }
+
+  	       // int len = snprintf(buf, sizeof(buf), "Counter = %d\r\n", value);
+  	       // serial_print(buf, len);
+  	       // value++;
+  	       HAL_Delay(500);
+
+    }
   /* USER CODE END 3 */
 }
 
@@ -166,6 +175,10 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
+  /** Enables the Clock Security System
+  */
+  HAL_RCC_EnableCSS();
 }
 
 /**
@@ -195,11 +208,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : BTN_Pin */
+  GPIO_InitStruct.Pin = BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -207,6 +224,23 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    static uint32_t last_interrupt_time = 0;
+
+    uint32_t current_time = HAL_GetTick();
+
+
+    if (GPIO_Pin == BTN_Pin)
+    {
+
+        if (current_time - last_interrupt_time > 50)
+        {
+            button_flag = 1;
+            last_interrupt_time = current_time;
+        }
+    }
+}
 
 /* USER CODE END 4 */
 
