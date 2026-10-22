@@ -1,4 +1,4 @@
-# <2.2>
+# <2.3>
 
   > EMB_25 Завдання 2.3: Superloop: Як змусити MCU робити кілька справ одночасно
 
@@ -9,14 +9,13 @@
 
   [Вивід в консоль](output/2.3_output.log)
   ```
-  alive @ 62050 ms | Total Loop time:  105505 | Avg over 447 iterations 236 
-  State of pin= 5: 0
-  State of pin= 6: 1
-  State of pin= 6: 0
-  State of pin= 5: 1
-  State of pin= 6: 1
-  State of pin= 6: 0
-  State of pin= 4: 1
+12:34:08.290 >  alive @ 40000 ms | Total Loop time:  1055409 | Avg over 1 iterations 1055409 
+12:34:08.290 >  State of pin= 5: 0
+12:34:08.290 >  State of pin= 6: 0
+12:34:08.790 >  State of pin= 6: 1
+12:34:09.289 >  State of pin= 5: 1
+12:34:09.289 >  State of pin= 6: 0
+12:34:09.790 >  State of pin= 6: 1
   ... (Цикл повторюється)
   ```
 

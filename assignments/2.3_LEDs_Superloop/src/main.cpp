@@ -31,16 +31,16 @@ static constexpr uint32_t LOOP_CYCLES = 1000;
 
 
 // LED time delay in microseconds
-static constexpr uint32_t LED_TASK_INTERVAL_SLOW = 200000; 
+static constexpr uint32_t LED_TASK_INTERVAL_SLOW = 2000000; 
 
 // LED time delay in microseconds
-static constexpr uint32_t LED_TASK_INTERVAL_MEDIUM = 100000; 
+static constexpr uint32_t LED_TASK_INTERVAL_MEDIUM = 1000000; 
 
 // LED time delay in microseconds
-static constexpr uint32_t LED_TASK_INTERVAL_HIGH = 50000; 
+static constexpr uint32_t LED_TASK_INTERVAL_HIGH = 500000; 
 
 // Serial output every n microseconds, but only if 1000 loops were complete
-static constexpr uint32_t SERIAL_TASK_INTERVAL = 200000;
+static constexpr uint32_t SERIAL_TASK_INTERVAL = 2000000;
 };
 /* Global counters */ 
 static uint32_t loop_count(0);
@@ -108,7 +108,10 @@ Task tasks[] = {
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200);  
+  pinMode(Config::LED_PIN_SLOW, OUTPUT);
+  pinMode(Config::LED_PIN_MEDIUM, OUTPUT);
+  pinMode(Config::LED_PIN_FAST, OUTPUT);
 }
 
 void loop()
