@@ -31,16 +31,16 @@ static constexpr uint32_t LOOP_CYCLES = 1000;
 
 
 // LED time delay in microseconds
-static constexpr uint32_t LED_TASK_INTERVAL_SLOW = 200000; 
+static constexpr uint32_t LED_TASK_INTERVAL_SLOW = 2000000; 
 
 // LED time delay in microseconds
-static constexpr uint32_t LED_TASK_INTERVAL_MEDIUM = 100000; 
+static constexpr uint32_t LED_TASK_INTERVAL_MEDIUM = 1000000; 
 
 // LED time delay in microseconds
-static constexpr uint32_t LED_TASK_INTERVAL_HIGH = 50000; 
+static constexpr uint32_t LED_TASK_INTERVAL_HIGH = 500000; 
 
 // Serial output every n microseconds, but only if 1000 loops were complete
-static constexpr uint32_t SERIAL_TASK_INTERVAL = 200000;
+static constexpr uint32_t SERIAL_TASK_INTERVAL = 2000000;
 };
 /* Global counters */ 
 static uint32_t loop_count(0);
@@ -55,18 +55,20 @@ class Task {
 public:
 
     Task(): frequency(Config::LED_PIN_SLOW), last(0), func(nullptr){}
-    // GPIO output pin constructor
-    // GPIO output pin constructor
-    explicit Task(uint32_t frequency): frequency(frequency), last(0), func(nullptr){}
+    explicit Task(uint32_t frequency): pin(0), frequency(frequency), last(0), func(nullptr){}
     
-    // GPIO output pin constructor
-    explicit Task(uint32_t frequency,  void (*const func)()): frequency(frequency), last(0), func(func){}
+    explicit Task(uint32_t frequency,  void (*const func)()): pin(0), frequency(frequency), last(0), func(func){}
+    // GPIO output pin enabled 
+    explicit Task(uint8_t pin, uint32_t frequency,  void (*const func)()): pin(pin), frequency(frequency), last(0), func(func){}
+
     ~Task(){
 
     }
-    void init(void (*const func)()){
-      this->func = func; 
-      return;
+    bool init(uint8_t pin){
+      if(!pin) { return false; }
+      this->pin = pin; 
+      pinMode(pin, OUTPUT);
+      return true;
     }
     bool execute(){
       bool valid = (bool)func;
@@ -108,7 +110,10 @@ Task tasks[] = {
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200);  
+  tasks[0].init(Config::LED_PIN_SLOW);
+  tasks[1].init(Config::LED_PIN_MEDIUM);
+  tasks[2].init(Config::LED_PIN_FAST);
 }
 
 void loop()
