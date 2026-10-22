@@ -2,9 +2,14 @@
 
 > EMB_25 : Додатковий урок: Реагування кнопки у STM32
 >   Урок 30 Гнучкий слот. Поглиблене дослідження теми
+>  [\assignments\2.8_STM32_Button_Handler\Core\Src\main_2_IQR_Button.c](.\Core\Src\main_2_IQR_Button.c)
 
+### Апдейт після комміту [Assignment 2.8: IRQ Handler for Button Press in STM32](3f46c65251fd69c200dd43200c8d3d5f96916452)
 
->  [\assignments\2.8_STM32_Button_Handler\Core\Src\main_2_IQR_Button.c\*.c](.\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
+- Перенесено логіку loop() та HAL_GPIO_EXTI_Callback() у додаткові файли app.c та app.h
+- додано механізм уникнення циклічного імпорту в `app.h`.
+- Виправлено видалення шматків користувацького коду після регенерації проєкту у STM32CubeMX (Блоки USER CODE Includes,  USER CODE 4, USER CODE 3):
+
 
 
 ### Схемотехніка
