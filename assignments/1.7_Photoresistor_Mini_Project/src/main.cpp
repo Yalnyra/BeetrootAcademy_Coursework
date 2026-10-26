@@ -24,7 +24,7 @@ void setup() {
   
   pinMode(RELAY_PIN, OUTPUT);
   
-  digitalWrite(RELAY_PIN, LOW); 
+  digitalWrite(RELAY_PIN, HIGH); 
   
   // встановлення роздільної здатності АЦП (12 біт = 0...4095)
   analogReadResolution(ADC_RESOLUTION);
@@ -49,12 +49,13 @@ void loop() {
   // Store the output
   prevOutValue = outValue;
   
-  if (rstValue > THRESHOLD_LIGHT){
-    digitalWrite(RELAY_PIN, HIGH);
-  }
-  else if (rstValue <= THRESHOLD_DARK){
-    digitalWrite(RELAY_PIN, LOW);
-  }
+  // if (rstValue > THRESHOLD_LIGHT){
+  //   digitalWrite(RELAY_PIN, HIGH);
+  // }
+  // else if (rstValue <= THRESHOLD_DARK){
+  //   digitalWrite(RELAY_PIN, LOW);
+  // }
+
 
   if (currentMillis - previousMillis >= interval)
   {

@@ -1,0 +1,85 @@
+#include <Arduino.h>
+// Вказівник на екземпляр апаратного таймера
+hw_timer_t *timer = NULL;
+
+
+// Налаштовуємо вивід на світлодіоди 
+// Використовуємо 1 байт пам'яті для пінів і обчислюємо на етапі компіляції
+constexpr uint8_t LED_PIN_1 = 4;
+constexpr uint8_t LED_PIN_2 = 5;
+constexpr uint8_t LED_PIN_3 = 6;
+
+struct Task {
+  uint32_t period; // як часто запускати, мс
+  uint32_t last;   // коли запускали востаннє
+  void (*run)();   // вказівник на функцію 
+};
+
+
+void blinkFast()   { static bool s; s = !s; digitalWrite(LED_PIN_1, s); }
+void blinkMiddle() { static bool s; s = !s; digitalWrite(LED_PIN_2, s); }
+void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
+
+void heartbeat()   { Serial.printf("alive @ %lu ms\n", millis()); }
+
+Task tasks[] = {
+  { 1,  0, blinkFast },
+  { 2, 0, blinkMiddle },
+  { 3, 0, blinkSlow },
+  { 2, 0, heartbeat },
+};
+
+
+// Змінна лічильника, доступна з контексту переривання
+volatile uint32_t counter = 0;
+
+// Обробник переривання в пам'яті IRAM (критично для стабільності RTOS)
+void IRAM_ATTR onTimer() {
+  counter++;
+}
+
+
+void setup() {
+  Serial.begin(115200);
+
+  // Номер таймера 0, подільник 80 (базова шина 80 МГц / 80 = 1 МГц, тобто 1 тік = 1 мкс),
+  timer = timerBegin(0, 80, true);
+
+  // Прив'язка функції обробника; 
+  timerAttachInterrupt(timer, &onTimer, true);
+
+  // Уставка алярму: 1 000 000 тіків = 1 секунда, увімкнено автоперезапуск (true)
+  timerAlarmWrite(timer, 1000000, true);
+
+  // Активація апаратного переривання таймера
+  timerAlarmEnable(timer);
+
+  //Add LED tasks
+    const uint8_t pins[] = {LED_PIN_1, LED_PIN_2, LED_PIN_3};
+    for (uint8_t pin : pins) {
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, LOW);
+    }
+}
+
+const uint32_t INTERVAL_MS = 1000;
+
+void loop() {
+  static uint32_t previous_millis = millis();
+
+  
+  uint32_t current_millis = millis();
+  for (Task &t : tasks) { 
+    if (counter % t.period == 0 && t.last != counter) { 
+      t.last = counter;
+      t.run(); 
+    }
+  }
+   
+  if (current_millis - previous_millis >= INTERVAL_MS) {
+    previous_millis += INTERVAL_MS;
+ 
+  Serial.println(counter);
+}
+
+}
