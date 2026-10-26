@@ -1,0 +1,50 @@
+ *  Executing task: espressif.esp-idf-extension: ESP-IDF Size 
+Memory Type Usage Summary
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃ Memory Type/Section ┃ Used [bytes] ┃ Used [%] ┃ Remain [bytes] ┃ Total [bytes] ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ Flash Code          │        68586 │          │                │               │
+│    .text            │        68586 │          │                │               │
+│ DIRAM               │        47379 │    13.86 │         294381 │        341760 │
+│    .text            │        32727 │     9.58 │                │               │
+│    .data            │        12076 │     3.53 │                │               │
+│    .bss             │         2576 │     0.75 │                │               │
+│ Flash Data          │        32644 │          │                │               │
+│    .rodata          │        32372 │          │                │               │
+│    .appdesc         │          256 │          │                │               │
+│    .tdata           │           16 │          │                │               │
+│ IRAM                │        16384 │    100.0 │              0 │         16384 │
+│    .text            │        15356 │    93.73 │                │               │
+│    .vectors         │         1028 │     6.27 │                │               │
+│ RTC SLOW            │           36 │     0.44 │           8156 │          8192 │
+│    .force_slow      │           36 │     0.44 │                │               │
+│ RTC FAST            │           24 │     0.29 │           8168 │          8192 │
+│    .rtc_reserved    │           24 │     0.29 │                │               │
+└─────────────────────┴──────────────┴──────────┴────────────────┴───────────────┘
+Total image size: 162453 bytes (.bin may be padded larger)
+Note: The reported total sizes may be smaller than those in the technical reference manual due to reserved memory and application configuration. The total flash size available for the application is not included by default, as it cannot be reliably determined due to the presence of other data like the bootloader, partition table, and application partition size.
+I (13264) TRAFFIC: -> state 2 (3000 ms)
+I (16264) TRAFFIC: -> state 3 (10000 ms)
+I (26264) TRAFFIC: -> state 4 (2000 ms)
+I (28264) TRAFFIC: -> state 0 (10000 ms)
+I (35234) TRAFFIC: button
+I (35234) TRAFFIC: -> state 5 (0 ms)
+I (37734) TRAFFIC: button
+I (37734) TRAFFIC: -> state 3 (10000 ms)
+I (47734) TRAFFIC: -> state 4 (2000 ms)
+I (49734) TRAFFIC: -> state 0 (10000 ms)
+I (59734) TRAFFIC: -> state 1 (3000 ms)
+I (62734) TRAFFIC: -> state 2 (3000 ms)
+I (63464) TRAFFIC: button
+I (63464) TRAFFIC: -> state 5 (0 ms)
+I (66974) TRAFFIC: button
+I (66974) TRAFFIC: -> state 3 (10000 ms)
+I (69034) TRAFFIC: button
+I (69034) TRAFFIC: -> state 5 (0 ms)
+I (72604) TRAFFIC: button
+I (72604) TRAFFIC: -> state 3 (10000 ms)
+I (82604) TRAFFIC: -> state 4 (2000 ms)
+I (83504) TRAFFIC: button
+I (83504) TRAFFIC: -> state 5 (0 ms)
+I (87834) TRAFFIC: button
+I (87834) TRAFFIC: -> state 3 (10000 ms)

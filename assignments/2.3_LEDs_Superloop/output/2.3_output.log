@@ -1,307 +1,164 @@
-
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 61650 ms | Total Loop time:  105538 | Avg over 713 iterations 148 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 61850 ms | Total Loop time:  105516 | Avg over 581 iterations 181 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 62050 ms | Total Loop time:  105505 | Avg over 447 iterations 236 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 62250 ms | Total Loop time:  105532 | Avg over 317 iterations 332 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 62450 ms | Total Loop time:  105501 | Avg over 184 iterations 573 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 62650 ms | Total Loop time:  105550 | Avg over 51 iterations 2069 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 62850 ms | Total Loop time:  105585 | Avg over 915 iterations 115 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 63050 ms | Total Loop time:  105474 | Avg over 777 iterations 135 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 63250 ms | Total Loop time:  105562 | Avg over 646 iterations 163 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 63450 ms | Total Loop time:  105551 | Avg over 511 iterations 206 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 63650 ms | Total Loop time:  105492 | Avg over 380 iterations 277 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 63850 ms | Total Loop time:  105520 | Avg over 249 iterations 423 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 64050 ms | Total Loop time:  105552 | Avg over 122 iterations 865 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 64250 ms | Total Loop time:  105566 | Avg over 986 iterations 107 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 64450 ms | Total Loop time:  105529 | Avg over 849 iterations 124 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 64650 ms | Total Loop time:  105499 | Avg over 712 iterations 148 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 64850 ms | Total Loop time:  105539 | Avg over 582 iterations 181 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 65050 ms | Total Loop time:  105466 | Avg over 450 iterations 234 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 65250 ms | Total Loop time:  105554 | Avg over 321 iterations 328 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 65450 ms | Total Loop time:  105570 | Avg over 188 iterations 561 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 65650 ms | Total Loop time:  105550 | Avg over 58 iterations 1819 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 65850 ms | Total Loop time:  105755 | Avg over 940 iterations 112 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 66050 ms | Total Loop time:  105598 | Avg over 810 iterations 130 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 66250 ms | Total Loop time:  105544 | Avg over 677 iterations 155 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 66450 ms | Total Loop time:  105540 | Avg over 545 iterations 193 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 66650 ms | Total Loop time:  105455 | Avg over 412 iterations 255 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 66850 ms | Total Loop time:  105496 | Avg over 276 iterations 382 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 67050 ms | Total Loop time:  105530 | Avg over 144 iterations 732 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 67250 ms | Total Loop time:  105483 | Avg over 16 iterations 6592 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 67450 ms | Total Loop time:  105568 | Avg over 892 iterations 118 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 67650 ms | Total Loop time:  105527 | Avg over 755 iterations 139 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 67850 ms | Total Loop time:  105512 | Avg over 624 iterations 169 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 68050 ms | Total Loop time:  105523 | Avg over 486 iterations 217 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 68250 ms | Total Loop time:  105544 | Avg over 348 iterations 303 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 68450 ms | Total Loop time:  105547 | Avg over 214 iterations 493 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 68650 ms | Total Loop time:  105531 | Avg over 87 iterations 1213 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 0
- alive @ 68850 ms | Total Loop time:  105559 | Avg over 959 iterations 110 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 4: 1
- alive @ 69050 ms | Total Loop time:  105562 | Avg over 827 iterations 127 
- State of pin= 5: 0
- State of pin= 6: 1
- State of pin= 6: 0
- State of pin= 5: 1
- State of pin= 6: 1
+12:33:28.789 >  State of pin= 6: 1
+12:33:29.289 >  State of pin= 5: 1
+12:33:29.289 >  State of pin= 6: 0
+12:33:29.789 >  State of pin= 6: 1
+12:33:30.289 >  State of pin= 4: 1
+12:33:30.289 >  State of pin= 5: 0
+12:33:30.289 >  alive @ 2000 ms | Total Loop time:  1004222 | Avg over 246 iterations 4082 
+12:33:30.289 >  State of pin= 6: 0
+12:33:30.790 >  State of pin= 6: 1
+12:33:31.289 >  State of pin= 5: 1
+12:33:31.289 >  State of pin= 6: 0
+12:33:31.790 >  State of pin= 6: 1
+12:33:32.289 >  State of pin= 4: 0
+12:33:32.289 >  State of pin= 5: 0
+12:33:32.289 >  alive @ 4000 ms | Total Loop time:  1055080 | Avg over 528 iterations 1998 
+12:33:32.289 >  State of pin= 6: 0
+12:33:32.790 >  State of pin= 6: 1
+12:33:33.289 >  State of pin= 5: 1
+12:33:33.289 >  State of pin= 6: 0
+12:33:33.789 >  State of pin= 6: 1
+12:33:34.290 >  State of pin= 4: 1
+12:33:34.290 >  State of pin= 5: 0
+12:33:34.290 >  alive @ 6000 ms | Total Loop time:  1055082 | Avg over 824 iterations 1280 
+12:33:34.290 >  State of pin= 6: 0
+12:33:34.790 >  State of pin= 6: 1
+12:33:35.289 >  State of pin= 5: 1
+12:33:35.289 >  State of pin= 6: 0
+12:33:35.790 >  State of pin= 6: 1
+12:33:36.290 >  State of pin= 4: 0
+12:33:36.290 >  State of pin= 5: 0
+12:33:36.290 >  alive @ 8000 ms | Total Loop time:  1054736 | Avg over 58 iterations 18185 
+12:33:36.290 >  State of pin= 6: 0
+12:33:36.790 >  State of pin= 6: 1
+12:33:37.289 >  State of pin= 5: 1
+12:33:37.289 >  State of pin= 6: 0
+12:33:37.790 >  State of pin= 6: 1
+12:33:38.290 >  State of pin= 4: 1
+12:33:38.290 >  State of pin= 5: 0
+12:33:38.290 >  alive @ 10000 ms | Total Loop time:  1054471 | Avg over 225 iterations 4686 
+12:33:38.290 >  State of pin= 6: 0
+12:33:38.789 >  State of pin= 6: 1
+12:33:39.290 >  State of pin= 5: 1
+12:33:39.290 >  State of pin= 6: 0
+12:33:39.790 >  State of pin= 6: 1
+12:33:40.289 >  State of pin= 4: 0
+12:33:40.289 >  alive @ 12000 ms | Total Loop time:  1054461 | Avg over 395 iterations 2669 
+12:33:40.289 >  State of pin= 5: 0
+12:33:40.289 >  State of pin= 6: 0
+12:33:40.790 >  State of pin= 6: 1
+12:33:41.290 >  State of pin= 5: 1
+12:33:41.290 >  State of pin= 6: 0
+12:33:41.790 >  State of pin= 6: 1
+12:33:42.289 >  State of pin= 4: 1
+12:33:42.289 >  alive @ 14000 ms | Total Loop time:  1054762 | Avg over 627 iterations 1682 
+12:33:42.289 >  State of pin= 5: 0
+12:33:42.289 >  State of pin= 6: 0
+12:33:42.790 >  State of pin= 6: 1
+12:33:43.290 >  State of pin= 5: 1
+12:33:43.290 >  State of pin= 6: 0
+12:33:43.790 >  State of pin= 6: 1
+12:33:44.290 >  State of pin= 4: 0
+12:33:44.290 >  alive @ 16000 ms | Total Loop time:  1054458 | Avg over 793 iterations 1329 
+12:33:44.290 >  State of pin= 5: 0
+12:33:44.290 >  State of pin= 6: 0
+12:33:44.790 >  State of pin= 6: 1
+12:33:45.290 >  State of pin= 5: 1
+12:33:45.290 >  State of pin= 6: 0
+12:33:45.790 >  State of pin= 6: 1
+12:33:46.290 >  State of pin= 4: 1
+12:33:46.290 >  alive @ 18000 ms | Total Loop time:  1055124 | Avg over 91 iterations 11594 
+12:33:46.290 >  State of pin= 5: 0
+12:33:46.290 >  State of pin= 6: 0
+12:33:46.791 >  State of pin= 6: 1
+12:33:47.290 >  State of pin= 5: 1
+12:33:47.290 >  State of pin= 6: 0
+12:33:47.790 >  State of pin= 6: 1
+12:33:48.290 >  State of pin= 4: 0
+12:33:48.790 >  alive @ 20000 ms | Total Loop time:  1054772 | Avg over 327 iterations 3225 
+12:33:48.790 >  State of pin= 5: 0
+12:33:48.790 >  State of pin= 6: 0
+12:33:48.790 >  State of pin= 6: 1
+12:33:49.290 >  State of pin= 5: 1
+12:33:49.290 >  State of pin= 6: 0
+12:33:49.790 >  State of pin= 6: 1
+12:33:50.290 >  State of pin= 4: 1
+12:33:50.290 >  alive @ 22000 ms | Total Loop time:  1055395 | Avg over 697 iterations 1514 
+12:33:50.290 >  State of pin= 5: 0
+12:33:50.290 >  State of pin= 6: 0
+12:33:50.790 >  State of pin= 6: 1
+12:33:51.289 >  State of pin= 5: 1
+12:33:51.289 >  State of pin= 6: 0
+12:33:51.790 >  State of pin= 6: 1
+12:33:52.290 >  State of pin= 4: 0
+12:33:52.290 >  alive @ 24000 ms | Total Loop time:  1054777 | Avg over 929 iterations 1135 
+12:33:52.290 >  State of pin= 5: 0
+12:33:52.290 >  State of pin= 6: 0
+12:33:52.790 >  State of pin= 6: 1
+12:33:53.290 >  State of pin= 5: 1
+12:33:53.290 >  State of pin= 6: 0
+12:33:53.790 >  State of pin= 6: 1
+12:33:54.290 >  State of pin= 4: 1
+12:33:54.290 >  alive @ 26000 ms | Total Loop time:  1055092 | Avg over 228 iterations 4627 
+12:33:54.290 >  State of pin= 5: 0
+12:33:54.290 >  State of pin= 6: 0
+12:33:54.791 >  State of pin= 6: 1
+12:33:55.290 >  State of pin= 5: 1
+12:33:55.290 >  State of pin= 6: 0
+12:33:55.790 >  State of pin= 6: 1
+12:33:56.290 >  State of pin= 4: 0
+12:33:56.290 >  alive @ 28000 ms | Total Loop time:  1054775 | Avg over 461 iterations 2288 
+12:33:56.290 >  State of pin= 5: 0
+12:33:56.290 >  State of pin= 6: 0
+12:33:56.790 >  State of pin= 6: 1
+12:33:57.290 >  State of pin= 5: 1
+12:33:57.290 >  State of pin= 6: 0
+12:33:57.790 >  State of pin= 6: 1
+12:33:58.290 >  State of pin= 4: 1
+12:33:58.290 >  alive @ 30000 ms | Total Loop time:  1054759 | Avg over 698 iterations 1511 
+12:33:58.290 >  State of pin= 5: 0
+12:33:58.290 >  State of pin= 6: 0
+12:33:58.790 >  State of pin= 6: 1
+12:33:59.290 >  State of pin= 5: 1
+12:33:59.290 >  State of pin= 6: 0
+12:33:59.790 >  State of pin= 6: 1
+12:34:00.290 >  State of pin= 4: 0
+12:34:00.290 >  alive @ 32000 ms | Total Loop time:  1055042 | Avg over 997 iterations 1058 
+12:34:00.290 >  State of pin= 5: 0
+12:34:00.290 >  State of pin= 6: 0
+12:34:00.790 >  State of pin= 6: 1
+12:34:01.290 >  State of pin= 5: 1
+12:34:01.290 >  State of pin= 6: 0
+12:34:01.790 >  State of pin= 6: 1
+12:34:02.290 >  State of pin= 4: 1
+12:34:02.290 >  alive @ 34000 ms | Total Loop time:  1054421 | Avg over 167 iterations 6313 
+12:34:02.290 >  State of pin= 5: 0
+12:34:02.290 >  State of pin= 6: 0
+12:34:02.791 >  State of pin= 6: 1
+12:34:03.290 >  State of pin= 5: 1
+12:34:03.290 >  State of pin= 6: 0
+12:34:03.790 >  State of pin= 6: 1
+12:34:04.290 >  State of pin= 4: 0
+12:34:04.290 >  alive @ 36000 ms | Total Loop time:  1054750 | Avg over 403 iterations 2617 
+12:34:04.290 >  State of pin= 5: 0
+12:34:04.290 >  State of pin= 6: 0
+12:34:04.790 >  State of pin= 6: 1
+12:34:05.290 >  State of pin= 5: 1
+12:34:05.290 >  State of pin= 6: 0
+12:34:05.790 >  State of pin= 6: 1
+12:34:06.290 >  State of pin= 4: 1
+12:34:06.290 >  alive @ 38000 ms | Total Loop time:  1054750 | Avg over 637 iterations 1655 
+12:34:06.290 >  State of pin= 5: 0
+12:34:06.290 >  State of pin= 6: 0
+12:34:06.790 >  State of pin= 6: 1
+12:34:07.291 >  State of pin= 5: 1
+12:34:07.291 >  State of pin= 6: 0
+12:34:07.790 >  State of pin= 6: 1
+12:34:08.290 >  State of pin= 4: 0
+12:34:08.290 >  alive @ 40000 ms | Total Loop time:  1055409 | Avg over 1 iterations 1055409 
+12:34:08.290 >  State of pin= 5: 0
+12:34:08.290 >  State of pin= 6: 0
+12:34:08.790 >  State of pin= 6: 1
+12:34:09.289 >  State of pin= 5: 1
+12:34:09.289 >  State of pin= 6: 0
+12:34:09.790 >  State of pin= 6: 1

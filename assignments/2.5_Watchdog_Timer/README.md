@@ -1,72 +1,12 @@
-# <2.2>
+# <2.5>
 
-> EMB_25 Завдання 2.2: Активні та Пасивні елементи
-> Завдання 1: Вимірювання часу спрацювання реле
+> EMB_25 Мініпроєкт 2.7: Активні та Пасивні елементи
+>   Урок 26 Таймер для витяжки 
 
 
 ### Схемотехніка
 
-[Посилання на Діаграму](https://app.cirkitdesigner.com/project/cbfc5bbb-d66e-47b1-b398-5468194a6da2)
-
-TODO: Iterate over all leds in an array rather than individually
-
-Example
-
-```cpp
-#include <Arduino.h>
-
-// Використовуємо 1 байт пам'яті для пінів і обчислюємо на етапі компіляції
-constexpr uint8_t LED_PIN_1 = 4;
-constexpr uint8_t LED_PIN_2 = 5;
-constexpr uint8_t LED_PIN_3 = 6;
-
-struct Task {
-  uint32_t period; // як часто запускати, мс
-  uint32_t last;   // коли запускали востаннє
-  void (*run)();   // вказівник на функцію 
-};
-
-
-void blinkFast()   { static bool s; s = !s; digitalWrite(LED_PIN_1, s); }
-void blinkMiddle() { static bool s; s = !s; digitalWrite(LED_PIN_2, s); }
-void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
-
-void heartbeat()   { Serial.printf("alive @ %lu ms\n", millis()); }
-
-Task tasks[] = {
-  { 200,  0, blinkFast },
-  { 1000, 0, blinkMiddle },
-  { 1500, 0, blinkSlow },
-  { 2000, 0, heartbeat },
-};
-
-void setup() {
-    Serial.begin(115200);
-    
-    const uint8_t pins[] = {LED_PIN_1, LED_PIN_2, LED_PIN_3};
-    for (uint8_t pin : pins) {
-        pinMode(pin, OUTPUT);
-        digitalWrite(pin, LOW);
-    }
-}
-
-void loop() {
-  uint32_t now = millis();
-  
-  for (Task &t : tasks) { 
-    if (now - t.last >= t.period) { 
-      t.last = now;
-      t.run(); 
-    }
-  }
-}
-```
-
-TODO: Replace a enum switch statement with following:
-```cpp
-void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); } 
-
-```
+[Посилання на Діаграму](https://app.cirkitdesigner.com/project/e458f877-0795-4711-978f-bc68a347a704)
 
 [Вивід в консоль](output/2.3_output.log)
 ```
@@ -116,34 +56,36 @@ void blinkSlow()   { static bool s; s = !s; digitalWrite(LED_PIN_3, s); }
 
 ### Відео демонстрація
 <video controls width="600">
-  <source src="./output/Assignment_2.3.mp4" type="video/mp4">
+  <source src="./output/Assignment_2.5.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
 ### Вимоги до програми (Код)
 
 
-**Керувати кількома незалежними процесами в одному loop() без блокування.**
+**Реалізувати керування витяжним вентилятором, який кожну годину вмикається на 15 хвилин, після чого автоматично вимикається**
 
-Є 3 світлодіоди:
+Вентилятор = двигун || реле
+Таймери мають працювати незалежно від коду в циклі
+Не використовувати delay() для реалізації завдання
+Цикл повторюється без участі loop() / task
+Час роботи і період задаються змінними або макросами
+Для налагодження можна:
 
-LED1 блимає кожні 200 мс
-LED2 блимає кожні 500 мс
-LED3 блимає кожні 1000 мс
-
-**Обмеження**
-
-❌ Заборонено використовувати delay()
-❌ Заборонено використовувати while() для очікування часу у loop() 
-✅ Дозволено використовувати millis()
-
+замінити 1 годину на кілька секунд
+15 хв замінити на пропорційно менший відрізок часу
 ## Набір деталей
+
+
 
 | Деталь | Опис |
 |------|--------|
 | Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
-| Резистори | x3 220 Om |
-| Світлодіоди | x3 Green |
+| Резистори | x3 10k Om |
+| 5V Реле x1 | jqc3f-05vdc-c |
+| NPN Транзистор | 2Q 2N2222  |
+| 5В Плата живлення на бредборді | x1 | 
+
 
 ### Вихід програми 
 
