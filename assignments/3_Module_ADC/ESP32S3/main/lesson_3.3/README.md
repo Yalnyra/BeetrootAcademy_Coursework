@@ -1,50 +1,31 @@
-# <2.2>
+# <2.7>
 
-> EMB_25 Завдання 2.4 і 2.6: Усунення брязкоту контактів кнопки [main\lesson_2.6\*.c](.\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
+> EMB_25 Мініпроєкт 2.7: Активні та Пасивні елементи
+>   Урок 28 Вимірювання часу спрацювання реле
+
+
+> Завдання по дебрязкіту кнопки: 2.4 і 2.6 : [main\lesson_2.6\*.c](.\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
 
 
 ### Схемотехніка
-<!-- 
+
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/4b9e888e-fe7f-4cd1-8d9f-bb6672065835)
-[Діаграма машини станів](https://drive.google.com/file/d/1YVgWSyFY107GuHPXBdf_-PQh5ftZQ2kx/view?usp=sharing) -->
-<!-- 
+[Вивід в консоль](output/2.7_output.log)
+
 ### Відео демонстрація
 <video controls width="600">
   <source src="./output/Assignment_2.7.mp4" type="video/mp4">
   Your browser does not support the video tag.
-</video> -->
+</video>
 
 ### Вимоги до програми (Код)
-**Домашнє завдання: Усунення брязкоту контактів кнопки**
 
-[Посилання на код: main\lesson_2.6\*.c](\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
 
-Завдання 1: Базова реалізація (без debounce, робили на уроці)
-Реалізувати GPIO interrupt на FALLING
-При кожному interrupt:
-інкрементувати лічильник
+1. Керування мотором за допомогою LEDC
 
-Завдання 2: Software debounce через таймер (time-based)
-Додати debounce на основі часу:
-ігнорувати interrupt, якщо з моменту попереднього пройшло < 50 мс
-Реалізувати поза ISR
+На піні 7 - корректна напруга 0.22 на PWM  
 
-Завдання 3: Debounce через перевірку рівня (state-based)
-Interrupt лише сигналізує “подія”
-У loop() / task:
-приймати подію лише якщо кнопка досі натиснута
-ігнорувати події при відпусканні
-
-Завдання 4: Polling + debounce (без interrupts)
-Прибрати interrupt повністю
-Опитувати кнопку кожні 5–10 мс
-Реалізувати debounce як машину станів
-
-Завдання 5: Hardware debounce
-Додати RC-фільтр (конденсатор 100n і резистор 100R, підтягуючий незмінний 10k)
-Повторити частини 1-4
-Порівняти результати з RC і без RC
-Завдання 6: Порівняльна таблиця
+2. Оновлення швидкості обертання за допомогою ще одного таймера 
 
 ## Набір деталей
 
@@ -55,33 +36,33 @@ Interrupt лише сигналізує “подія”
 | Світлодіоди | x3 Green |
 
 ### Вихід програми 
-
-Шлях до логів для кожного завдання
-
-output//2_6/50ms_debounce/<Номер завдання>_<Тип дебрязкіту>.log
-
-[output\2_6\1_no_debounce.log - Завдання 1](output\2_6\1_no_debounce.log)
-
-[output\2_6\2_delay.log - Завдання 2](output\2_6\2_delay.log)
-
-[output\2_6\3_irq.log - Завдання 3](output\2_6\3_irq.log)
-
-[output\2_6\4_fsm.log - Завдання 4](output\2_6\4_fsm.log)
-
-[output\2_6\5_hardware.log - Завдання 5](output\2_6\5_hardware.log)
-
-
-
-### Порівняння методів debounce
-
-| Метод | Кількість хибних спрацювань | Затримка | Складність | Коментар |
-|------|------|------|------|------|
-| Без debounce | | | | |
-| Time-based | | | | |
-| State-based | | | | |
-| Polling | | | | |
-| Hardware RC | | | | |
-
+```
+I (13264) TRAFFIC: -> state 2 (3000 ms)
+I (16264) TRAFFIC: -> state 3 (10000 ms)
+I (26264) TRAFFIC: -> state 4 (2000 ms)
+I (28264) TRAFFIC: -> state 0 (10000 ms)
+I (35234) TRAFFIC: button
+I (35234) TRAFFIC: -> state 5 (0 ms)
+I (37734) TRAFFIC: button
+I (37734) TRAFFIC: -> state 3 (10000 ms)
+I (47734) TRAFFIC: -> state 4 (2000 ms)
+I (49734) TRAFFIC: -> state 0 (10000 ms)
+I (59734) TRAFFIC: -> state 1 (3000 ms)
+I (62734) TRAFFIC: -> state 2 (3000 ms)
+I (63464) TRAFFIC: button
+I (63464) TRAFFIC: -> state 5 (0 ms)
+I (66974) TRAFFIC: button
+I (66974) TRAFFIC: -> state 3 (10000 ms)
+I (69034) TRAFFIC: button
+I (69034) TRAFFIC: -> state 5 (0 ms)
+I (72604) TRAFFIC: button
+I (72604) TRAFFIC: -> state 3 (10000 ms)
+I (82604) TRAFFIC: -> state 4 (2000 ms)
+I (83504) TRAFFIC: button
+I (83504) TRAFFIC: -> state 5 (0 ms)
+I (87834) TRAFFIC: button
+I (87834) TRAFFIC: -> state 3 (10000 ms)
+```
 ## Передумови (версії, з якими зібрано проєкт)
 
 | Компонент | Версія / шлях |

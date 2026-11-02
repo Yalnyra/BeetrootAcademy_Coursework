@@ -61,6 +61,8 @@
 
 #define ADC_MAX_VALUE       4095
 #define UPDATE_PERIOD_MS    20
+// Servo update-rate control via potentiometer.
+#define SERVO_STEP_PERIOD_MS  2000U
 #define LOG_PERIOD_MS       500
 
 // _Static_assert(MOTOR_MIN_PERCENT <= MOTOR_MAX_PERCENT && MOTOR_MAX_PERCENT <= 100U,
@@ -229,6 +231,7 @@ void app_main(void)
     static float current_angle_deg = 0.0f;
     TickType_t last_log = xTaskGetTickCount();
     // Servomotor     
+    static TickType_t last_servo_step = 0;
     while (1) {
         // 1. UNCOMMENT
         int pot_value = 0;
@@ -242,11 +245,12 @@ void app_main(void)
     
         
         TickType_t now = xTaskGetTickCount();
-        
-        current_angle_deg += SERVO_ANGLE_STEP_DEG;
-        esp_err_t set_success = servo_set_angle_deg(current_angle_deg);  // wrapping happens inside
-        ESP_LOGI(TAG, "SERVO SET SUCCESS", set_success == ESP_OK);
-
+        if (now - last_servo_step >= pdMS_TO_TICKS(SERVO_STEP_PERIOD_MS)) {
+            last_servo_step = now;
+            current_angle_deg += SERVO_ANGLE_STEP_DEG;
+            esp_err_t set_success = servo_set_angle_deg(current_angle_deg);
+            ESP_LOGI(TAG, "SERVO SET SUCCESS=%d", set_success == ESP_OK);
+        }
         // 2. TEST UNCOMMENT
         // Фоторезистор впливає лише на LED: темніше -> яскравіше.
         // uint32_t led_duty = ldr_result == ESP_OK ? ldr_to_led_duty(ldr_value) : 0;
@@ -255,13 +259,8 @@ void app_main(void)
 
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             // Log without LDR, just potent
-            ESP_LOGI(TAG, "POT_GPIO4=%d ",
-                // MOTOR_GPIO7=%u/1024 (%u%%)
-                // PIN7_HIGH=%u/256, LED_GPIO6=%u/1023",
-                     pot_value);
-                    //  (unsigned)motor_duty,
-                    //  (unsigned)((motor_duty * 100U + PWM_PERIOD_TICKS / 2U) / PWM_PERIOD_TICKS),
-                    //  motor_high_samples(), (unsigned)led_duty);
+            ESP_LOGI(TAG, "POT_GPIO4=%d, SERVO_ANGLE (%u%% deg)/180, GPIO7_HIGH=%u/256, LED_GPIO6=%u/1023",
+                pot_value, current_angle_deg, (unsigned)led_duty);
             if (pot_result != ESP_OK) {
                 ESP_LOGW(TAG, "POT ADCread failed: %s", esp_err_to_name(pot_result));
             }
@@ -269,7 +268,7 @@ void app_main(void)
             // if (ldr_result != ESP_OK) {
             //     ESP_LOGW(TAG, "LDR ADC read failed: %s", esp_err_to_name(ldr_result));
             // }
-            // last_log = now;
+            last_log = now;
         }
         vTaskDelay(pdMS_TO_TICKS(UPDATE_PERIOD_MS));
     }
