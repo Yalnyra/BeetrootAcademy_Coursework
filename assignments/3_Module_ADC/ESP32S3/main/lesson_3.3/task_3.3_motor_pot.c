@@ -62,7 +62,12 @@
 #define ADC_MAX_VALUE       4095
 #define UPDATE_PERIOD_MS    20
 // Servo update-rate control via potentiometer.
-#define SERVO_STEP_PERIOD_MS  2000U
+// SG90 datasheet speed is ~0.1 s / 60° under no load — commanding angle
+// updates faster than that doesn't make it rotate faster, it just drives
+// the motor against its own inertia/gearing (extra current, jitter, wear).
+#define SERVO_UPDATE_PERIOD_MIN_MS   60U     // critical floor: fastest allowed interval
+#define SERVO_UPDATE_PERIOD_MAX_MS   500U    // pot at 0 -> slowest
+// #define SERVO_STEP_PERIOD_MS  2000U
 #define LOG_PERIOD_MS       500
 
 // _Static_assert(MOTOR_MIN_PERCENT <= MOTOR_MAX_PERCENT && MOTOR_MAX_PERCENT <= 100U,
@@ -103,7 +108,7 @@ static esp_err_t pwm_output_init(int pin, ledc_channel_t channel,
     return ledc_channel_config(&channel_config);
 }
 
-static esp_err_t adc_inputs_init(adc_oneshot_unit_handle_t adc_handle)
+static esp_err_t adc_inputs_init(adc_oneshot_unit_handle_t *adc_handle)
 {
     const adc_oneshot_unit_init_cfg_t unit_config = {
         .unit_id = ADC_UNIT,
@@ -115,7 +120,7 @@ static esp_err_t adc_inputs_init(adc_oneshot_unit_handle_t adc_handle)
         .bitwidth = ADC_BITWIDTH_12,
     };
 
-    return adc_oneshot_config_channel(adc_handle, POT_CHANNEL,
+    return adc_oneshot_config_channel(*adc_handle, POT_CHANNEL,
                                              &channel_config);
 }
 
