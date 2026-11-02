@@ -10,6 +10,9 @@
 #include "freertos/task.h"
 
 
+//CONST
+#define ROUND_UP_CORRECTION 0.5f
+
 // Потенціометр: 
 #define ADC_UNIT     ADC_UNIT_1        // АЦП1 
 #define ADC_CHANNEL  ADC_CHANNEL_5     // GPIO6
@@ -26,6 +29,7 @@
 // Servo control
 #define ADC_MIN_VALUE       0U
 #define ADC_MAX_VALUE       4095u
+#define POT_ERROR_TRESHOLD (ADC_MAX_VALUE / 100U)
 
 #define SERVO_PIN           7
 #define LED_PIN             6
@@ -57,12 +61,11 @@
 #define SERVO_MAX_PULSE_US   2000U                    // 2ms -> 180 deg
 // Servo attitude control via potentiometer.
 #define POT_MIN_RANGE_DEG 45.0f 
-#define POT_MAX_RANGE_DEG 360.0f - POT_MIN_RANGE_DEG // 270 range 
+#define POT_MAX_RANGE_DEG    315.0f   // 315.0f -> 270 deg of real pot travel
 // SG90 datasheet speed is ~0.1 s / 60° under no load — commanding angle
 // updates faster than that doesn't make it rotate faster, it just drives
 // the motor against its own inertia/gearing (extra current, jitter, wear).
-#define SERVO_UPDATE_PERIOD_MIN_MS   60U     // critical floor: fastest allowed interval
-#define SERVO_UPDATE_PERIOD_MAX_MS   500U    // pot at 0 -> slowest
+#define SERVO_UPDATE_PERIOD_MS   500U    // pot at 0 -> slowest
 
 #define SERVO_ANGLE_MAX_DEG  180.0f
 #define SERVO_ANGLE_MIN_STEP_DEG 45.0f
@@ -81,8 +84,20 @@ _Static_assert(POT_MIN_RANGE_DEG <= POT_MAX_RANGE_DEG && POT_MAX_RANGE_DEG <= 36
 
 
 
-static const char *TAG = "hw_3_3";
+static const char *TAG = "hw_3_5";
 static adc_oneshot_unit_handle_t adc_handle;
+// logged values
+typedef struct {
+    float pot_value;             //ADC value 
+    float pot_angle;            // converted angle 
+} pot_status_t;
+typedef struct {
+    float    angle_deg;   // clamped servo-space angle actually commanded
+    uint32_t duty_ticks;       // raw LEDC duty value written
+    float    pulse_width_ms;   // same duty, expressed as a pulse width
+    float    angle_dev_deg;   // angle deviation from pot space to angle space 
+} servo_status_t;
+
 
 
 static esp_err_t pwm_output_init(int pin, ledc_channel_t channel,
@@ -131,33 +146,33 @@ static esp_err_t adc_inputs_init(adc_oneshot_unit_handle_t *adc_handle)
 }
 
 // Utils 
-static uint32_t  map_value(uint32_t  x, uint32_t  in_min, uint32_t  in_max, uint32_t  out_min, uint32_t  out_max) {
+static float map_valuef(float x, float in_min, float in_max, float out_min, float out_max)
+{
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 // TODO Update based on degree delta, if delta of potentiometer is larger than x
 
-static uint32_t calc_deviation_percent(uint32_t one, uint32_t other){
+static uint32_t calc_deviation_percentf(float one, float other){
       return (one > 0)
-                  ? (one - other) / (float)other * 100.0f
+                  ? (one - other) / other * 100.0f
                   : 0.0f; 
 }
 
 
-// Map ADC range (0-4095) to allowed main rule 
-static uint32_t pot_to_servo_degrees(int value)
+// Map raw ADC (0..4095) to the potentiometer's real mechanical range in degrees.
+static float pot_to_servo_degrees(int value)
 {
-    if (value < 0) {
-        value = 0;
-    } else if (value > ADC_MAX_VALUE) {
-        value = ADC_MAX_VALUE;
+    if (value < (int)ADC_MIN_VALUE) {
+        value = (int)ADC_MIN_VALUE;
+    } else if (value > (int)ADC_MAX_VALUE) {
+        value = (int)ADC_MAX_VALUE;
     }
 
-    clamp 
-
-    const uint32_t span = SERVO_UPDATE_PERIOD_MAX_MS - SERVO_UPDATE_PERIOD_MIN_MS;
-    return map(value, ADC_MIN_VALUE, ADC_MAX_VALUE, )
+    return map_valuef((float)value, (float)ADC_MIN_VALUE, (float)ADC_MAX_VALUE,
+                       POT_MIN_RANGE_DEG, POT_MAX_RANGE_DEG);
 }
+
 
 // TODO: Change the LED brightness range 
 static uint32_t pot_to_led_duty(int value)
@@ -172,22 +187,30 @@ static uint32_t pot_to_led_duty(int value)
 }
 
 
-// Step 2. Set constant angle 
-esp_err_t servo_set_angle_deg(float angle_deg)
+esp_err_t servo_set_angle_deg(float angle_deg, servo_status_t *status)
 {
-    // Step 1: wrap angle into [0, 180) — keeps the "+angle_deg each call" pattern cycling
-    // Fix: 180 (2pi) is also a valid position, add min rotation degree
-    float wrapped_deg = fmodf(angle_deg, SERVO_ANGLE_MAX_DEG + SERVO_ANGLE_MIN_STEP_DEG);
-    if (wrapped_deg < 0.0f) {
-        wrapped_deg += SERVO_ANGLE_MAX_DEG;
+    if (angle_deg < POT_MIN_RANGE_DEG) {
+        angle_deg = POT_MIN_RANGE_DEG;
+    } else if (angle_deg > POT_MAX_RANGE_DEG) {
+        angle_deg = POT_MAX_RANGE_DEG;
     }
-    float ratio = wrapped_deg / SERVO_ANGLE_MAX_DEG;   // 0.0 .. 1.0
 
-    // Step 2 + 3 collapsed: interpolate directly between the precomputed tick
-    // bounds (equivalent to computing pulse_us then duty, but skips the
-    // intermediate float->us->ticks round trip)
+    float servo_deg = map_valuef(angle_deg,
+                                  POT_MIN_RANGE_DEG, POT_MAX_RANGE_DEG,
+                                  SERVO_ANGLE_MIN_STEP_DEG, SERVO_ANGLE_MAX_DEG);
+
+    float ratio = (servo_deg - SERVO_ANGLE_MIN_STEP_DEG) /
+                  (SERVO_ANGLE_MAX_DEG - SERVO_ANGLE_MIN_STEP_DEG);
+
     uint32_t duty = SERVO_MIN_TICKS +
         (uint32_t)(ratio * (float)(SERVO_MAX_TICKS - SERVO_MIN_TICKS) + 0.5f);
+
+    if (status != NULL) {
+        status->angle_deg      = servo_deg;
+        status->duty_ticks     = duty;
+        status->pulse_width_ms = (float)duty * SERVO_PERIOD_US / SERVO_PERIOD_TICKS / 1000.0f;
+        status->angle_dev_deg = calc_deviation_percentf(angle_deg, status->angle_deg);
+    }
 
     esp_err_t err = ledc_set_duty(PWM_MODE, SERVO_CHANNEL, duty);
     if (err != ESP_OK) {
@@ -195,14 +218,12 @@ esp_err_t servo_set_angle_deg(float angle_deg)
     }
     return ledc_update_duty(PWM_MODE, SERVO_CHANNEL);
 }
-
-
-
+pot_status_t pot_status = {0};
+servo_status_t servo_status = {0};
 void app_main(void)
 {
     ESP_ERROR_CHECK(gpio_input_enable(SERVO_PIN));
-    // esp_err_t pwm_success = pwm_output_init(SERVO_PIN, SERVO_CHANNEL, SERVO_TIMER,
-                    // SERVO_FREQUENCY_HZ, SERVO_MAX_TICKS);
+
     const ledc_timer_config_t servo_timer_config = {
         .speed_mode = PWM_MODE,
         .duty_resolution = SERVO_RESOLUTION,
@@ -224,8 +245,7 @@ void app_main(void)
     };
     esp_err_t pwm_success = ledc_channel_config(&servo_channel_config);
     ESP_LOGI(TAG, "PWM INIT_SUCCESS", pwm_success == ESP_OK);
-    // esp_err_t led_success = pwm_output_init(LED_PIN, LED_CHANNEL, LED_TIMER, LED_FREQUENCY_HZ, 0);
-    // ESP_LOGI(TAG, "LED INIT_SUCCESS", led_success == ESP_OK);
+
     const ledc_timer_config_t led_timer_config = {
         .speed_mode = PWM_MODE,
         .duty_resolution = LED_RESOLUTION,
@@ -246,7 +266,7 @@ void app_main(void)
         .hpoint = 0,
     };
 
-    esp_err_t led_success = ledc_channel_config(&led_channel_config);
+    ESP_ERROR_CHECK(ledc_channel_config(&led_channel_config));
     // ESP_LOGI(TAG, "POT INIT_SUCCESS", led_success == ESP_OK);
 // ?    esp_err_t pot_success = adc_inputs_init(adc_handle);
 
@@ -261,55 +281,55 @@ void app_main(void)
         .bitwidth = ADC_BITWIDTH_12,
     };
 
-    esp_err_t pot_success = adc_oneshot_config_channel(adc_handle, POT_CHANNEL, &channel_config);
-
-    ESP_LOGI(TAG, "POT GPIO4 -> MOTOR GPIO7: %u..%u%% PWM; LDR GPIO5 -> LED GPIO6",
-             (unsigned)MOTOR_MIN_PERCENT, (unsigned)MOTOR_MAX_PERCENT);
-    ESP_LOGI(TAG, "Motor %u Hz, LED %u Hz",
-             (unsigned)ledc_get_freq(PWM_MODE, SERVO_TIMER),
-             (unsigned)ledc_get_freq(PWM_MODE, LED_TIMER));
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle, POT_CHANNEL, &channel_config));
+    
     // Static variables inside 
     static uint32_t led_duty = 0;
-    static float current_angle_deg = 0.0f;
     TickType_t last_log = xTaskGetTickCount();
     // Servomotor     
     static TickType_t last_servo_step = 0;
+    esp_err_t set_success = 0;
+    esp_err_t pot_result = 0;
     while (1) {
-        int pot_value = 0;
+        int current_pot_value = 0;
         // int ldr_value = 0;
-        esp_err_t pot_result = adc_oneshot_read(adc_handle, POT_CHANNEL, &pot_value);
-        // esp_err_t ldr_result = adc_oneshot_read(adc_handle, LDR_CHANNEL, &ldr_value)
+        pot_result = adc_oneshot_read(adc_handle, POT_CHANNEL, &current_pot_value);
+        // pot_status.pot_value (current_pot_value - pot_status.pot_value) <= POT_ERROR_TRESHOLD ? current_pot_value: pot_status.pot_value;
+        current_pot_value = pot_result == ESP_OK ? current_pot_value : 0;
+        pot_status.pot_value = pot_to_servo_degrees(current_pot_value);
         // Safeguard against invalid ADC read (>4095)
-        led_duty = pot_result == ESP_OK ? pot_to_led_duty(pot_value) : 0;
+        led_duty = pot_result == ESP_OK ? pot_to_led_duty(pot_result) : 0;
         ESP_ERROR_CHECK(ledc_set_duty(PWM_MODE, LED_CHANNEL, led_duty));
         ESP_ERROR_CHECK(ledc_update_duty(PWM_MODE, LED_CHANNEL));
 
         TickType_t now = xTaskGetTickCount();
-        if (now - last_servo_step >= pdMS_TO_TICKS(SERVO_UPDATE_PERIOD_MAX_MS)) {
+        if (now - last_servo_step >= pdMS_TO_TICKS(SERVO_UPDATE_PERIOD_MS)) {
             last_servo_step = now;
-            current_angle_deg += SERVO_ANGLE_MIN_STEP_DEG;
-            esp_err_t set_success = servo_set_angle_deg(current_angle_deg);
-            ESP_LOGI(TAG, "SERVO SET SUCCESS=%d, period=%u ms",
-                    set_success == ESP_OK, SERVO_UPDATE_PERIOD_MAX_MS);
+            pot_status.pot_angle = pot_to_servo_degrees(pot_status.pot_value);
+            set_success = servo_set_angle_deg(pot_status.pot_angle, &servo_status);
+            
         }
-        // 2. TEST UNCOMMENT
-        // Фоторезистор впливає лише на LED: темніше -> яскравіше.
-        // uint32_t led_duty = ldr_result == ESP_OK ? ldr_to_led_duty(ldr_value) : 0;
-        // ESP_ERROR_CHECK(ledc_set_duty(PWM_MODE, LED_CHANNEL, led_duty));
-        // ESP_ERROR_CHECK(ledc_update_duty(PWM_MODE, LED_CHANNEL));
 
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
-            // Log without LDR, just potent
-            ESP_LOGI(TAG, "POT_GPIO4=%d, SERVO_PERIOD=%u ms, SERVO_ANGLE=%2.f deg/180, GPIO7_HIGH=%u/256, LED_GPIO6=%u/1023",
-                pot_value, (unsigned)servo_update_period_ms, current_angle_deg, (unsigned)led_duty);
-            if (pot_result != ESP_OK) {
-                ESP_LOGW(TAG, "POT ADCread failed: %s", esp_err_to_name(pot_result));
-            }
-            // 2. LDR TEST UNCOMMENT 
-            // if (ldr_result != ESP_OK) {
-            //     ESP_LOGW(TAG, "LDR ADC read failed: %s", esp_err_to_name(ldr_result));
-            // }
             last_log = now;
+            ESP_LOGI(TAG,
+                    "POT_GPIO4=%d, POT_ANGLE=%.1f/%.0f deg, SERVO_ANGLE=%.1f/%.0f deg, "
+                    "SERVO_DUTY=%u/%u ticks, SERVO_PULSE=%.3fms, "
+                    "SERVO_UPDATE_PERIOD=%ums, LED_GPIO6=%u/%u",
+                    pot_status.pot_value,
+                    pot_status.pot_angle, POT_MAX_RANGE_DEG,
+                    servo_status.angle_deg, SERVO_ANGLE_MAX_DEG,
+                    (unsigned)servo_status.duty_ticks, (unsigned)SERVO_MAX_TICKS,
+                    servo_status.pulse_width_ms,
+                    (unsigned)SERVO_UPDATE_PERIOD_MS,
+                    (unsigned)led_duty, (unsigned)LED_MAX_DUTY);
+
+            if (set_success != ESP_OK) {
+                ESP_LOGW(TAG, "servo_set_angle_deg failed: %s", esp_err_to_name(set_success));
+            }
+            if (pot_result != ESP_OK) {
+                ESP_LOGW(TAG, "POT ADC read failed: %s", esp_err_to_name(pot_result));
+            }
         }
         vTaskDelay(pdMS_TO_TICKS(UPDATE_PERIOD_MS));
     }
