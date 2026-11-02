@@ -21,7 +21,7 @@
 
 // Power of the LED:
 #define LED_MIN_PERCENT    10U
-#define LED_MAX_PERCENT    60U
+#define LED_MAX_PERCENT    100U
 
 #define SERVO_PIN           7
 #define LED_PIN             6
@@ -38,7 +38,7 @@
 #define LED_FREQUENCY_HZ    1000
 // general
 #define LED_RESOLUTION      LEDC_TIMER_10_BIT
-#define LED_PERIOD_TICKS    (1U << LED_RESOLUTION)
+#define LED_PERIOD_TICKS    1024U
 #define LED_MAX_DUTY        (LED_PERIOD_TICKS - 1U)
 //led
 #define LED_MIN_TICKS     ((LED_PERIOD_TICKS * LED_MIN_PERCENT + 50U) / 100U)
@@ -65,9 +65,9 @@
 // SG90 datasheet speed is ~0.1 s / 60° under no load — commanding angle
 // updates faster than that doesn't make it rotate faster, it just drives
 // the motor against its own inertia/gearing (extra current, jitter, wear).
-#define SERVO_UPDATE_PERIOD_MIN_MS   60U     // critical floor: fastest allowed interval
-#define SERVO_UPDATE_PERIOD_MAX_MS   500U    // pot at 0 -> slowest
-// #define SERVO_STEP_PERIOD_MS  2000U
+// #define SERVO_UPDATE_PERIOD_MIN_MS   60U     // critical floor: fastest allowed interval
+// #define SERVO_UPDATE_PERIOD_MAX_MS   500U    // pot at 0 -> slowest
+#define SERVO_STEP_PERIOD_MS  2000U
 #define LOG_PERIOD_MS       500
 
 // _Static_assert(MOTOR_MIN_PERCENT <= MOTOR_MAX_PERCENT && MOTOR_MAX_PERCENT <= 100U,
@@ -113,7 +113,7 @@ static esp_err_t adc_inputs_init(adc_oneshot_unit_handle_t *adc_handle)
     const adc_oneshot_unit_init_cfg_t unit_config = {
         .unit_id = ADC_UNIT,
     };
-    ESP_ERROR_CHECK(adc_oneshot_new_unit(&unit_config, &adc_handle));
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&unit_config, adc_handle));
 
     const adc_oneshot_chan_cfg_t channel_config = {
         .atten = ADC_ATTEN_DB_12,
@@ -156,7 +156,7 @@ static uint32_t pot_to_led_duty(int value)
     } else if (value > ADC_MAX_VALUE) {
         value = ADC_MAX_VALUE;
     }
-    const uint32_t span = LED_MIN_TICKS - LED_MAX_TICKS;
+    const uint32_t span = LED_MAX_TICKS - LED_MIN_TICKS;
     return LED_MIN_TICKS + ((uint32_t)value * span + ADC_MAX_VALUE / 2U) / ADC_MAX_VALUE;
 }
 
@@ -238,12 +238,11 @@ void app_main(void)
     // Servomotor     
     static TickType_t last_servo_step = 0;
     while (1) {
-        // 1. UNCOMMENT
         int pot_value = 0;
         // int ldr_value = 0;
         esp_err_t pot_result = adc_oneshot_read(adc_handle, POT_CHANNEL, &pot_value);
         // esp_err_t ldr_result = adc_oneshot_read(adc_handle, LDR_CHANNEL, &ldr_value)
-        // Потенціометер впливає також на двигун 
+        // Safeguard against invalid ADC read (>4095)
         led_duty = pot_result == ESP_OK ? pot_to_led_duty(pot_value) : 0;
         ESP_ERROR_CHECK(ledc_set_duty(PWM_MODE, LED_CHANNEL, led_duty));
         ESP_ERROR_CHECK(ledc_update_duty(PWM_MODE, LED_CHANNEL));
@@ -264,7 +263,7 @@ void app_main(void)
 
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             // Log without LDR, just potent
-            ESP_LOGI(TAG, "POT_GPIO4=%d, SERVO_ANGLE (%u%% deg)/180, GPIO7_HIGH=%u/256, LED_GPIO6=%u/1023",
+            ESP_LOGI(TAG, "POT_GPIO4=%d, SERVO_ANGLE=%2.f deg/180, GPIO7_HIGH=%u/256, LED_GPIO6=%u/1023",
                 pot_value, current_angle_deg, (unsigned)led_duty);
             if (pot_result != ESP_OK) {
                 ESP_LOGW(TAG, "POT ADCread failed: %s", esp_err_to_name(pot_result));
