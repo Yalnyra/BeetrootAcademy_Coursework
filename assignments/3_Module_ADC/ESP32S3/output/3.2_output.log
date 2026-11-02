@@ -1,0 +1,7 @@
+ADC_LAB: RAW 4095 | U_naive  3300.0 mV | U_cali 3173 mV | Error  +4.00 %
+ADC_LAB: RAW 3775 | U_naive  3042.1 mV | U_cali 3036 mV | Error  +0.20 %
+ADC_LAB: RAW 2740 | U_naive  2208.1 mV | U_cali 2330 mV | Error  -5.23 %
+ADC_LAB: RAW  991 | U_naive   798.6 mV | U_cali  861 mV | Error  -7.25 %
+ADC_LAB: RAW  627 | U_naive   505.3 mV | U_cali  554 mV | Error  -8.80 %
+ADC_LAB: RAW  344 | U_naive   277.2 mV | U_cali  309 mV | Error -10.29 %
+ADC_LAB: RAW   37 | U_naive    29.8 mV | U_cali   34 mV | Error -12.30 %

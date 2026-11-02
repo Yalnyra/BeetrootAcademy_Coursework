@@ -1,87 +1,60 @@
-# <2.2>
+# <3.2>
 
-> EMB_25 Завдання 2.4 і 2.6: Усунення брязкоту контактів кнопки [main\lesson_2.6\*.c](.\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
+> Модуль 3. ЦАП та ШИМ модуляція
+
+
+> Завдання 3.2 Перетворюємо "сирі" дані ADC: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](.\main_2_potentiotemer_adc_calbiration)
 
 
 ### Схемотехніка
-<!-- 
-[Посилання на Діаграму](https://app.cirkitdesigner.com/project/4b9e888e-fe7f-4cd1-8d9f-bb6672065835)
-[Діаграма машини станів](https://drive.google.com/file/d/1YVgWSyFY107GuHPXBdf_-PQh5ftZQ2kx/view?usp=sharing) -->
-<!-- 
-### Відео демонстрація
-<video controls width="600">
-  <source src="./output/Assignment_2.7.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video> -->
+
+[Посилання на Діаграму](https://app.cirkitdesigner.com/project/1d9b4079-1a9c-4b3b-b021-867db9eda888)
+[Вивід в консоль](output/3.2_output.log)
+
+### Висновки 
+
+- Найбільші рівні нелінійності - в ділянці (0-1400mV), з похибкою від 12% до 6% відповідно
+
+- Найменша похибка - 0% на рівні 3.0В 
+- Bias - завищений на 130mV - 4% на найвищому значенні 
+U_naive  3300.0 mV | U_cali 3173 mV
 
 ### Вимоги до програми (Код)
-**Домашнє завдання: Усунення брязкоту контактів кнопки**
 
-[Посилання на код: main\lesson_2.6\*.c](\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
+Підключити потенціометр (~10 кОм) у вигляді подільника напруги.
 
-Завдання 1: Базова реалізація (без debounce, робили на уроці)
-Реалізувати GPIO interrupt на FALLING
-При кожному interrupt:
-інкрементувати лічильник
+візьміть до уваги опорну напругу, атенюацію та розрядність. Можна додати їх до таблиці також для інформації.
 
-Завдання 2: Software debounce через таймер (time-based)
-Додати debounce на основі часу:
-ігнорувати interrupt, якщо з моменту попереднього пройшло < 50 мс
-Реалізувати поза ISR
+Налаштувати АЦП та зчитувати значення кожні ~100 мс.
+Зробити кілька вимірювань. Для кожного вимірювання:
 
-Завдання 3: Debounce через перевірку рівня (state-based)
-Interrupt лише сигналізує “подія”
-У loop() / task:
-приймати подію лише якщо кнопка досі натиснута
-ігнорувати події при відпусканні
+зчитати RAW значення АЦП та обчислити напругу за формулою
+зчитати напругу за допомогою каліброваного АЦП;
 
-Завдання 4: Polling + debounce (без interrupts)
-Прибрати interrupt повністю
-Опитувати кнопку кожні 5–10 мс
-Реалізувати debounce як машину станів
+обчислити похибку (%) між обчисленою та каліброваною напругою.
+Вивести в серійну консоль таблицю. Приклад нижче:
 
-Завдання 5: Hardware debounce
-Додати RC-фільтр (конденсатор 100n і резистор 100R, підтягуючий незмінний 10k)
-Повторити частини 1-4
-Порівняти результати з RC і без RC
-Завдання 6: Порівняльна таблиця
+### Що виконано
+
+Вивід в консоль
 
 ## Набір деталей
 
 | Деталь | Опис |
 |------|--------|
-| Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
-| Резистори | x3 220 Om |
-| Світлодіоди | x3 Green |
+| Плата | ESP32-S3 (devkit) |
+| Потенціометр | x1 |
 
 ### Вихід програми 
-
-Шлях до логів для кожного завдання
-
-output//2_6/50ms_debounce/<Номер завдання>_<Тип дебрязкіту>.log
-
-[output\2_6\1_no_debounce.log - Завдання 1](output\2_6\1_no_debounce.log)
-
-[output\2_6\2_delay.log - Завдання 2](output\2_6\2_delay.log)
-
-[output\2_6\3_irq.log - Завдання 3](output\2_6\3_irq.log)
-
-[output\2_6\4_fsm.log - Завдання 4](output\2_6\4_fsm.log)
-
-[output\2_6\5_hardware.log - Завдання 5](output\2_6\5_hardware.log)
-
-
-
-### Порівняння методів debounce
-
-| Метод | Кількість хибних спрацювань | Затримка | Складність | Коментар |
-|------|------|------|------|------|
-| Без debounce | | | | |
-| Time-based | | | | |
-| State-based | | | | |
-| Polling | | | | |
-| Hardware RC | | | | |
-
+| Цифрове значення RAW |  U_manual(mV) | U_cali(mV)  | Error(%) |
+|------|--------|--------|--------|
+ADC_LAB: RAW 4095 | U_naive  3300.0 mV | U_cali 3173 mV | Error  +4.00 %
+ADC_LAB: RAW 3775 | U_naive  3042.1 mV | U_cali 3036 mV | Error  +0.20 %
+ADC_LAB: RAW 2740 | U_naive  2208.1 mV | U_cali 2330 mV | Error  -5.23 %
+ADC_LAB: RAW  991 | U_naive   798.6 mV | U_cali  861 mV | Error  -7.25 %
+ADC_LAB: RAW  627 | U_naive   505.3 mV | U_cali  554 mV | Error  -8.80 %
+ADC_LAB: RAW  344 | U_naive   277.2 mV | U_cali  309 mV | Error -10.29 %
+ADC_LAB: RAW   37 | U_naive    29.8 mV | U_cali   34 mV | Error -12.30 %
 ## Передумови (версії, з якими зібрано проєкт)
 
 | Компонент | Версія / шлях |
@@ -193,13 +166,9 @@ SERIAL_PATH = "COM16" # Порт UART (JTAG) на USB32, має співпада
 ```
 Видає тільки ./<logname>.log
 
-## Notes (Debriefing)
-
- 1. Task 1.5 using a single LED - Implement still and a blinking counter based
- 2. Expand 7 states state machine 
- 3.  Add an special state transition called by button isr event 
-
 ## What I would add
+
+- LDR resistor ADC control
 
 ## TODO
 - [] Add hardware requirements

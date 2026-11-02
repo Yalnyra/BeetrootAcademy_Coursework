@@ -1,78 +1,17 @@
-# <2.7>
+# <3>
 
-> EMB_25 Мініпроєкт 2.7: Активні та Пасивні елементи
->   Урок 28 Вимірювання часу спрацювання реле
-
-
-> Завдання по дебрязкіту кнопки: 2.4 і 2.6 : [main\lesson_2.6\*.c](.\assignments\2.6_ESPIDF_Debounce\main\lesson_2.6)
+> Модуль 3. ЦАП та ШИМ модуляція
 
 
-### Схемотехніка
+> Завдання 3.2 Перетворюємо "сирі" дані ADC: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](.\main_2_potentiotemer_adc_calbiration)
 
-[Посилання на Діаграму](https://app.cirkitdesigner.com/project/4b9e888e-fe7f-4cd1-8d9f-bb6672065835)
-[Діаграма машини станів](https://drive.google.com/file/d/1YVgWSyFY107GuHPXBdf_-PQh5ftZQ2kx/view?usp=sharing)
-[Вивід в консоль](output/2.7_output.log)
 
-### Відео демонстрація
-<video controls width="600">
-  <source src="./output/Assignment_2.7.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 
-### Вимоги до програми (Код)
+> Завдання 3.3 Керування потужністю та швидкістю: як змінювати яскравість світла та оберти двигуна: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](.\task_3.3_motor_pot.c)
 
-Використовуючи код із заняття додати стани відповідно до ПДР України.
 
-Станом на 12 січня 2026 року в Україні правила дорожнього руху (ПДР) чітко регламентують послідовність сигналів світлофора для забезпечення безпеки.
+> Завдання 3.4 Зворотна дія: перетворюємо число на напругу (DAC): TODO 
 
-Стандартна послідовність перемикання:
-
-Зелений: Дозволяє рух.
-Зелений миготливий: Попереджає, що час дії дозволеного сигналу закінчується і скоро буде ввімкнено заборонний сигнал.
-Жовтий: Забороняє рух і попереджає про майбутню зміну сигналів.
-Червоний: Забороняє рух.
-Червоний та жовтий одночасно: Попереджають про наступне ввімкнення зеленого сигналу (рух все ще заборонено).
-Зелений: Цикл повторюється.
-Особливі випадки:
-
-Жовтий миготливий: Дозволяє рух і інформує про наявність нерегульованого перехрестя або пішохідного переходу.
-
-## Набір деталей
-
-| Деталь | Опис |
-|------|--------|
-| Board | ESP32-S3 N16R8 (16 MB flash, 8 MB PSRAM) |
-| Резистори | x3 220 Om |
-| Світлодіоди | x3 Green |
-
-### Вихід програми 
-```
-I (13264) TRAFFIC: -> state 2 (3000 ms)
-I (16264) TRAFFIC: -> state 3 (10000 ms)
-I (26264) TRAFFIC: -> state 4 (2000 ms)
-I (28264) TRAFFIC: -> state 0 (10000 ms)
-I (35234) TRAFFIC: button
-I (35234) TRAFFIC: -> state 5 (0 ms)
-I (37734) TRAFFIC: button
-I (37734) TRAFFIC: -> state 3 (10000 ms)
-I (47734) TRAFFIC: -> state 4 (2000 ms)
-I (49734) TRAFFIC: -> state 0 (10000 ms)
-I (59734) TRAFFIC: -> state 1 (3000 ms)
-I (62734) TRAFFIC: -> state 2 (3000 ms)
-I (63464) TRAFFIC: button
-I (63464) TRAFFIC: -> state 5 (0 ms)
-I (66974) TRAFFIC: button
-I (66974) TRAFFIC: -> state 3 (10000 ms)
-I (69034) TRAFFIC: button
-I (69034) TRAFFIC: -> state 5 (0 ms)
-I (72604) TRAFFIC: button
-I (72604) TRAFFIC: -> state 3 (10000 ms)
-I (82604) TRAFFIC: -> state 4 (2000 ms)
-I (83504) TRAFFIC: button
-I (83504) TRAFFIC: -> state 5 (0 ms)
-I (87834) TRAFFIC: button
-I (87834) TRAFFIC: -> state 3 (10000 ms)
-```
 ## Передумови (версії, з якими зібрано проєкт)
 
 | Компонент | Версія / шлях |
@@ -169,31 +108,3 @@ I (87834) TRAFFIC: -> state 3 (10000 ms)
 - Python 1.13.13
 - pyserial 3.5
 - matplotlib==
-
-### Записати лог
-
-
-Задайте шлях до логів
-
-src\save_serial_output.py
-
-```python
-LOG_PATH = Path(__file__).parent / ".." / "dummy.log" # Шлях до логу
-SERIAL_PATH = "COM16" # Порт UART (JTAG) на USB32, має співпадати з 
-# platformio.ini: monitor_port = COM16
-```
-Видає тільки ./<logname>.log
-
-## Notes (Debriefing)
-
- 1. Task 1.5 using a single LED - Implement still and a blinking counter based
- 2. Expand 7 states state machine 
- 3.  Add an special state transition called by button isr event 
-
-## What I would add
-
-## TODO
-- [] Add hardware requirements
-- [] Add circuit diagram 
-- [] Add code function comments
-- [] Add debugging log 
