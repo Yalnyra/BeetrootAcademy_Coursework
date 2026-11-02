@@ -65,9 +65,9 @@
 // SG90 datasheet speed is ~0.1 s / 60° under no load — commanding angle
 // updates faster than that doesn't make it rotate faster, it just drives
 // the motor against its own inertia/gearing (extra current, jitter, wear).
-// #define SERVO_UPDATE_PERIOD_MIN_MS   60U     // critical floor: fastest allowed interval
-// #define SERVO_UPDATE_PERIOD_MAX_MS   500U    // pot at 0 -> slowest
-#define SERVO_STEP_PERIOD_MS  2000U
+#define SERVO_UPDATE_PERIOD_MIN_MS   60U     // critical floor: fastest allowed interval
+#define SERVO_UPDATE_PERIOD_MAX_MS   500U    // pot at 0 -> slowest
+// #define SERVO_STEP_PERIOD_MS  2000U
 #define LOG_PERIOD_MS       500
 
 // _Static_assert(MOTOR_MIN_PERCENT <= MOTOR_MAX_PERCENT && MOTOR_MAX_PERCENT <= 100U,
@@ -146,7 +146,19 @@ esp_err_t servo_set_angle_deg(float angle_deg)
     }
     return ledc_update_duty(PWM_MODE, SERVO_CHANNEL);
 }
+// Map ADC range (0-8912) to allowed main loop last_servo_step period 
+static uint32_t pot_to_servo_update_period_ms(int value)
+{
+    if (value < 0) {
+        value = 0;
+    } else if (value > ADC_MAX_VALUE) {
+        value = ADC_MAX_VALUE;
+    }
 
+    const uint32_t span = SERVO_UPDATE_PERIOD_MAX_MS - SERVO_UPDATE_PERIOD_MIN_MS;
+    return SERVO_UPDATE_PERIOD_MAX_MS -
+        ((uint32_t)value * span + ADC_MAX_VALUE / 2U) / ADC_MAX_VALUE;
+}
 
 // TODO: Change the LED brightness range 
 static uint32_t pot_to_led_duty(int value)
@@ -247,13 +259,24 @@ void app_main(void)
         ESP_ERROR_CHECK(ledc_set_duty(PWM_MODE, LED_CHANNEL, led_duty));
         ESP_ERROR_CHECK(ledc_update_duty(PWM_MODE, LED_CHANNEL));
     
-        
+                
+        uint32_t servo_update_period_ms = pot_result == ESP_OK
+            ? pot_to_servo_update_period_ms(pot_value)
+            : SERVO_UPDATE_PERIOD_MAX_MS;   // bad read -> fall back to the slow/safe side
+
+        // Explicit cap: never let the servo be stepped faster than it can
+        // physically keep up with, regardless of what the mapping above produced.
+        if (servo_update_period_ms < SERVO_UPDATE_PERIOD_MIN_MS) {
+            servo_update_period_ms = SERVO_UPDATE_PERIOD_MIN_MS;
+        }
+
         TickType_t now = xTaskGetTickCount();
-        if (now - last_servo_step >= pdMS_TO_TICKS(SERVO_STEP_PERIOD_MS)) {
+        if (now - last_servo_step >= pdMS_TO_TICKS(servo_update_period_ms)) {
             last_servo_step = now;
             current_angle_deg += SERVO_ANGLE_STEP_DEG;
             esp_err_t set_success = servo_set_angle_deg(current_angle_deg);
-            ESP_LOGI(TAG, "SERVO SET SUCCESS=%d", set_success == ESP_OK);
+            ESP_LOGI(TAG, "SERVO SET SUCCESS=%d, period=%u ms",
+                    set_success == ESP_OK, (unsigned)servo_update_period_ms);
         }
         // 2. TEST UNCOMMENT
         // Фоторезистор впливає лише на LED: темніше -> яскравіше.
@@ -263,8 +286,8 @@ void app_main(void)
 
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             // Log without LDR, just potent
-            ESP_LOGI(TAG, "POT_GPIO4=%d, SERVO_ANGLE=%2.f deg/180, GPIO7_HIGH=%u/256, LED_GPIO6=%u/1023",
-                pot_value, current_angle_deg, (unsigned)led_duty);
+            ESP_LOGI(TAG, "POT_GPIO4=%d, SERVO_PERIOD=%u ms, SERVO_ANGLE=%2.f deg/180, GPIO7_HIGH=%u/256, LED_GPIO6=%u/1023",
+                pot_value, (unsigned)servo_update_period_ms, current_angle_deg, (unsigned)led_duty);
             if (pot_result != ESP_OK) {
                 ESP_LOGW(TAG, "POT ADCread failed: %s", esp_err_to_name(pot_result));
             }
