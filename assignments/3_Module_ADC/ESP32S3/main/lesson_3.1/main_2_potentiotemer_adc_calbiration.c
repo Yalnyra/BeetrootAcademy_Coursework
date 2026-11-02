@@ -29,11 +29,11 @@ Needed components:
 
 void app_main(void)
 {
-    adc_oneshot_unit_handle_t adc1_handle;               // хендл блока АЦП1 — потрібен для всіх подальших викликів
+    adc_oneshot_unit_handle_t adc_handle;               // хендл блока АЦП1 — потрібен для всіх подальших викликів
     adc_oneshot_unit_init_cfg_t init_config = {
         .unit_id = ADC_UNIT,
     };
-    adc_oneshot_new_unit(&init_config, &adc1_handle);    // реєструємо блок АЦП1
+    adc_oneshot_new_unit(&init_config, &adc_handle);    // реєструємо блок АЦП1
 
     adc_oneshot_chan_cfg_t chan_config = {
         .bitwidth = ADC_BITWIDTH_DEFAULT,                // типова роздільна здатність (12 біт на класичному ESP32)
@@ -47,7 +47,7 @@ void app_main(void)
         .atten    = ADC_ATTEN_DB_12,                      // дозволяє читати повний діапазон ~0-3.3В (детально — Крок 2)
     };
 
-    adc_oneshot_config_channel(adc1_handle, ADC_CHANNEL, &chan_config);
+    adc_oneshot_config_channel(adc_handle, ADC_CHANNEL, &chan_config);
 
     adc_cali_handle_t cali_handle = 0;  
     esp_err_t err = adc_cali_create_scheme_curve_fitting(&cali_config, &cali_handle);
@@ -61,7 +61,7 @@ void app_main(void)
 
     while (1) {
         int raw = 0;
-        adc_oneshot_read(adc1_handle, ADC_CHANNEL, &raw); // ОДИН замір: дискретизація + квантування + кодування за один виклик
+        adc_oneshot_read(adc_handle, ADC_CHANNEL, &raw); // ОДИН замір: дискретизація + квантування + кодування за один виклик
 
          int u_cali_mv = 0;
     if (cali_handle) {

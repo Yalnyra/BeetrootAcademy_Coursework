@@ -210,13 +210,9 @@ SERIAL_PATH = "COM16" # Порт UART (JTAG) на USB32, має співпада
 ```
 Видає тільки ./<logname>.log
 
-## Notes (Debriefing)
-
- 1. Task 1.5 using a single LED - Implement still and a blinking counter based
- 2. Expand 7 states state machine 
- 3.  Add an special state transition called by button isr event 
-
 ## What I would add
+
+- LDR resistor ADC control
 
 ## TODO
 - [] Add hardware requirements
