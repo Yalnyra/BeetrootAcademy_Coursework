@@ -2,37 +2,26 @@
 
 > Модуль 3. ЦАП та ШИМ модуляція
 
-> Завдання 3.5 Зворотна дія: перетворюємо число на напругу (DAC): TODO 
+> Завдання 3.5 Точне керування положенням (Серво)  
 
 
 ### Схемотехніка
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/1d9b4079-1a9c-4b3b-b021-867db9eda888)
-[Вивід в консоль](output/3.3_output.log)
+[Вивід в консоль](output/3.5_output.log)
 
 ### Вимоги до програми (Код)
 
-- Потенціометр керує яскравістю світлодіода.
-- Потенціометр керує швидкістю вала двигуна.
-- Двигун та світлодіод не впливають на роботу одне одного.
-
-Двигун замінено на серво (треба замінити мотор)
-
+Потенціометр керує положенням валу сервоприводу в пропорції 1:1.
+Розбіжність кута повороту сервоприводу та потенціометра обрізаються і використовується тільки та частина діапазону, котра збігатися.
+Кут відхилення від крайнього лівого положення логується в консолі.
 ### Що виконано
 
-Обрано використовувати два окремих таймери, бо LED та Серво працюють на різних частотах: 1024 Гц та 50 Гц відповідно
-
-0. Виправлено помилки з передаванням об'єкту adc_handle для ініціалізації потенціометра (Передача параметру значенням, а не вказівником)
-
-1. Керування положенням серво за допомогою LEDC
-Ініціалізація мотора SG90: [Даташит](https://www.friendlywire.com/projects/ne555-servo-safe/SG90-datasheet.pdf)
-
-2. Перевірка потужності пінів 2 та 7
-GPIO7  між землею та PWM: 0.17-0.31V від положення 0 до 180 градусів.
-Між VCC та GND: 6.07v
-
-2. Оновлення швидкості обертання за допомогою софтверного таймера 
-xTaskGetTickCount()
+1. 0-4095 (POT_GPIO4) -> 0-270 (POT_ANGLE) (Мапа на кут Потенціометра) 
+2. 0-270 -> (SERVO_ANGLE) 0-180 (Обрізання до положення сервомотора SG90) -> 
+3. 0-180 -> 1-2 мс (Маппінг у довжину PWM пульсу) 
+4. 1-2мс (SERVO_PULSE) -> Ширина duty cycle (SERVO_DUTY) 1/50 - 1/25 Гц 
+5. Помилка між POT_ANGLE та SERVO_PULSE, конвертований в кут, з функцією duty_to_servo_angle_deg()
 
 ## Набір деталей
 
@@ -47,49 +36,31 @@ xTaskGetTickCount()
 
 ### Вихід програми 
 ```
-I (13335) hw_3_3: SERVO SET SUCCESS=1, period=500 ms
-I (13775) hw_3_3: POT_GPIO4=0, SERVO_PERIOD=500 ms, SERVO_ANGLE=1440 deg/180, GPIO7_HIGH=102/256, LED_GPIO6=1070162112/1023
-I (13835) hw_3_3: SERVO SET SUCCESS=1, period=500 ms
-I (14275) hw_3_3: POT_GPIO4=181, SERVO_PERIOD=481 ms, SERVO_ANGLE=1485 deg/180, GPIO7_HIGH=143/256, LED_GPIO6=1070162112/1023
-I (14315) hw_3_3: SERVO SET SUCCESS=1, period=477 ms
-I (14755) hw_3_3: SERVO SET SUCCESS=1, period=442 ms
-I (14775) hw_3_3: POT_GPIO4=546, SERVO_PERIOD=441 ms, SERVO_ANGLE=1575 deg/180, GPIO7_HIGH=225/256, LED_GPIO6=1070162112/1023
-I (15175) hw_3_3: SERVO SET SUCCESS=1, period=418 ms
-I (15275) hw_3_3: POT_GPIO4=814, SERVO_PERIOD=413 ms, SERVO_ANGLE=1620 deg/180, GPIO7_HIGH=285/256, LED_GPIO6=1070162112/1023
-I (15575) hw_3_3: SERVO SET SUCCESS=1, period=398 ms
-I (15775) hw_3_3: POT_GPIO4=1031, SERVO_PERIOD=389 ms, SERVO_ANGLE=1665 deg/180, GPIO7_HIGH=334/256, LED_GPIO6=1070162112/1023
-I (15955) hw_3_3: SERVO SET SUCCESS=1, period=373 ms
-I (16275) hw_3_3: POT_GPIO4=1575, SERVO_PERIOD=331 ms, SERVO_ANGLE=1710 deg/180, GPIO7_HIGH=457/256, LED_GPIO6=1070162112/1023
-I (16295) hw_3_3: SERVO SET SUCCESS=1, period=327 ms
-I (16595) hw_3_3: SERVO SET SUCCESS=1, period=309 ms
-I (16775) hw_3_3: POT_GPIO4=1835, SERVO_PERIOD=303 ms, SERVO_ANGLE=1800 deg/180, GPIO7_HIGH=515/256, LED_GPIO6=1070162112/1023
-I (16895) hw_3_3: SERVO SET SUCCESS=1, period=299 ms
-I (17175) hw_3_3: SERVO SET SUCCESS=1, period=284 ms
-I (17275) hw_3_3: POT_GPIO4=2056, SERVO_PERIOD=279 ms, SERVO_ANGLE=1890 deg/180, GPIO7_HIGH=565/256, LED_GPIO6=1070162112/1023
-I (17435) hw_3_3: SERVO SET SUCCESS=1, period=265 ms
-I (17695) hw_3_3: SERVO SET SUCCESS=1, period=253 ms
-I (17775) hw_3_3: POT_GPIO4=2355, SERVO_PERIOD=247 ms, SERVO_ANGLE=1980 deg/180, GPIO7_HIGH=632/256, LED_GPIO6=1070162112/1023
-I (17935) hw_3_3: SERVO SET SUCCESS=1, period=235 ms
-I (18155) hw_3_3: SERVO SET SUCCESS=1, period=219 ms
-I (18275) hw_3_3: POT_GPIO4=2724, SERVO_PERIOD=207 ms, SERVO_ANGLE=2070 deg/180, GPIO7_HIGH=715/256, LED_GPIO6=1070162112/1023
-I (18355) hw_3_3: SERVO SET SUCCESS=1, period=198 ms
-I (18535) hw_3_3: SERVO SET SUCCESS=1, period=177 ms
-I (18695) hw_3_3: SERVO SET SUCCESS=1, period=152 ms
-I (18775) hw_3_3: POT_GPIO4=3352, SERVO_PERIOD=140 ms, SERVO_ANGLE=2205 deg/180, GPIO7_HIGH=857/256, LED_GPIO6=1070162112/1023
-I (18835) hw_3_3: SERVO SET SUCCESS=1, period=127 ms
-I (18955) hw_3_3: SERVO SET SUCCESS=1, period=108 ms
-I (19055) hw_3_3: SERVO SET SUCCESS=1, period=87 ms
-I (19135) hw_3_3: SERVO SET SUCCESS=1, period=71 ms
-I (19195) hw_3_3: SERVO SET SUCCESS=1, period=61 ms
-I (19255) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19275) hw_3_3: POT_GPIO4=4095, SERVO_PERIOD=60 ms, SERVO_ANGLE=2475 deg/180, GPIO7_HIGH=1024/256, LED_GPIO6=1070162112/1023
-I (19315) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19375) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19435) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19495) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19555) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19615) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19675) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
+
+I (134265) hw_3_5: POT_GPIO4=0, POT_ANGLE=0.00/270.00 deg, SERVO_ANGLE0.00/180.00 deg,  ANGLE_ERROR=0.00%
+I (134265) hw_3_5: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001ms, 
+I (134765) hw_3_5: POT_GPIO4=0, POT_ANGLE=0.00/270.00 deg, SERVO_ANGLE0.00/180.00 deg,  ANGLE_ERROR=0.00%
+I (134765) hw_3_5: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001ms, 
+I (135265) hw_3_5: POT_GPIO4=171, POT_ANGLE=11.27/270.00 deg, SERVO_ANGLE11.27/180.00 deg,  ANGLE_ERROR=-1.47%
+I (135265) hw_3_5: SERVO_DUTY=436 ticks, SERVO_PULSE=1.064ms, 
+I (135765) hw_3_5: POT_GPIO4=731, POT_ANGLE=48.20/270.00 deg, SERVO_ANGLE47.01/180.00 deg,  ANGLE_ERROR=-0.17%
+I (135765) hw_3_5: SERVO_DUTY=517 ticks, SERVO_PULSE=1.262ms, 
+I (136265) hw_3_5: POT_GPIO4=711, POT_ANGLE=46.88/270.00 deg, SERVO_ANGLE46.35/180.00 deg,  ANGLE_ERROR=0.31%
+I (136265) hw_3_5: SERVO_DUTY=515 ticks, SERVO_PULSE=1.257ms, 
+I (136765) hw_3_5: POT_GPIO4=1007, POT_ANGLE=66.40/270.00 deg, SERVO_ANGLE66.40/180.00 deg,  ANGLE_ERROR=-0.09%
+I (136765) hw_3_5: SERVO_DUTY=561 ticks, SERVO_PULSE=1.370ms, 
+I (137265) hw_3_5: POT_GPIO4=1979, POT_ANGLE=130.48/270.00 deg, SERVO_ANGLE128.64/180.00 deg,  ANGLE_ERROR=0.10%
+I (137265) hw_3_5: SERVO_DUTY=702 ticks, SERVO_PULSE=1.714ms, 
+I (137765) hw_3_5: POT_GPIO4=2941, POT_ANGLE=193.91/270.00 deg, SERVO_ANGLE180.00/180.00 deg,  ANGLE_ERROR=4.73%
+I (137765) hw_3_5: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000ms, 
+I (138265) hw_3_5: POT_GPIO4=3590, POT_ANGLE=236.70/270.00 deg, SERVO_ANGLE180.00/180.00 deg,  ANGLE_ERROR=31.50%
+I (138265) hw_3_5: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000ms, 
+I (138765) hw_3_5: POT_GPIO4=3307, POT_ANGLE=218.04/270.00 deg, SERVO_ANGLE180.00/180.00 deg,  ANGLE_ERROR=21.21%
+I (138765) hw_3_5: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000ms, 
+I (139265) hw_3_5: POT_GPIO4=3179, POT_ANGLE=209.60/270.00 deg, SERVO_ANGLE180.00/180.00 deg,  ANGLE_ERROR=15.75%
+I (139265) hw_3_5: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000ms, 
+
+
 ```
 ## Передумови (версії, з якими зібрано проєкт)
 

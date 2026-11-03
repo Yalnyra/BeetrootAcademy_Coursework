@@ -10,12 +10,6 @@
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/1d9b4079-1a9c-4b3b-b021-867db9eda888)
 [Вивід в консоль](output/3.3_output.log)
 
-### Відео демонстрація
-<video controls width="600">
-  <source src="./output/Assignment_2.7.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
 ### Вимоги до програми (Код)
 
 - Потенціометр керує яскравістю світлодіода.
