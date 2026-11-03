@@ -87,10 +87,10 @@ _Static_assert(POT_MIN_RANGE_DEG <= POT_MAX_RANGE_DEG && POT_MAX_RANGE_DEG <= 36
 static const char *TAG = "hw_3_5";
 static adc_oneshot_unit_handle_t adc_handle;
 // logged values
-typedef struct {
-    float pot_value;             //ADC value 
-    float pot_angle;            // converted angle 
-} pot_status_t;
+// typedef struct {
+//     float pot_value;             //ADC value 
+//     float pot_angle;            // converted angle 
+// } pot_status_t;
 typedef struct {
     float    angle_deg;   // clamped servo-space angle actually commanded
     uint32_t duty_ticks;       // raw LEDC duty value written
@@ -161,6 +161,7 @@ static uint32_t calc_deviation_percentf(float one, float other){
 
 
 // Map raw ADC (0..4095) to the potentiometer's real mechanical range in degrees.
+// The conversion here is correct 
 static float pot_to_servo_degrees(int value)
 {
     if (value < (int)ADC_MIN_VALUE) {
@@ -186,30 +187,28 @@ static uint32_t pot_to_led_duty(int value)
     return LED_MIN_TICKS + ((uint32_t)value * span + ADC_MAX_VALUE / 2U) / ADC_MAX_VALUE;
 }
 
+// // TODO the mapping of angle_deg to is not 1-to-1 - its rescaled!!
+// Clamp instead of rescaling!!
 
 esp_err_t servo_set_angle_deg(float angle_deg, servo_status_t *status)
 {
-    if (angle_deg < POT_MIN_RANGE_DEG) {
-        angle_deg = POT_MIN_RANGE_DEG;
-    } else if (angle_deg > POT_MAX_RANGE_DEG) {
-        angle_deg = POT_MAX_RANGE_DEG;
+    float servo_angle_deg = angle_deg;
+    if (servo_angle_deg < POT_MIN_RANGE_DEG) {
+        servo_angle_deg = POT_MIN_RANGE_DEG;
+    } else if (servo_angle_deg > POT_MAX_RANGE_DEG) {
+        servo_angle_deg = POT_MAX_RANGE_DEG;
     }
-
-    float servo_deg = map_valuef(angle_deg,
-                                  POT_MIN_RANGE_DEG, POT_MAX_RANGE_DEG,
-                                  SERVO_ANGLE_MIN_STEP_DEG, SERVO_ANGLE_MAX_DEG);
-
-    float ratio = (servo_deg - SERVO_ANGLE_MIN_STEP_DEG) /
+    float ratio = (servo_angle_deg - SERVO_ANGLE_MIN_STEP_DEG) /
                   (SERVO_ANGLE_MAX_DEG - SERVO_ANGLE_MIN_STEP_DEG);
 
     uint32_t duty = SERVO_MIN_TICKS +
-        (uint32_t)(ratio * (float)(SERVO_MAX_TICKS - SERVO_MIN_TICKS) + 0.5f);
+        (uint32_t)(ratio * (float)(SERVO_MAX_TICKS - SERVO_MIN_TICKS) + ROUND_UP_CORRECTION);
 
     if (status != NULL) {
-        status->angle_deg      = servo_deg;
+        status->angle_deg      = servo_angle_deg;
         status->duty_ticks     = duty;
         status->pulse_width_ms = (float)duty * SERVO_PERIOD_US / SERVO_PERIOD_TICKS / 1000.0f;
-        status->angle_dev_deg = calc_deviation_percentf(angle_deg, status->angle_deg);
+        status->angle_dev_deg = calc_deviation_percentf(angle_deg, servo_angle_deg);
     }
 
     esp_err_t err = ledc_set_duty(PWM_MODE, SERVO_CHANNEL, duty);
@@ -218,7 +217,7 @@ esp_err_t servo_set_angle_deg(float angle_deg, servo_status_t *status)
     }
     return ledc_update_duty(PWM_MODE, SERVO_CHANNEL);
 }
-pot_status_t pot_status = {0};
+// pot_status_t pot_status = {0};
 servo_status_t servo_status = {0};
 void app_main(void)
 {
@@ -292,11 +291,12 @@ void app_main(void)
     esp_err_t pot_result = 0;
     while (1) {
         int current_pot_value = 0;
+        float pot_angle = 0;
         // int ldr_value = 0;
         pot_result = adc_oneshot_read(adc_handle, POT_CHANNEL, &current_pot_value);
         // pot_status.pot_value (current_pot_value - pot_status.pot_value) <= POT_ERROR_TRESHOLD ? current_pot_value: pot_status.pot_value;
         current_pot_value = pot_result == ESP_OK ? current_pot_value : 0;
-        pot_status.pot_value = pot_to_servo_degrees(current_pot_value);
+        pot_angle = pot_to_servo_degrees(current_pot_value);
         // Safeguard against invalid ADC read (>4095)
         led_duty = pot_result == ESP_OK ? pot_to_led_duty(pot_result) : 0;
         ESP_ERROR_CHECK(ledc_set_duty(PWM_MODE, LED_CHANNEL, led_duty));
@@ -305,24 +305,41 @@ void app_main(void)
         TickType_t now = xTaskGetTickCount();
         if (now - last_servo_step >= pdMS_TO_TICKS(SERVO_UPDATE_PERIOD_MS)) {
             last_servo_step = now;
-            pot_status.pot_angle = pot_to_servo_degrees(pot_status.pot_value);
-            set_success = servo_set_angle_deg(pot_status.pot_angle, &servo_status);
+            pot_angle = pot_to_servo_degrees(current_pot_value);
+            set_success = servo_set_angle_deg(pot_angle, &servo_status);
             
         }
 
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             last_log = now;
+            // ESP_LOGI(TAG,
+            //         "POT_GPIO4=%f, POT_ANGLE=%.1f/%.0f deg, SERVO_ANGLE=%.1f/%.0f deg, "
+            //         "SERVO_DUTY=%u/%u ticks, SERVO_PULSE=%.3fms, "
+            //         "SERVO_UPDATE_PERIOD=%ums, LED_GPIO6=%u/%u",
+            //         current_pot_value,
+            //         pot_angle, 
+            //         POT_MAX_RANGE_DEG,
+            //         servo_status.angle_deg, 
+            //         SERVO_ANGLE_MAX_DEG,
+            //         (unsigned)servo_status.duty_ticks, (unsigned)SERVO_MAX_TICKS,
+            //         servo_status.pulse_width_ms,
+            //         (unsigned)SERVO_UPDATE_PERIOD_MS,
+            //         (unsigned)led_duty, (unsigned)LED_MAX_DUTY);
             ESP_LOGI(TAG,
-                    "POT_GPIO4=%d, POT_ANGLE=%.1f/%.0f deg, SERVO_ANGLE=%.1f/%.0f deg, "
-                    "SERVO_DUTY=%u/%u ticks, SERVO_PULSE=%.3fms, "
+                    "POT_GPIO4=%f, POT_ANGLE=%f deg, SERVO_ANGLE%f deg, "
+                    "SERVO_DUTY=%u ticks, SERVO_PULSE=%.3fms, "
                     "SERVO_UPDATE_PERIOD=%ums, LED_GPIO6=%u/%u",
-                    pot_status.pot_value,
-                    pot_status.pot_angle, POT_MAX_RANGE_DEG,
-                    servo_status.angle_deg, SERVO_ANGLE_MAX_DEG,
-                    (unsigned)servo_status.duty_ticks, (unsigned)SERVO_MAX_TICKS,
+                    current_pot_value,
+                    pot_angle, 
+                    // POT_MAX_RANGE_DEG,
+                    servo_status.angle_deg, 
+                    // SERVO_ANGLE_MAX_DEG,
+                    (unsigned)servo_status.duty_ticks, 
+                    // (unsigned)SERVO_MAX_TICKS,
                     servo_status.pulse_width_ms,
                     (unsigned)SERVO_UPDATE_PERIOD_MS,
-                    (unsigned)led_duty, (unsigned)LED_MAX_DUTY);
+                    // (unsigned)led_duty, 
+                    (unsigned)LED_MAX_DUTY);
 
             if (set_success != ESP_OK) {
                 ESP_LOGW(TAG, "servo_set_angle_deg failed: %s", esp_err_to_name(set_success));
