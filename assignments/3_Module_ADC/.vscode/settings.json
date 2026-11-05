@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "D:/!SOFT/!Documents/embed/training/beetroot/assignments/3_Module_ADC/ESP32S3"
+    "cmake.sourceDirectory": "D:/!SOFT/!Documents/embed/training/beetroot/assignments/3_Module_ADC/ESP32S3",
+    "idf.currentSetup": "C:\\esp\\v6.1\\esp-idf"
 }
