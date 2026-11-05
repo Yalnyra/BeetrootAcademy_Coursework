@@ -430,11 +430,11 @@ Disassembly of section .text:
  80005aa:	bf00      	nop
 
 080005ac <serial_print>:
-/*UART buffer variables */
 char buf[64];
 int value = 0; // Input char
 static volatile uint8_t button_flag = 0;
 /* USER CODE END PV */
+
 int serial_print(char *ptr, int len){
  80005ac:	b580      	push	{r7, lr}
  80005ae:	b082      	sub	sp, #8
