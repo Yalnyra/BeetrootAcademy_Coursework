@@ -11,7 +11,9 @@
 #                     INCLUDE_DIRS "."
 #                     REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log freertos)
 
-idf_component_register(SRCS "lesson_3.6/main.c"
+# idf_component_register(SRCS "lesson_3.6/main.c"
+#                           REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log esp_driver_pcnt freertos)
 
-#                     INCLUDE_DIRS "."
+
+idf_component_register(SRCS "miniproject_3/src/main.c"
                           REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log esp_driver_pcnt freertos)

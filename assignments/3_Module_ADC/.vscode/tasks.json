@@ -1,0 +1,61 @@
+{
+  // Lives at the workspace root (3_Module_ADC). Project files are in ESP32S3/.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "cppcheck: project",
+      "type": "shell",
+      "command": "C:\\Program Files\\Cppcheck\\cppcheck.exe",
+      "args": [
+        "--enable=warning,style,performance,portability",
+        "--inline-suppr",
+        "--suppress=missingIncludeSystem",
+        "--project=${workspaceFolder}/ESP32S3/build/compile_commands.json",
+        "--file-filter=${workspaceFolder}/ESP32S3/main/*",
+        "--cppcheck-build-dir=${workspaceFolder}/ESP32S3/.cppcheck",
+        "--template={file}:{line}:{column}: {severity}: {message} [{id}]",
+        "--quiet"
+      ],
+      "options": { "cwd": "${workspaceFolder}/ESP32S3" },
+      "group": "none",
+      "presentation": { "reveal": "silent", "clear": true },
+      "problemMatcher": {
+        "owner": "cppcheck",
+        "source": "cppcheck",
+        "fileLocation": "absolute",
+        "severity": "warning",
+        "pattern": {
+          "regexp": "^(.+?):(\\d+):(\\d+):\\s+(\\w+):\\s+(.*)$",
+          "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+        }
+      }
+    },
+    {
+      "label": "cppcheck: current file",
+      "type": "shell",
+      "command": "C:\\Program Files\\Cppcheck\\cppcheck.exe",
+      "args": [
+        "--enable=warning,style,performance,portability",
+        "--inline-suppr",
+        "--suppress=missingIncludeSystem",
+        "--project=${workspaceFolder}/ESP32S3/build/compile_commands.json",
+        "--file-filter=${file}",
+        "--template={file}:{line}:{column}: {severity}: {message} [{id}]",
+        "--quiet"
+      ],
+      "options": { "cwd": "${workspaceFolder}/ESP32S3" },
+      "group": "none",
+      "presentation": { "reveal": "silent", "clear": true },
+      "problemMatcher": {
+        "owner": "cppcheck",
+        "source": "cppcheck",
+        "fileLocation": "absolute",
+        "severity": "warning",
+        "pattern": {
+          "regexp": "^(.+?):(\\d+):(\\d+):\\s+(\\w+):\\s+(.*)$",
+          "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+        }
+      }
+    }
+  ]
+}

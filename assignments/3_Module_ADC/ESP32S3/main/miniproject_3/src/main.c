@@ -22,9 +22,11 @@
  *   Passive buzzer  -> GPIO18
  */
 
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include <driver/gpio.h>
 #include <driver/ledc.h>
@@ -35,23 +37,37 @@
 #include <freertos/task.h>
 
 /* ============================== Pins ============================== */
-#define ENCODER_GPIO_A          5       // CLK: counted edges
-#define ENCODER_GPIO_B          6       // DT:  direction level
-#define ENCODER_GPIO_SW         7       // SW:  push button, active LOW
-#define SERVO_GPIO              14
-#define BUZZER_GPIO             18
+#define ENCODER_GPIO_A          4       // CLK: counted edges
+#define ENCODER_GPIO_B          5       // DT:  direction level
+#define ENCODER_GPIO_SW         6       // SW:  push button, active LOW
+#define SERVO_GPIO              7
+#define BUZZER_GPIO             16
 
 /* =========================== Superloop ============================ */
-#define SUPERLOOP_DELAY_MS      50      // vTaskDelay per cycle (FREERTOS_HZ=100 -> 5 ticks)
+#define SUPERLOOP_DELAY_MS      500      // vTaskDelay per cycle (FREERTOS_HZ=100 -> 5 ticks)
+#define LOG_PERIOD_MS           500
+
+/* ============================== Encoder ============================== */
+
+#define ENCODER_CPR      ENCODER_PPR  // Режим X1: 1 імпульс = 1 крок, тому CPR = PPR
 
 /* ================ Servo: LEDC timer 0 / channel 0 ================= */
 #define SERVO_LEDC_MODE         LEDC_LOW_SPEED_MODE
 #define SERVO_LEDC_TIMER        LEDC_TIMER_0
 #define SERVO_LEDC_CHANNEL      LEDC_CHANNEL_0
-#define SERVO_FREQ_HZ           50
+#define SERVO_MIN_PULSE_US   1000U                    // 1ms -> 0 deg
+#define SERVO_MAX_PULSE_US   2000U                    // 2ms -> 180 deg
+#define SERVO_FREQ_HZ           50                    // pwm update frequency
 #define SERVO_PERIOD_US         (1000000 / SERVO_FREQ_HZ)   // 20 000 us
-#define SERVO_DUTY_RES          LEDC_TIMER_12_BIT
+#define SERVO_DUTY_RES          LEDC_TIMER_13_BIT
 #define SERVO_MAX_DUTY          ((1 << SERVO_DUTY_RES) - 1)
+// Pulse widths expressed as duty ticks (rounded to nearest tick)
+#define SERVO_MIN_TICKS \
+    ((SERVO_MIN_PULSE_US * SERVO_MAX_DUTY + SERVO_PERIOD_US / 2U) / SERVO_PERIOD_US)
+#define SERVO_MAX_TICKS \
+    ((SERVO_MAX_PULSE_US * SERVO_MAX_DUTY + SERVO_PERIOD_US / 2U) / SERVO_PERIOD_US)
+
+
 
 #define SERVO_RANGE_DEG         180     // physical range: 0..180 deg ...
 #define SERVO_MIN_US            500     // ... maps to 500..2500 us pulse
@@ -60,10 +76,26 @@
 #define SERVO_MAX_DEG           170     // these triggers the beep
 #define SERVO_INIT_DEG          90
 
+#define SERVO_MAX_RANGE_DEG  180.0f
+#define SERVO_MIN_RANGE_DEG 0.0f
+
 /* =================== Step size: k = 2k (mod N) ==================== */
 #define SERVO_STEP_FINE_DEG     5       // degrees per tick at k = 1
 #define SPEED_N                 3       // N, see speed_update()
 #define SPEED_K_INIT            2       // start coarse: 2 * 5 = 10 deg/tick
+
+
+/* Структура для логування PWM сигналу серво */
+typedef struct {
+    int32_t ticks;      // Encoder counter ticks
+    float    angle_deg;             // current angle set by the encoder 
+    int32_t    achieved_angle_deg; //  clamped servo-space angle actually commanded
+    int32_t duty_ticks;       // raw LEDC duty value written
+    float    pulse_width_ms;   // same duty, expressed as a pulse width
+    float    angle_dev_pcnt;   // angle deviation from pot space to angle space 
+    float    deviation_deg;      // angle_deg - achieved_angle_deg (quantization error)
+    int32_t buzzer_error_flag; 
+} servo_status_t;
 
 /* =============== Buzzer: LEDC timer 1 / channel 1 ================= */
 /* The servo needs its own 50 Hz timer, so the buzzer cannot share timer 0. */
@@ -88,15 +120,23 @@ static void buzzer_init(void);
 /* Superloop blocks — one function per flowchart block */
 static int32_t  encoder_update_ticks(void);
 static bool     button_pressed_event(void);
-static uint32_t speed_update(uint32_t k);
-static bool     servo_update_duty(int32_t ticks, uint32_t speed_k);
-static void     buzzer_emit_note(uint32_t freq_hz, uint32_t cycles);
+static int32_t speed_update(int32_t k);
+bool            servo_update_duty(int32_t ticks, int32_t speed_k, servo_status_t* status);
+static void     buzzer_emit_note(int32_t freq_hz, int32_t cycles);
 static void     buzzer_update(void);
 
 /* Helpers */
-static uint32_t servo_angle_to_duty(int32_t angle_deg);
+static int32_t servo_angle_to_duty_ticks(int32_t angle_deg);
+bool           servo_update_status(int32_t cmd_angle_deg, servo_status_t* status);
+
+static float duty_to_servo_angle_deg(uint32_t duty);
+static float duty_to_pulse_width_ms(int32_t duty_ticks);
+static float calc_deviation_percentf(float one, float other);
 static inline int32_t val_clamp(int32_t value, int32_t val_min, int32_t val_max);
-static inline int32_t mad_map(int32_t value, int32_t in_min, int32_t in_max,
+static inline float map_valuef(float value, float in_min, float in_max,
+                              float out_min, float out_max);
+#define ROUND_UP_CORRECTION 0.5f
+static inline int32_t map_value(int32_t value, int32_t in_min, int32_t in_max,
                               int32_t out_min, int32_t out_max);
 
 /* Дескриптор апаратного лічильника імпульсів (PCNT) */
@@ -111,12 +151,16 @@ void app_main(void)
     servo_init();
     buzzer_init();
 
-    uint32_t speed_k = SPEED_K_INIT;    // k: step multiplier
+    int32_t speed_k = SPEED_K_INIT;    // k: step multiplier
+    TickType_t last_log = xTaskGetTickCount();
+    servo_status_t servo_status = {0};
 
     ESP_LOGI(TAG, "superloop started, delay %d ms", SUPERLOOP_DELAY_MS);
 
     while (1)
     {
+        
+        TickType_t now = xTaskGetTickCount();
         /* 1. Update encoder ticks */
         int32_t ticks = encoder_update_ticks();
 
@@ -128,15 +172,34 @@ void app_main(void)
         // No: do nothing
 
         /* 3. Update servo PWM duty cycle */
-        bool out_of_bounds = servo_update_duty(ticks, speed_k);
+        bool servo_updated = servo_update_duty(ticks, speed_k, &servo_status);
 
         /* 4. Duty cycle out of bounds? */
         buzzer_update();                        // count down a note started in earlier cycles
-        if (out_of_bounds)
+        if (servo_status.buzzer_error_flag)
         {
             buzzer_emit_note(BUZZER_NOTE_HZ, BUZZER_BEEP_CYCLES);  // Yes: play_note for the next two cycles
         }
         // No: do nothing
+
+        
+        if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
+            last_log = now;
+            ESP_LOGI(TAG,
+                    "ENCODER_PULSES=%" PRId32 ", ENCODER_ANGLE=%.2f deg, SERVO_ANGLE=%" PRId32 "/%.0f deg, ANGLE_ERROR=%.2f deg (%.2f%%)",
+                    ticks,
+                    servo_status.angle_deg,
+                    servo_status.achieved_angle_deg,
+                    SERVO_MAX_RANGE_DEG,
+                    servo_status.deviation_deg,
+                    servo_status.angle_dev_pcnt);
+
+            ESP_LOGI(TAG,
+                    "SERVO_DUTY=%" PRId32 " ticks, SERVO_PULSE=%.3f ms, SPEED_K=%" PRId32,
+                    servo_status.duty_ticks,
+                    servo_status.pulse_width_ms,
+                    speed_k);
+        }
 
         vTaskDelay(pdMS_TO_TICKS(SUPERLOOP_DELAY_MS));
     }
@@ -214,7 +277,7 @@ static void servo_init(void)
         .timer_sel  = SERVO_LEDC_TIMER,
         .intr_type  = LEDC_INTR_DISABLE,
         .gpio_num   = SERVO_GPIO,
-        .duty       = servo_angle_to_duty(SERVO_INIT_DEG),  // 0 until the helper is implemented
+        .duty       = servo_angle_to_duty_ticks(SERVO_INIT_DEG ),  // 0 until the helper is implemented
         .hpoint     = 0,
     };
     ESP_ERROR_CHECK(ledc_channel_config(&channel_config));
@@ -254,8 +317,22 @@ static int32_t encoder_update_ticks(void)
     //  - delta = count - prev_count; prev_count = count   (prev_count: a `static int` local)
     //  - don't pcnt_unit_clear_count() every cycle: ticks that land between
     //    the get and the clear are lost
-    return 0;
+
+
+    int count = 0;
+    // Зчитуємо поточне значення лічильника
+    pcnt_unit_get_count(pcnt_unit, &count);
+    
+    return count;
 }
+
+static void encoder_output_ticks(void){
+    //TODO:
+    // - read the ticks result from the encoder 
+    // - set the pin to HIGH if ticks increased 
+    // - set the pin to LOW if nothing happened 
+}
+
 
 /* 2. Button event pressed? (once per press event)
  * Returns true exactly once per press; holding the button does not repeat. */
@@ -270,7 +347,7 @@ static bool button_pressed_event(void)
 
 /* 2 -> Yes. Update speed: k = 2k (mod N), N - maximum speed
  * Returns the new k. */
-static uint32_t speed_update(uint32_t k)
+static int32_t speed_update(int32_t k)
 {
     // TODO: k = 2k (mod N)
     //  - with N = SPEED_N = 3, k alternates 2 -> 1 -> 2 -> ... (2*2 mod 3 = 1, 2*1 mod 3 = 2):
@@ -284,30 +361,60 @@ static uint32_t speed_update(uint32_t k)
  * Moves the servo by ticks * SERVO_STEP_FINE_DEG * speed_k degrees, clamped
  * to SERVO_MIN_DEG..SERVO_MAX_DEG.
  * Returns true if this cycle's ticks tried to push the shaft past a limit. */
-static bool servo_update_duty(int32_t ticks, uint32_t speed_k)
+bool servo_update_duty(int32_t ticks, int32_t speed_k, servo_status_t* status)
 {
     // TODO:
     //  - target = angle + ticks * SERVO_STEP_FINE_DEG * speed_k
     //    (angle: a `static int32_t` local holding the position, starts at SERVO_INIT_DEG)
     //  - out_of_bounds = target < SERVO_MIN_DEG || target > SERVO_MAX_DEG
     //  - angle = val_clamp(target, SERVO_MIN_DEG, SERVO_MAX_DEG)
-    //  - if angle changed: ledc_set_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHANNEL, servo_angle_to_duty(angle))
+    //  - if angle changed: ledc_set_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHANNEL, servo_angle_to_duty_ticks(angle))
     //                      ledc_update_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHANNEL)
     //  - return out_of_bounds (false when ticks == 0, so a servo resting at a limit stays silent)
-    (void)ticks;
-    (void)speed_k;
-    return false;
+    // (void)ticks; signals to compiler the passed value is not used
+    // (void)speed_k;
+    if (status == NULL) { ESP_LOGE(TAG, "servo struct init error: status is null pointer"); return false; }
+    if (ticks == status->ticks) {  ESP_LOGI(TAG, "servo idle, at %" PRId32 " deg", status->achieved_angle_deg); return false; } // angle did not change 
+    int32_t new_ticks = ticks;
+    int32_t current_ticks = status->ticks;
+    
+    int32_t new_angle = status->angle_deg + (new_ticks - current_ticks) * SERVO_STEP_FINE_DEG * speed_k; // Updates based on current speed
+
+    if (!servo_update_status(new_angle, status)) {  ESP_LOGI(TAG, "status update error, at %" PRId32 " deg", status->achieved_angle_deg); return false; } 
+
+    //ESP_LOGI(*TAG, "servo idle, at %d deg", status->achieved_angle_deg
+    // Requires duty cycle, not time ms 
+    esp_err_t set_err = ledc_set_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHANNEL, status->duty_ticks);
+    return set_err == ESP_OK && ledc_update_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHANNEL) == ESP_OK;
+}
+
+bool servo_update_status(int32_t cmd_angle_deg, servo_status_t* status){
+    if (cmd_angle_deg == status->achieved_angle_deg) return false;
+    int32_t duty_ticks = servo_angle_to_duty_ticks(cmd_angle_deg);
+    // float achieved_angle_deg = duty_to_servo_angle_deg(duty_ticks);
+    int32_t achieved_angle_deg =  val_clamp(cmd_angle_deg, SERVO_MIN_DEG, SERVO_MAX_DEG);
+    int32_t deviation_deg = cmd_angle_deg - achieved_angle_deg;
+    bool buzzer_error_flag = abs(deviation_deg) == 0;  // todo, separate change was made from angle was not made 
+
+    status->angle_deg      = cmd_angle_deg;
+    status->duty_ticks     = servo_angle_to_duty_ticks(cmd_angle_deg);
+    status->pulse_width_ms = duty_to_pulse_width_ms(duty_ticks);
+    status->achieved_angle_deg = achieved_angle_deg;
+    status->angle_dev_pcnt = calc_deviation_percentf(cmd_angle_deg, achieved_angle_deg);
+    status->deviation_deg = deviation_deg;
+    status->buzzer_error_flag = buzzer_error_flag; 
+    return true;
 }
 
 /* 4 -> Yes. Emit play_note for the next `cycles` superloop cycles
  * Non-blocking version of play_note() from lesson 3.4: starts the tone and
  * returns immediately; buzzer_update() stops it later. */
-static void buzzer_emit_note(uint32_t freq_hz, uint32_t cycles)
+static void buzzer_emit_note(int32_t freq_hz, int32_t cycles)
 {
     // TODO:
     //  - ledc_set_freq(BUZZER_LEDC_MODE, BUZZER_LEDC_TIMER, freq_hz)
     //  - ledc_set_duty(BUZZER_LEDC_MODE, BUZZER_LEDC_CHANNEL, BUZZER_DUTY) + ledc_update_duty(...)
-    //  - buzzer_cycles_left = cycles   (a file-scope `static uint32_t`, shared with buzzer_update();
+    //  - buzzer_cycles_left = cycles   (a file-scope `static int32_t`, shared with buzzer_update();
     //    re-arming while the note plays keeps the tone on as long as the user keeps turning)
     (void)freq_hz;
     (void)cycles;
@@ -323,14 +430,38 @@ static void buzzer_update(void)
 
 /* ============================ Helpers ============================= */
 
+
+static float duty_to_servo_angle_deg(uint32_t duty)
+{
+    return map_valuef((float)duty,
+                       (float)SERVO_MIN_TICKS, (float)SERVO_MAX_TICKS,
+                       SERVO_MIN_RANGE_DEG, SERVO_MAX_RANGE_DEG);
+}
+
 /* Servo angle (0..SERVO_RANGE_DEG) -> LEDC duty ticks */
-static uint32_t servo_angle_to_duty(int32_t angle_deg)
+static int32_t servo_angle_to_duty_ticks(int32_t angle_deg)
 {
     // TODO:
-    //  - pulse_us = mad_map(angle_deg, 0, SERVO_RANGE_DEG, SERVO_MIN_US, SERVO_MAX_US)
-    //  - duty     = pulse_us * (SERVO_MAX_DUTY + 1) / SERVO_PERIOD_US   (12 bit @ 50 Hz: 1 ms ~ 205 ticks)
-    (void)angle_deg;
-    return 0;
+    // Mapping to number ticks per second (0-8192)
+    // float ratio = (cmd_angle_deg - SERVO_MIN_RANGE_DEG) / (SERVO_MAX_RANGE_DEG - SERVO_MIN_RANGE_DEG);
+    // uint32_t duty_ticks = SERVO_MIN_TICKS +
+    // (uint32_t)(ratio * (float)(SERVO_MAX_TICKS - SERVO_MIN_TICKS) + ROUND_UP_CORRECTION);
+    
+    //Map built-in clamps to allowed degree value
+    return map_value(angle_deg, 0, SERVO_RANGE_DEG, SERVO_MIN_TICKS, SERVO_MAX_TICKS);
+}
+
+/* Relative deviation of `one` from `other`, % (from lesson 3.5) */
+static float calc_deviation_percentf(float one, float other)
+{
+    return (other != 0.0f)
+                ? (one - other) / other * 100.0f
+                : 0.0f;
+}
+
+static float duty_to_pulse_width_ms(int32_t duty_ticks)
+{
+    return (float)duty_ticks * SERVO_PERIOD_US / (SERVO_MAX_DUTY + 1 )/ 1000.0f;  // (13 bit @ 50 Hz: 1 ms ~ 205 ticks);
 }
 
 static inline int32_t val_clamp(int32_t value, int32_t val_min, int32_t val_max)
@@ -340,12 +471,24 @@ static inline int32_t val_clamp(int32_t value, int32_t val_min, int32_t val_max)
     return value;
 }
 
-static inline int32_t mad_map(int32_t value, int32_t in_min, int32_t in_max,
+
+static inline int32_t map_value(int32_t value, int32_t in_min, int32_t in_max,
                               int32_t out_min, int32_t out_max)
 {
     if (in_min == in_max) return out_max;
 
     value = val_clamp(value, in_min, in_max);
+
+    return out_min + ((value - in_min) * (out_max - out_min) / (in_max - in_min) + ROUND_UP_CORRECTION);
+}
+
+static inline float map_valuef(float value, float in_min, float in_max,
+                              float out_min, float out_max)
+{
+    if (in_min == in_max) return out_max;
+
+    if (value < in_min) value = in_min;
+    if (value > in_max) value = in_max;
 
     return out_min + (value - in_min) * (out_max - out_min) / (in_max - in_min);
 }
