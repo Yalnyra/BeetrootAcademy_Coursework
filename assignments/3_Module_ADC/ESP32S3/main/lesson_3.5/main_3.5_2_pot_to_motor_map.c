@@ -211,26 +211,29 @@ esp_err_t servo_set_angle_deg(float angle_deg, servo_status_t *status)
     } else if (cmd_angle_deg > SERVO_MAX_RANGE_DEG) {
         cmd_angle_deg = SERVO_MAX_RANGE_DEG;
     }
+
+    // Mapping to number ticks per second (0-8192)
     float ratio = (cmd_angle_deg - SERVO_MIN_RANGE_DEG) /
                   (SERVO_MAX_RANGE_DEG - SERVO_MIN_RANGE_DEG);
 
-    uint32_t duty = SERVO_MIN_TICKS +
+    uint32_t duty_ticks = SERVO_MIN_TICKS +
         (uint32_t)(ratio * (float)(SERVO_MAX_TICKS - SERVO_MIN_TICKS) + ROUND_UP_CORRECTION);
 
-    float achieved_angle_deg = duty_to_servo_angle_deg(duty);
+    float achieved_angle_deg = duty_to_servo_angle_deg(duty_ticks);
     // Include the clamped range
     float angle_dev_deg = calc_deviation_percentf(angle_deg, achieved_angle_deg);
 
     if (status != NULL) {
         status->angle_deg      = cmd_angle_deg;
-        status->duty_ticks     = duty;
-        status->pulse_width_ms = (float)duty * SERVO_PERIOD_US / SERVO_PERIOD_TICKS / 1000.0f;
+        status->duty_ticks     = duty_ticks;
+        // Mapping to ms (0-2ms)
+        status->pulse_width_ms = (float)duty_ticks * SERVO_PERIOD_US / SERVO_PERIOD_TICKS / 1000.0f;
         status->achieved_angle_deg = achieved_angle_deg;
         status->angle_dev_deg = angle_dev_deg;
         status->deviation_deg = cmd_angle_deg - achieved_angle_deg;
     }
-
-    esp_err_t err = ledc_set_duty(PWM_MODE, SERVO_CHANNEL, duty);
+    // Requires duty cycle, not time ms 
+    esp_err_t err = ledc_set_duty(PWM_MODE, SERVO_CHANNEL, duty_ticks);
     if (err != ESP_OK) {
         return err;
     }
