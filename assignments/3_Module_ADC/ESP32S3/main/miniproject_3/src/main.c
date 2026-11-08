@@ -39,9 +39,9 @@
 #include <freertos/task.h>
 
 /* ============================== Pins ============================== */
-#define ENCODER_GPIO_A          5       // CLK: counted edges
-#define ENCODER_GPIO_B          6       // DT:  direction level
-#define ENCODER_GPIO_SW         4       // SW:  push button, active LOW
+#define ENCODER_GPIO_A          4       // CLK: counted edges
+#define ENCODER_GPIO_B          5       // DT:  direction level
+#define ENCODER_GPIO_SW         6       // SW:  push button, active LOW
 #define SERVO_GPIO              7
 #define BUZZER_GPIO             16
 #define ENCODER_DEBUG_GPIO      15      // scope/LED probe: HIGH while the filtered PCNT count is moving
@@ -58,7 +58,8 @@
 
 /* ============================== Encoder ============================== */
 
-#define ENCODER_COUNTS_PER_DETENT  4   // X4: one click = full quadrature cycle = 4 edges (set 2 if one click gives delta=2)
+#define ENCODER_COUNTS_PER_DETENT  1   // X4: one click = full quadrature cycle = 4 edges (set 2 if one click gives delta=2)
+#define GLITCH_FILTER_DELAY_NS 10000 
 
 /* ================ Servo: LEDC timer 0 / channel 0 ================= */
 #define SERVO_LEDC_MODE         LEDC_LOW_SPEED_MODE
@@ -232,7 +233,7 @@ static void encoder_init(void)
     ESP_ERROR_CHECK(pcnt_new_unit(&unit_config, &pcnt_unit));
 
     // Апаратний фільтр завад: імпульси коротші за 10 мкс ігноруються
-    pcnt_glitch_filter_config_t filter_config = { .max_glitch_ns = 10000 };
+    pcnt_glitch_filter_config_t filter_config = { .max_glitch_ns = GLITCH_FILTER_DELAY_NS };
     ESP_ERROR_CHECK(pcnt_unit_set_glitch_filter(pcnt_unit, &filter_config));
 
     // Канал рахує фронти сигналу A, а сигнал B визначає напрямок обертання
@@ -338,18 +339,22 @@ static void encoder_debug_init(void)
 
 /* 1. Update encoder ticks
  * Returns the tick delta since the previous cycle (+ CW / - CCW). */
- static int32_t encoder_update_ticks(void)
+static int32_t encoder_update_ticks(void)
 {
     static int prev_count = 0;
-    static int residual = 0;    // edges not yet adding up to a full click
     int count = 0;
-    pcnt_unit_get_count(pcnt_unit, &count);
-    residual += count - prev_count;
+    if (pcnt_unit_get_count(pcnt_unit, &count) != ESP_OK) {
+        return 0;                   // read failed: report no movement, keep prev_count
+    }
+    int32_t delta = count - prev_count;
     prev_count = count;
-
-    int32_t clicks = residual / ENCODER_COUNTS_PER_DETENT;   // truncates toward 0: symmetric for +/-
-    residual -= clicks * ENCODER_COUNTS_PER_DETENT;
-    return clicks;
+    if (delta > 0 ) {
+        ESP_LOGW(TAG, "COUNT INCREASED BY", delta);
+    }
+    if (delta < 0 ) {
+        ESP_LOGE(TAG, "COUNT DECREASED BY", delta);
+    }
+    return delta;
 }
 
 /* Debug probe: mirrors the glitch-filtered PCNT count on ENCODER_DEBUG_GPIO.
