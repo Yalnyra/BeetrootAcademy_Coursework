@@ -19,6 +19,8 @@
  *   Encoder DT  (B) -> GPIO6
  *   Encoder SW      -> GPIO7   TODO: confirm pin (active LOW, internal pull-up)
  *   Servo signal    -> GPIO14  (servo on external 5 V, common GND)
+ *   Diagnostic pulse counter ouput -> GPIO15   
+ * 
  *   Passive buzzer  -> GPIO18
  */
 
@@ -37,19 +39,26 @@
 #include <freertos/task.h>
 
 /* ============================== Pins ============================== */
-#define ENCODER_GPIO_A          4       // CLK: counted edges
-#define ENCODER_GPIO_B          5       // DT:  direction level
-#define ENCODER_GPIO_SW         6       // SW:  push button, active LOW
+#define ENCODER_GPIO_A          5       // CLK: counted edges
+#define ENCODER_GPIO_B          6       // DT:  direction level
+#define ENCODER_GPIO_SW         4       // SW:  push button, active LOW
 #define SERVO_GPIO              7
 #define BUZZER_GPIO             16
+#define ENCODER_DEBUG_GPIO      15      // scope/LED probe: HIGH while the filtered PCNT count is moving
 
 /* =========================== Superloop ============================ */
-#define SUPERLOOP_DELAY_MS      500      // vTaskDelay per cycle (FREERTOS_HZ=100 -> 5 ticks)
-#define LOG_PERIOD_MS           500
+#define SUPERLOOP_DELAY_MS      50     // vTaskDelay per cycle (FREERTOS_HZ=100 -> 5 ticks)
+#define LOG_PERIOD_MS           2000
+#define ENCODER_POLL_PERIOD_MS  200     // how often the PCNT count is read; the hardware keeps
+                                        // counting in between, so a slower poll loses no clicks,
+                                        // it only batches them (servo moves in bigger jumps)
+#if ENCODER_POLL_PERIOD_MS < SUPERLOOP_DELAY_MS
+#warning "ENCODER_POLL_PERIOD_MS < SUPERLOOP_DELAY_MS: encoder is polled every cycle, the define has no effect"
+#endif
 
 /* ============================== Encoder ============================== */
 
-#define ENCODER_CPR      ENCODER_PPR  // Режим X1: 1 імпульс = 1 крок, тому CPR = PPR
+#define ENCODER_COUNTS_PER_DETENT  4   // X4: one click = full quadrature cycle = 4 edges (set 2 if one click gives delta=2)
 
 /* ================ Servo: LEDC timer 0 / channel 0 ================= */
 #define SERVO_LEDC_MODE         LEDC_LOW_SPEED_MODE
@@ -87,7 +96,7 @@
 
 /* Структура для логування PWM сигналу серво */
 typedef struct {
-    int32_t ticks;      // Encoder counter ticks
+    int32_t ticks;      // Encoder ticks delta from last update
     float    angle_deg;             // current angle set by the encoder 
     int32_t    achieved_angle_deg; //  clamped servo-space angle actually commanded
     int32_t duty_ticks;       // raw LEDC duty value written
@@ -116,9 +125,11 @@ static void encoder_init(void);
 static void button_init(void);
 static void servo_init(void);
 static void buzzer_init(void);
+static void encoder_debug_init(void);
 
 /* Superloop blocks — one function per flowchart block */
 static int32_t  encoder_update_ticks(void);
+static void     encoder_output_ticks(void);
 static bool     button_pressed_event(void);
 static int32_t speed_update(int32_t k);
 bool            servo_update_duty(int32_t ticks, int32_t speed_k, servo_status_t* status);
@@ -150,12 +161,14 @@ void app_main(void)
     button_init();
     servo_init();
     buzzer_init();
+    encoder_debug_init();
 
     int32_t speed_k = SPEED_K_INIT;    // k: step multiplier
     TickType_t last_log = xTaskGetTickCount();
+    TickType_t last_encoder_poll = last_log;
     servo_status_t servo_status = {0};
 
-    ESP_LOGI(TAG, "superloop started, delay %d ms", SUPERLOOP_DELAY_MS);
+    ESP_LOGI(TAG, "superloop started, delay %d ms, encoder poll %d ms", SUPERLOOP_DELAY_MS, ENCODER_POLL_PERIOD_MS);
 
     while (1)
     {
@@ -176,7 +189,8 @@ void app_main(void)
 
         /* 4. Duty cycle out of bounds? */
         buzzer_update();                        // count down a note started in earlier cycles
-        if (servo_status.buzzer_error_flag)
+        // if (servo_status.buzzer_error_flag)
+        if (servo_updated)
         {
             buzzer_emit_note(BUZZER_NOTE_HZ, BUZZER_BEEP_CYCLES);  // Yes: play_note for the next two cycles
         }
@@ -306,31 +320,67 @@ static void buzzer_init(void)
     ESP_ERROR_CHECK(ledc_channel_config(&channel_config));
 }
 
+/* Debug output pin for encoder_output_ticks(): plain push-pull output, starts LOW */
+static void encoder_debug_init(void)
+{
+    gpio_config_t cfg = {
+        .pin_bit_mask = 1ULL << ENCODER_DEBUG_GPIO,
+        .mode         = GPIO_MODE_OUTPUT,
+        .pull_up_en   = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type    = GPIO_INTR_DISABLE,
+    };
+    ESP_ERROR_CHECK(gpio_config(&cfg));
+    ESP_ERROR_CHECK(gpio_set_level(ENCODER_DEBUG_GPIO, 0));
+}
+
 /* ======================== Superloop blocks ======================== */
 
 /* 1. Update encoder ticks
  * Returns the tick delta since the previous cycle (+ CW / - CCW). */
-static int32_t encoder_update_ticks(void)
+ static int32_t encoder_update_ticks(void)
 {
-    // TODO:
-    //  - pcnt_unit_get_count(pcnt_unit, &count)
-    //  - delta = count - prev_count; prev_count = count   (prev_count: a `static int` local)
-    //  - don't pcnt_unit_clear_count() every cycle: ticks that land between
-    //    the get and the clear are lost
-
-
+    static int prev_count = 0;
+    static int residual = 0;    // edges not yet adding up to a full click
     int count = 0;
-    // Зчитуємо поточне значення лічильника
     pcnt_unit_get_count(pcnt_unit, &count);
-    
-    return count;
+    residual += count - prev_count;
+    prev_count = count;
+
+    int32_t clicks = residual / ENCODER_COUNTS_PER_DETENT;   // truncates toward 0: symmetric for +/-
+    residual -= clicks * ENCODER_COUNTS_PER_DETENT;
+    return clicks;
 }
 
-static void encoder_output_ticks(void){
-    //TODO:
-    // - read the ticks result from the encoder 
-    // - set the pin to HIGH if ticks increased 
-    // - set the pin to LOW if nothing happened 
+/* Debug probe: mirrors the glitch-filtered PCNT count on ENCODER_DEBUG_GPIO.
+ *
+ * The ESP32-S3 PCNT cannot route its filtered input to a GPIO, so this reads
+ * the count (which only moves on edges that survived the 10 us glitch filter)
+ * and drives the pin from software, once per superloop cycle:
+ *   count changed since last call -> HIGH (filtered edges arrived)
+ *   count unchanged               -> LOW  (encoder at rest)
+ * Keeps its own previous count, so it does not disturb encoder_update_ticks().
+ *
+ * Expected while the servo "runs away": pin LOW, raw count constant. That proves
+ * the PCNT is quiet and the runaway is in software (absolute count re-added
+ * every cycle), not noise or bounce getting past the filter. */
+static void encoder_output_ticks(void)
+{
+    static int prev_count = 0;
+    int count = 0;
+
+    if (pcnt_unit_get_count(pcnt_unit, &count) != ESP_OK) {
+        return;
+    }
+
+    int delta = count - prev_count;
+    prev_count = count;
+
+    gpio_set_level(ENCODER_DEBUG_GPIO, delta != 0 ? 1 : 0);
+
+    if (delta != 0) {
+        ESP_LOGI(TAG, "PCNT filtered: count=%d delta=%+d", count, delta);
+    }
 }
 
 
@@ -374,11 +424,11 @@ bool servo_update_duty(int32_t ticks, int32_t speed_k, servo_status_t* status)
     // (void)ticks; signals to compiler the passed value is not used
     // (void)speed_k;
     if (status == NULL) { ESP_LOGE(TAG, "servo struct init error: status is null pointer"); return false; }
-    if (ticks == status->ticks) {  ESP_LOGI(TAG, "servo idle, at %" PRId32 " deg", status->achieved_angle_deg); return false; } // angle did not change 
-    int32_t new_ticks = ticks;
-    int32_t current_ticks = status->ticks;
+    // FIXED: Use counter delta since last encoder_update_ticks() instead of counter value
+    if (ticks == 0) { return false; } // angle did not change 
+    status->ticks = ticks; 
     
-    int32_t new_angle = status->angle_deg + (new_ticks - current_ticks) * SERVO_STEP_FINE_DEG * speed_k; // Updates based on current speed
+    int32_t new_angle = status->angle_deg + ticks * SERVO_STEP_FINE_DEG * speed_k; // Updates based on current speed
 
     if (!servo_update_status(new_angle, status)) {  ESP_LOGI(TAG, "status update error, at %" PRId32 " deg", status->achieved_angle_deg); return false; } 
 
