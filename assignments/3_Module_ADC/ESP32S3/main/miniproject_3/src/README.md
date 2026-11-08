@@ -32,264 +32,371 @@
 | Резистор | x1 220 Ом |
 | Світлодіод | x1 Червоний |
 | Сервопривід | x1 SG90 (Tower Pro) |
-| Джерело живлення | 5V зовнішнє |
+| Джерело живлення | 5V зовнішнє |'
+
 
 ### Вихід програми 
-```I (242) sleep_gpio: Configure to isolate all GPIO pins in sleep state
-I (248) sleep_gpio: Enable automatic switching of GPIO sleep configuration
-I (255) main_task: Started on CPU0
-I (255) main_task: Calling app_main()
-I (265) mini_project_3: PCNT X1 initialized
-I (265) mini_project_3: superloop started, delay 20 ms
-I (265) mini_project_3: PCNT filtered: count=1 delta=+1
-I (295) mini_project_3: servo idle, at 10 deg
-I (315) mini_project_3: servo idle, at 10 deg
-I (335) mini_project_3: servo idle, at 10 deg
-I (355) mini_project_3: servo idle, at 10 deg
-I (375) mini_project_3: servo idle, at 10 deg
-I (395) mini_project_3: servo idle, at 10 deg
-I (415) mini_project_3: servo idle, at 10 deg
-I (435) mini_project_3: servo idle, at 10 deg
-I (455) mini_project_3: servo idle, at 10 deg
-I (475) mini_project_3: servo idle, at 10 deg
-I (495) mini_project_3: servo idle, at 10 deg
-I (515) mini_project_3: servo idle, at 10 deg
-I (535) mini_project_3: servo idle, at 10 deg
-I (555) mini_project_3: servo idle, at 10 deg
-I (575) mini_project_3: servo idle, at 10 deg
-I (595) mini_project_3: servo idle, at 10 deg
-I (615) mini_project_3: servo idle, at 10 deg
-I (635) mini_project_3: servo idle, at 10 deg
-I (655) mini_project_3: servo idle, at 10 deg
-I (675) mini_project_3: servo idle, at 10 deg
-I (695) mini_project_3: servo idle, at 10 deg
-I (715) mini_project_3: servo idle, at 10 deg
-I (735) mini_project_3: servo idle, at 10 deg
-I (755) mini_project_3: servo idle, at 10 deg
-I (775) mini_project_3: servo idle, at 10 deg
-I (775) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=10.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (775) mini_project_3: SERVO_DUTY=432 ticks, SERVO_PULSE=1.055 ms, SPEED_K=2
-I (805) mini_project_3: servo idle, at 10 deg
-I (825) mini_project_3: servo idle, at 10 deg
-I (845) mini_project_3: servo idle, at 10 deg
-I (865) mini_project_3: servo idle, at 10 deg
-I (885) mini_project_3: servo idle, at 10 deg
-I (905) mini_project_3: servo idle, at 10 deg
-I (925) mini_project_3: servo idle, at 10 deg
-I (945) mini_project_3: servo idle, at 10 deg
-I (965) mini_project_3: servo idle, at 10 deg
-I (985) mini_project_3: servo idle, at 10 deg
-I (1005) mini_project_3: servo idle, at 10 deg
-I (1025) mini_project_3: servo idle, at 10 deg
-I (1045) mini_project_3: servo idle, at 10 deg
-I (1065) mini_project_3: servo idle, at 10 deg
-I (1085) mini_project_3: servo idle, at 10 deg
-I (1105) mini_project_3: servo idle, at 10 deg
-I (1125) mini_project_3: servo idle, at 10 deg
-I (1145) mini_project_3: servo idle, at 10 deg
-I (1165) mini_project_3: servo idle, at 10 deg
-I (1185) mini_project_3: servo idle, at 10 deg
-I (1205) mini_project_3: servo idle, at 10 deg
-I (1225) mini_project_3: servo idle, at 10 deg
-I (1245) mini_project_3: servo idle, at 10 deg
-I (1265) mini_project_3: servo idle, at 10 deg
-I (1285) mini_project_3: servo idle, at 10 deg
-I (1285) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=10.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (1285) mini_project_3: SERVO_DUTY=432 ticks, SERVO_PULSE=1.055 ms, SPEED_K=2
-I (1315) mini_project_3: servo idle, at 10 deg
-I (1335) mini_project_3: servo idle, at 10 deg
-I (1355) mini_project_3: servo idle, at 10 deg
-I (1375) mini_project_3: servo idle, at 10 deg
-I (1395) mini_project_3: servo idle, at 10 deg
-I (1415) mini_project_3: servo idle, at 10 deg
-I (1435) mini_project_3: servo idle, at 10 deg
-I (1455) mini_project_3: servo idle, at 10 deg
-I (1475) mini_project_3: servo idle, at 10 deg
-I (1495) mini_project_3: servo idle, at 10 deg
-I (1515) mini_project_3: servo idle, at 10 deg
-I (1535) mini_project_3: servo idle, at 10 deg
-I (1555) mini_project_3: servo idle, at 10 deg
-I (1575) mini_project_3: servo idle, at 10 deg
-I (1595) mini_project_3: servo idle, at 10 deg
-I (1615) mini_project_3: servo idle, at 10 deg
-I (1635) mini_project_3: servo idle, at 10 deg
-I (1655) mini_project_3: servo idle, at 10 deg
-I (1675) mini_project_3: servo idle, at 10 deg
-I (1695) mini_project_3: servo idle, at 10 deg
-I (1715) mini_project_3: servo idle, at 10 deg
-I (1735) mini_project_3: servo idle, at 10 deg
-I (1755) mini_project_3: servo idle, at 10 deg
-I (1775) mini_project_3: servo idle, at 10 deg
-I (1795) mini_project_3: servo idle, at 10 deg
-I (1795) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=10.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (1795) mini_project_3: SERVO_DUTY=432 ticks, SERVO_PULSE=1.055 ms, SPEED_K=2
-I (1825) mini_project_3: servo idle, at 10 deg
-I (1845) mini_project_3: servo idle, at 10 deg
-I (1865) mini_project_3: servo idle, at 10 deg
-I (1885) mini_project_3: servo idle, at 10 deg
-I (1905) mini_project_3: servo idle, at 10 deg
-I (1925) mini_project_3: servo idle, at 10 deg
-I (1945) mini_project_3: servo idle, at 10 deg
-I (1965) mini_project_3: servo idle, at 10 deg
-I (1985) mini_project_3: servo idle, at 10 deg
-I (2005) mini_project_3: servo idle, at 10 deg
-I (2025) mini_project_3: servo idle, at 10 deg
-I (2045) mini_project_3: servo idle, at 10 deg
-I (2065) mini_project_3: servo idle, at 10 deg
-I (2085) mini_project_3: servo idle, at 10 deg
-I (2105) mini_project_3: servo idle, at 10 deg
-I (2125) mini_project_3: servo idle, at 10 deg
-I (2145) mini_project_3: servo idle, at 10 deg
-I (2165) mini_project_3: servo idle, at 10 deg
-I (2185) mini_project_3: servo idle, at 10 deg
-I (2205) mini_project_3: servo idle, at 10 deg
-I (2225) mini_project_3: servo idle, at 10 deg
-I (2245) mini_project_3: servo idle, at 10 deg
-I (2265) mini_project_3: servo idle, at 10 deg
-I (2285) mini_project_3: servo idle, at 10 deg
-I (2305) mini_project_3: servo idle, at 10 deg
-I (2305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=10.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (2305) mini_project_3: SERVO_DUTY=432 ticks, SERVO_PULSE=1.055 ms, SPEED_K=2
-I (2335) mini_project_3: servo idle, at 10 deg
-I (2355) mini_project_3: servo idle, at 10 deg
-I (2375) mini_project_3: servo idle, at 10 deg
-I (2395) mini_project_3: servo idle, at 10 deg
-I (2415) mini_project_3: servo idle, at 10 deg
-I (2435) mini_project_3: servo idle, at 10 deg
-I (2455) mini_project_3: servo idle, at 10 deg
-I (2475) mini_project_3: servo idle, at 10 deg
-I (2495) mini_project_3: servo idle, at 10 deg
-I (2515) mini_project_3: servo idle, at 10 deg
-I (2535) mini_project_3: servo idle, at 10 deg
-I (2555) mini_project_3: servo idle, at 10 deg
-I (2575) mini_project_3: servo idle, at 10 deg
-I (2595) mini_project_3: servo idle, at 10 deg
-I (2615) mini_project_3: servo idle, at 10 deg
-I (2635) mini_project_3: servo idle, at 10 deg
-I (2655) mini_project_3: servo idle, at 10 deg
-I (2675) mini_project_3: servo idle, at 10 deg
-I (2695) mini_project_3: servo idle, at 10 deg
-I (2715) mini_project_3: servo idle, at 10 deg
-I (2735) mini_project_3: servo idle, at 10 deg
-I (2755) mini_project_3: servo idle, at 10 deg
-I (2775) mini_project_3: servo idle, at 10 deg
-I (2795) mini_project_3: servo idle, at 10 deg
-I (2815) mini_project_3: servo idle, at 10 deg
-I (2815) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=10.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (2815) mini_project_3: SERVO_DUTY=432 ticks, SERVO_PULSE=1.055 ms, SPEED_K=2
-I (2845) mini_project_3: servo idle, at 10 deg
-I (2865) mini_project_3: servo idle, at 10 deg
-I (2885) mini_project_3: servo idle, at 10 deg
-I (2905) mini_project_3: servo idle, at 10 deg
-I (2925) mini_project_3: servo idle, at 10 deg
-I (2945) mini_project_3: servo idle, at 10 deg
-I (2965) mini_project_3: servo idle, at 10 deg
-I (2985) mini_project_3: servo idle, at 10 deg
-I (3005) mini_project_3: servo idle, at 10 deg
-I (3025) mini_project_3: servo idle, at 10 deg
-I (3045) mini_project_3: servo idle, at 10 deg
-I (3065) mini_project_3: servo idle, at 10 deg
-I (3085) mini_project_3: servo idle, at 10 deg
-I (3105) mini_project_3: servo idle, at 10 deg
-I (3125) mini_project_3: PCNT filtered: count=2 delta=+1
-I (3145) mini_project_3: servo idle, at 20 deg
-I (3165) mini_project_3: servo idle, at 20 deg
-I (3185) mini_project_3: servo idle, at 20 deg
-I (3205) mini_project_3: servo idle, at 20 deg
-I (3225) mini_project_3: servo idle, at 20 deg
-I (3245) mini_project_3: servo idle, at 20 deg
-I (3265) mini_project_3: servo idle, at 20 deg
-I (3285) mini_project_3: servo idle, at 20 deg
-I (3305) mini_project_3: servo idle, at 20 deg
-I (3325) mini_project_3: servo idle, at 20 deg
-I (3325) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=20.00 deg, SERVO_ANGLE=20/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (3325) mini_project_3: SERVO_DUTY=455 ticks, SERVO_PULSE=1.111 ms, SPEED_K=2
-I (3355) mini_project_3: servo idle, at 20 deg
-I (3375) mini_project_3: servo idle, at 20 deg
-I (3395) mini_project_3: servo idle, at 20 deg
-I (3415) mini_project_3: servo idle, at 20 deg
-I (3435) mini_project_3: servo idle, at 20 deg
-I (3455) mini_project_3: servo idle, at 20 deg
-I (3475) mini_project_3: servo idle, at 20 deg
-I (3495) mini_project_3: servo idle, at 20 deg
-I (3515) mini_project_3: servo idle, at 20 deg
-I (3535) mini_project_3: servo idle, at 20 deg
-I (3555) mini_project_3: servo idle, at 20 deg
-I (3575) mini_project_3: PCNT filtered: count=4 delta=+2
-I (3595) mini_project_3: servo idle, at 40 deg
-I (3615) mini_project_3: servo idle, at 40 deg
-I (3635) mini_project_3: servo idle, at 40 deg
-I (3655) mini_project_3: servo idle, at 40 deg
-I (3675) mini_project_3: servo idle, at 40 deg
-I (3695) mini_project_3: servo idle, at 40 deg
-I (3715) mini_project_3: servo idle, at 40 deg
-I (3735) mini_project_3: servo idle, at 40 deg
-I (3755) mini_project_3: servo idle, at 40 deg
-I (3775) mini_project_3: servo idle, at 40 deg
-I (3795) mini_project_3: servo idle, at 40 deg
-I (3815) mini_project_3: servo idle, at 40 deg
-I (3835) mini_project_3: servo idle, at 40 deg
-I (3835) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=40.00 deg, SERVO_ANGLE=40/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (3835) mini_project_3: SERVO_DUTY=500 ticks, SERVO_PULSE=1.221 ms, SPEED_K=2
-I (3865) mini_project_3: servo idle, at 40 deg
-I (3885) mini_project_3: PCNT filtered: count=5 delta=+1
-I (3905) mini_project_3: servo idle, at 50 deg
-I (3925) mini_project_3: servo idle, at 50 deg
-I (3945) mini_project_3: servo idle, at 50 deg
-I (3965) mini_project_3: servo idle, at 50 deg
-I (3985) mini_project_3: servo idle, at 50 deg
-I (4005) mini_project_3: servo idle, at 50 deg
-I (4025) mini_project_3: servo idle, at 50 deg
-I (4045) mini_project_3: servo idle, at 50 deg
-I (4065) mini_project_3: servo idle, at 50 deg
-I (4085) mini_project_3: servo idle, at 50 deg
-I (4105) mini_project_3: servo idle, at 50 deg
-I (4125) mini_project_3: servo idle, at 50 deg
-I (4145) mini_project_3: servo idle, at 50 deg
-I (4165) mini_project_3: servo idle, at 50 deg
-I (4185) mini_project_3: servo idle, at 50 deg
-I (4205) mini_project_3: servo idle, at 50 deg
-I (4225) mini_project_3: servo idle, at 50 deg
-I (4245) mini_project_3: servo idle, at 50 deg
-I (4265) mini_project_3: PCNT filtered: count=6 delta=+1
-I (4285) mini_project_3: servo idle, at 60 deg
-I (4305) mini_project_3: servo idle, at 60 deg
-I (4325) mini_project_3: servo idle, at 60 deg
-I (4345) mini_project_3: servo idle, at 60 deg
-I (4345) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=60.00 deg, SERVO_ANGLE=60/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (4345) mini_project_3: SERVO_DUTY=546 ticks, SERVO_PULSE=1.333 ms, SPEED_K=2
-I (4375) mini_project_3: servo idle, at 60 deg
-I (4395) mini_project_3: servo idle, at 60 deg
-I (4415) mini_project_3: servo idle, at 60 deg
-I (4435) mini_project_3: PCNT filtered: count=7 delta=+1
-I (4455) mini_project_3: servo idle, at 70 deg
-I (4475) mini_project_3: servo idle, at 70 deg
-I (4495) mini_project_3: servo idle, at 70 deg
-I (4515) mini_project_3: servo idle, at 70 deg
-I (4535) mini_project_3: servo idle, at 70 deg
-I (4555) mini_project_3: servo idle, at 70 deg
-I (4575) mini_project_3: servo idle, at 70 deg
-I (4595) mini_project_3: servo idle, at 70 deg
-I (4615) mini_project_3: servo idle, at 70 deg
-I (4635) mini_project_3: servo idle, at 70 deg
-I (4655) mini_project_3: servo idle, at 70 deg
-I (4675) mini_project_3: servo idle, at 70 deg
-I (4695) mini_project_3: servo idle, at 70 deg
-I (4715) mini_project_3: servo idle, at 70 deg
-I (4735) mini_project_3: servo idle, at 70 deg
-I (4755) mini_project_3: servo idle, at 70 deg
-I (4775) mini_project_3: servo idle, at 70 deg
-I (4795) mini_project_3: servo idle, at 70 deg
-I (4815) mini_project_3: servo idle, at 70 deg
-I (4835) mini_project_3: servo idle, at 70 deg
-I (4855) mini_project_3: servo idle, at 70 deg
-I (4855) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=70.00 deg, SERVO_ANGLE=70/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
-I (4855) mini_project_3: SERVO_DUTY=569 ticks, SERVO_PULSE=1.389 ms, SPEED_K=2
-I (4885) mini_project_3: servo idle, at 70 deg
-I (4905) mini_project_3: servo idle, at 70 deg
-I (4925) mini_project_3: servo idle, at 70 deg
-I (4945) mini_project_3: servo idle, at 70 deg
 
+#### Опис Дебаггінгу 
+
+1. Writing a single pulse at a time 
+
+First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
+
+
+```
+
+I (114275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (114275) mini_project_3: SERVO_DUTY=0 ticks, SERVO_PULSE=0.000 ms, SPEED_K=2
+I (116275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (116275) mini_project_3: SERVO_DUTY=0 ticks, SERVO_PULSE=0.000 ms, SPEED_K=2
+W (117425) mini_project_3: COUNT INCREASED BY 2
+W (117475) mini_project_3: COUNT INCREASED BY 2
+W (117575) mini_project_3: COUNT INCREASED BY 1
+I (118275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=50.00 deg, SERVO_ANGLE=50/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (118275) mini_project_3: SERVO_DUTY=523 ticks, SERVO_PULSE=1.277 ms, SPEED_K=2
+W (118625) mini_project_3: COUNT INCREASED BY 1
+W (118825) mini_project_3: COUNT INCREASED BY 1
+W (118975) mini_project_3: COUNT INCREASED BY 1
+W (119125) mini_project_3: COUNT INCREASED BY 1
+W (119275) mini_project_3: COUNT INCREASED BY 1
+W (119375) mini_project_3: COUNT INCREASED BY 1
+W (119675) mini_project_3: COUNT INCREASED BY 2
+W (119725) mini_project_3: COUNT INCREASED BY 2
+W (119775) mini_project_3: COUNT INCREASED BY 3
+W (119825) mini_project_3: COUNT INCREASED BY 2
+W (119875) mini_project_3: COUNT INCREASED BY 3
+W (119925) mini_project_3: COUNT INCREASED BY 1
+I (120275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=240.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=70.00 deg (41.18%)
+I (120275) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (120325) mini_project_3: COUNT INCREASED BY 4
+W (120375) mini_project_3: COUNT INCREASED BY 4
+W (120475) mini_project_3: COUNT INCREASED BY 3
+W (120525) mini_project_3: COUNT INCREASED BY 1
+W (121875) mini_project_3: COUNT INCREASED BY 1
+W (121925) mini_project_3: COUNT INCREASED BY 1
+W (121975) mini_project_3: COUNT INCREASED BY 4
+W (122025) mini_project_3: COUNT INCREASED BY 2
+W (122075) mini_project_3: COUNT INCREASED BY 2
+W (122175) mini_project_3: COUNT INCREASED BY 1
+W (122225) mini_project_3: COUNT INCREASED BY 1
+E (122275) mini_project_3: COUNT DECREASED BY -1
+I (122275) mini_project_3: ENCODER_PULSES=-1, ENCODER_ANGLE=470.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=300.00 deg (176.47%)
+I (122275) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (123635) mini_project_3: COUNT INCREASED BY 1
+W (123785) mini_project_3: COUNT INCREASED BY 2
+W (123835) mini_project_3: COUNT INCREASED BY 1
+W (124035) mini_project_3: COUNT INCREASED BY 3
+W (124085) mini_project_3: COUNT INCREASED BY 1
+W (124135) mini_project_3: COUNT INCREASED BY 1
+W (124235) mini_project_3: COUNT INCREASED BY 2
+W (124285) mini_project_3: COUNT INCREASED BY 1
+I (124285) mini_project_3: ENCODER_PULSES=1, ENCODER_ANGLE=590.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=420.00 deg (247.06%)
+I (124285) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (124345) mini_project_3: COUNT INCREASED BY 1
+W (124395) mini_project_3: COUNT INCREASED BY 1
+W (124795) mini_project_3: COUNT INCREASED BY 1
+W (124895) mini_project_3: COUNT INCREASED BY 1
+W (124945) mini_project_3: COUNT INCREASED BY 1
+W (124995) mini_project_3: COUNT INCREASED BY 1
+W (125045) mini_project_3: COUNT INCREASED BY 1
+W (125095) mini_project_3: COUNT INCREASED BY 1
+W (125145) mini_project_3: COUNT INCREASED BY 1
+W (125195) mini_project_3: COUNT INCREASED BY 1
+W (125545) mini_project_3: COUNT INCREASED BY 2
+W (125645) mini_project_3: COUNT INCREASED BY 2
+W (125795) mini_project_3: COUNT INCREASED BY 1
+I (126295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=740.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=570.00 deg (335.29%)
+I (126295) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (126695) mini_project_3: COUNT INCREASED BY 1
+W (126795) mini_project_3: COUNT INCREASED BY 1
+W (126895) mini_project_3: COUNT INCREASED BY 1
+W (126945) mini_project_3: COUNT INCREASED BY 1
+W (126995) mini_project_3: COUNT INCREASED BY 1
+W (127095) mini_project_3: COUNT INCREASED BY 3
+W (127145) mini_project_3: COUNT INCREASED BY 1
+W (127245) mini_project_3: COUNT INCREASED BY 2
+W (127395) mini_project_3: COUNT INCREASED BY 2
+W (127495) mini_project_3: COUNT INCREASED BY 2
+W (127545) mini_project_3: COUNT INCREASED BY 2
+W (127645) mini_project_3: COUNT INCREASED BY 2
+W (127745) mini_project_3: COUNT INCREASED BY 1
+W (127795) mini_project_3: COUNT INCREASED BY 1
+W (127845) mini_project_3: COUNT INCREASED BY 3
+W (127895) mini_project_3: COUNT INCREASED BY 1
+W (128145) mini_project_3: COUNT INCREASED BY 1
+I (128295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=1000.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=830.00 deg (488.24%)
+I (128295) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (129095) mini_project_3: COUNT INCREASED BY 4
+E (129145) mini_project_3: COUNT DECREASED BY -4
+W (129345) mini_project_3: COUNT INCREASED BY 1
+I (130295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=1010.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=840.00 deg (494.12%)
+I (130295) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (130445) mini_project_3: COUNT INCREASED BY 1
+W (130545) mini_project_3: COUNT INCREASED BY 5
+W (130595) mini_project_3: COUNT INCREASED BY 2
+I (132295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=1090.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=920.00 deg (541.18%)
+I (132295) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (133095) mini_project_3: COUNT INCREASED BY 3
+W (133145) mini_project_3: COUNT INCREASED BY 2
+W (133195) mini_project_3: COUNT INCREASED BY 12
+I (134295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=1260.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=1090.00 deg (641.18%)
+I (134295) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (134495) mini_project_3: COUNT INCREASED BY 3
+W (134545) mini_project_3: COUNT INCREASED BY 4
+W (134595) mini_project_3: COUNT INCREASED BY 5
+W (134895) mini_project_3: COUNT INCREASED BY 1
+W (134945) mini_project_3: COUNT INCREASED BY 5
+W (135195) mini_project_3: COUNT INCREASED BY 2
+W (135245) mini_project_3: COUNT INCREASED BY 3
+W (135295) mini_project_3: COUNT INCREASED BY 6
+W (135395) mini_project_3: COUNT INCREASED BY 2
+E (135445) mini_project_3: COUNT DECREASED BY -2
+W (135545) mini_project_3: COUNT INCREASED BY 7
+W (135595) mini_project_3: COUNT INCREASED BY 5
+W (135645) mini_project_3: COUNT INCREASED BY 6
+W (135695) mini_project_3: COUNT INCREASED BY 8
+W (135745) mini_project_3: COUNT INCREASED BY 10
+W (135795) mini_project_3: COUNT INCREASED BY 1
+W (135845) mini_project_3: COUNT INCREASED BY 7
+W (135895) mini_project_3: COUNT INCREASED BY 2
+W (135945) mini_project_3: COUNT INCREASED BY 2
+W (135995) mini_project_3: COUNT INCREASED BY 6
+W (136045) mini_project_3: COUNT INCREASED BY 2
+W (136095) mini_project_3: COUNT INCREASED BY 12
+W (136145) mini_project_3: COUNT INCREASED BY 8
+W (136195) mini_project_3: COUNT INCREASED BY 7
+W (136245) mini_project_3: COUNT INCREASED BY 6
+W (136295) mini_project_3: COUNT INCREASED BY 5
+I (136295) mini_project_3: ENCODER_PULSES=5, ENCODER_ANGLE=2490.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=2320.00 deg (1364.71%)
+I (136295) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (136355) mini_project_3: COUNT INCREASED BY 5
+W (136405) mini_project_3: COUNT INCREASED BY 1
+W (136505) mini_project_3: COUNT INCREASED BY 1
+W (136555) mini_project_3: COUNT INCREASED BY 1
+E (136605) mini_project_3: COUNT DECREASED BY -1
+W (136655) mini_project_3: COUNT INCREASED BY 6
+W (136705) mini_project_3: COUNT INCREASED BY 9
+W (136755) mini_project_3: COUNT INCREASED BY 27
+W (136805) mini_project_3: COUNT INCREASED BY 11
+W (136855) mini_project_3: COUNT INCREASED BY 2
+E (136955) mini_project_3: COUNT DECREASED BY -3
+E (137005) mini_project_3: COUNT DECREASED BY -3
+E (137105) mini_project_3: COUNT DECREASED BY -8
+E (137155) mini_project_3: COUNT DECREASED BY -1
+E (137205) mini_project_3: COUNT DECREASED BY -1
+W (138005) mini_project_3: COUNT INCREASED BY 1
+E (138105) mini_project_3: COUNT DECREASED BY -1
+I (138305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=2950.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=2780.00 deg (1635.29%)
+I (138305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (138405) mini_project_3: COUNT INCREASED BY 2
+W (138455) mini_project_3: COUNT INCREASED BY 1
+W (138505) mini_project_3: COUNT INCREASED BY 2
+W (138605) mini_project_3: COUNT INCREASED BY 1
+E (138655) mini_project_3: COUNT DECREASED BY -1
+W (138855) mini_project_3: COUNT INCREASED BY 1
+E (138905) mini_project_3: COUNT DECREASED BY -1
+W (140105) mini_project_3: COUNT INCREASED BY 4
+I (140305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=3040.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=2870.00 deg (1688.24%)
+I (140305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (140405) mini_project_3: COUNT INCREASED BY 3
+W (140605) mini_project_3: COUNT INCREASED BY 1
+W (140655) mini_project_3: COUNT INCREASED BY 1
+W (140755) mini_project_3: COUNT INCREASED BY 2
+W (140955) mini_project_3: COUNT INCREASED BY 2
+W (141005) mini_project_3: COUNT INCREASED BY 1
+W (141255) mini_project_3: COUNT INCREASED BY 1
+W (141755) mini_project_3: COUNT INCREASED BY 1
+W (141805) mini_project_3: COUNT INCREASED BY 19
+W (142005) mini_project_3: COUNT INCREASED BY 1
+W (142105) mini_project_3: COUNT INCREASED BY 2
+I (142305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=3380.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=3210.00 deg (1888.24%)
+I (142305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (142855) mini_project_3: COUNT INCREASED BY 1
+W (142905) mini_project_3: COUNT INCREASED BY 3
+W (142955) mini_project_3: COUNT INCREASED BY 2
+W (143005) mini_project_3: COUNT INCREASED BY 2
+W (143055) mini_project_3: COUNT INCREASED BY 1
+W (143105) mini_project_3: COUNT INCREASED BY 2
+W (143155) mini_project_3: COUNT INCREASED BY 1
+W (143205) mini_project_3: COUNT INCREASED BY 1
+W (143605) mini_project_3: COUNT INCREASED BY 11
+W (143655) mini_project_3: COUNT INCREASED BY 4
+W (143705) mini_project_3: COUNT INCREASED BY 4
+W (143755) mini_project_3: COUNT INCREASED BY 3
+W (143805) mini_project_3: COUNT INCREASED BY 3
+W (143905) mini_project_3: COUNT INCREASED BY 1
+I (144305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=3770.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=3600.00 deg (2117.65%)
+I (144305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (144655) mini_project_3: COUNT INCREASED BY 2
+W (145055) mini_project_3: COUNT INCREASED BY 1
+W (145105) mini_project_3: COUNT INCREASED BY 1
+W (145655) mini_project_3: COUNT INCREASED BY 1
+W (146005) mini_project_3: COUNT INCREASED BY 1
+I (146305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=3830.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=3660.00 deg (2152.94%)
+I (146305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (146455) mini_project_3: COUNT INCREASED BY 2
+W (146805) mini_project_3: COUNT INCREASED BY 1
+W (147255) mini_project_3: COUNT INCREASED BY 1
+E (147305) mini_project_3: COUNT DECREASED BY -1
+E (147555) mini_project_3: COUNT DECREASED BY -2
+W (147805) mini_project_3: COUNT INCREASED BY 1
+W (148255) mini_project_3: COUNT INCREASED BY 1
+I (148305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=3860.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=3690.00 deg (2170.59%)
+I (148305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (148605) mini_project_3: COUNT INCREASED BY 1
+W (148955) mini_project_3: COUNT INCREASED BY 1
+W (149155) mini_project_3: COUNT INCREASED BY 2
+W (149805) mini_project_3: COUNT INCREASED BY 2
+I (150305) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=3920.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=3750.00 deg (2205.88%)
+I (150305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (150855) mini_project_3: COUNT INCREASED BY 3
+W (150905) mini_project_3: COUNT INCREASED BY 3
+W (152205) mini_project_3: COUNT INCREASED BY 3
+W (152255) mini_project_3: COUNT INCREASED BY 3
+W (152305) mini_project_3: COUNT INCREASED BY 1
+I (152305) mini_project_3: ENCODER_PULSES=1, ENCODER_ANGLE=4050.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=3880.00 deg (2282.35%)
+I (152305) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (152365) mini_project_3: COUNT INCREASED BY 2
+W (152415) mini_project_3: COUNT INCREASED BY 1
+W (152465) mini_project_3: COUNT INCREASED BY 2
+W (152515) mini_project_3: COUNT INCREASED BY 3
+W (152565) mini_project_3: COUNT INCREASED BY 1
+W (152615) mini_project_3: COUNT INCREASED BY 3
+W (152715) mini_project_3: COUNT INCREASED BY 1
+W (152815) mini_project_3: COUNT INCREASED BY 1
+W (153515) mini_project_3: COUNT INCREASED BY 2
+W (153915) mini_project_3: COUNT INCREASED BY 2
+W (153965) mini_project_3: COUNT INCREASED BY 1
+W (154265) mini_project_3: COUNT INCREASED BY 2
+W (154315) mini_project_3: COUNT INCREASED BY 3
+I (154315) mini_project_3: ENCODER_PULSES=3, ENCODER_ANGLE=4290.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4120.00 deg (2423.53%)
+I (154315) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (154475) mini_project_3: COUNT INCREASED BY 2
+W (154675) mini_project_3: COUNT INCREASED BY 3
+W (154725) mini_project_3: COUNT INCREASED BY 1
+W (154775) mini_project_3: COUNT INCREASED BY 2
+W (154825) mini_project_3: COUNT INCREASED BY 1
+W (155625) mini_project_3: COUNT INCREASED BY 1
+W (155675) mini_project_3: COUNT INCREASED BY 1
+E (155725) mini_project_3: COUNT DECREASED BY -1
+E (155975) mini_project_3: COUNT DECREASED BY -1
+W (156175) mini_project_3: COUNT INCREASED BY 1
+E (156225) mini_project_3: COUNT DECREASED BY -1
+I (156325) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4380.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4210.00 deg (2476.47%)
+I (156325) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (156575) mini_project_3: COUNT INCREASED BY 4
+E (156625) mini_project_3: COUNT DECREASED BY -1
+E (156825) mini_project_3: COUNT DECREASED BY -1
+W (157075) mini_project_3: COUNT INCREASED BY 1
+E (157275) mini_project_3: COUNT DECREASED BY -1
+W (157425) mini_project_3: COUNT INCREASED BY 1
+W (157475) mini_project_3: COUNT INCREASED BY 1
+I (158325) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4420.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4250.00 deg (2500.00%)
+I (158325) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (158625) mini_project_3: COUNT INCREASED BY 2
+W (158675) mini_project_3: COUNT INCREASED BY 3
+W (158725) mini_project_3: COUNT INCREASED BY 1
+W (159225) mini_project_3: COUNT INCREASED BY 1
+W (159275) mini_project_3: COUNT INCREASED BY 1
+W (159525) mini_project_3: COUNT INCREASED BY 2
+W (159775) mini_project_3: COUNT INCREASED BY 1
+W (159975) mini_project_3: COUNT INCREASED BY 2
+W (160175) mini_project_3: COUNT INCREASED BY 4
+I (160325) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4590.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4420.00 deg (2600.00%)
+I (160325) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (160375) mini_project_3: COUNT INCREASED BY 5
+W (161925) mini_project_3: COUNT INCREASED BY 1
+W (162125) mini_project_3: COUNT INCREASED BY 2
+W (162175) mini_project_3: COUNT INCREASED BY 1
+W (162325) mini_project_3: COUNT INCREASED BY 2
+I (162325) mini_project_3: ENCODER_PULSES=2, ENCODER_ANGLE=4700.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4530.00 deg (2664.71%)
+I (162325) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (162385) mini_project_3: COUNT INCREASED BY 1
+W (162535) mini_project_3: COUNT INCREASED BY 1
+W (162585) mini_project_3: COUNT INCREASED BY 1
+W (162885) mini_project_3: COUNT INCREASED BY 1
+W (163135) mini_project_3: COUNT INCREASED BY 3
+W (163335) mini_project_3: COUNT INCREASED BY 2
+W (163535) mini_project_3: COUNT INCREASED BY 1
+E (163585) mini_project_3: COUNT DECREASED BY -1
+I (164335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4790.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4620.00 deg (2717.65%)
+I (164335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (164485) mini_project_3: COUNT DECREASED BY -1
+W (164735) mini_project_3: COUNT INCREASED BY 1
+E (164785) mini_project_3: COUNT DECREASED BY -1
+E (164985) mini_project_3: COUNT DECREASED BY -1
+E (165285) mini_project_3: COUNT DECREASED BY -2
+E (166185) mini_project_3: COUNT DECREASED BY -1
+E (166235) mini_project_3: COUNT DECREASED BY -1
+I (166335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4730.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4560.00 deg (2682.35%)
+I (166335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (166485) mini_project_3: COUNT INCREASED BY 1
+E (166535) mini_project_3: COUNT DECREASED BY -1
+E (166735) mini_project_3: COUNT DECREASED BY -1
+W (166785) mini_project_3: COUNT INCREASED BY 1
+W (166985) mini_project_3: COUNT INCREASED BY 1
+E (167485) mini_project_3: COUNT DECREASED BY -1
+E (167685) mini_project_3: COUNT DECREASED BY -1
+E (168035) mini_project_3: COUNT DECREASED BY -1
+I (168335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4710.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4540.00 deg (2670.59%)
+I (168335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (168385) mini_project_3: COUNT INCREASED BY 1
+E (169335) mini_project_3: COUNT DECREASED BY -1
+E (169885) mini_project_3: COUNT DECREASED BY -1
+E (170185) mini_project_3: COUNT DECREASED BY -1
+I (170335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4690.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4520.00 deg (2658.82%)
+I (170335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (170485) mini_project_3: COUNT DECREASED BY -1
+E (170835) mini_project_3: COUNT DECREASED BY -1
+E (171035) mini_project_3: COUNT DECREASED BY -1
+W (171285) mini_project_3: COUNT INCREASED BY 2
+E (171385) mini_project_3: COUNT DECREASED BY -1
+E (171785) mini_project_3: COUNT DECREASED BY -1
+W (172035) mini_project_3: COUNT INCREASED BY 1
+E (172085) mini_project_3: COUNT DECREASED BY -1
+E (172235) mini_project_3: COUNT DECREASED BY -1
+I (172335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4650.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4480.00 deg (2635.29%)
+I (172335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (173335) mini_project_3: COUNT DECREASED BY -1
+E (173635) mini_project_3: COUNT DECREASED BY -1
+E (173985) mini_project_3: COUNT DECREASED BY -1
+E (174185) mini_project_3: COUNT DECREASED BY -1
+I (174335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4610.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4440.00 deg (2611.76%)
+I (174335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+W (174385) mini_project_3: COUNT INCREASED BY 1
+E (174485) mini_project_3: COUNT DECREASED BY -1
+E (174685) mini_project_3: COUNT DECREASED BY -1
+E (174885) mini_project_3: COUNT DECREASED BY -1
+E (174985) mini_project_3: COUNT DECREASED BY -1
+E (175135) mini_project_3: COUNT DECREASED BY -1
+I (176335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4570.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4400.00 deg (2588.24%)
+I (176335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (178035) mini_project_3: COUNT DECREASED BY -1
+I (178335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4560.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4390.00 deg (2582.35%)
+I (178335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (178535) mini_project_3: COUNT DECREASED BY -1
+I (180335) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4550.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4380.00 deg (2576.47%)
+I (180335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (182335) mini_project_3: COUNT DECREASED BY -1
+I (182335) mini_project_3: ENCODER_PULSES=-1, ENCODER_ANGLE=4540.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4370.00 deg (2570.59%)
+I (182335) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (184095) mini_project_3: COUNT DECREASED BY -1
+I (184345) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4530.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4360.00 deg (2564.71%)
+I (184345) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (184695) mini_project_3: COUNT DECREASED BY -1
+W (184745) mini_project_3: COUNT INCREASED BY 1
+E (185245) mini_project_3: COUNT DECREASED BY -1
+I (186345) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4520.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4350.00 deg (2558.82%)
+I (186345) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (188045) mini_project_3: COUNT DECREASED BY -1
+I (188345) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4510.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4340.00 deg (2552.94%)
+I (188345) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+E (188495) mini_project_3: COUNT DECREASED BY -1
+I (190345) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4500.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4330.00 deg (2547.06%)
+I (190345) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
+I (192345) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=4500.00 deg, SERVO_ANGLE=170/180 deg, ANGLE_ERROR=4330.00 deg (2547.06%)
+I (192345) mini_project_3: SERVO_DUTY=819 ticks, SERVO_PULSE=2.000 ms, SPEED_K=2
 
 ```
 ## Передумови (версії, з якими зібрано проєкт)

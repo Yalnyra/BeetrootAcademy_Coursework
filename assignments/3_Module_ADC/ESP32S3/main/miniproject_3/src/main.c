@@ -349,10 +349,10 @@ static int32_t encoder_update_ticks(void)
     int32_t delta = count - prev_count;
     prev_count = count;
     if (delta > 0 ) {
-        ESP_LOGW(TAG, "COUNT INCREASED BY", delta);
+        ESP_LOGW(TAG, "COUNT INCREASED BY %d", delta);
     }
     if (delta < 0 ) {
-        ESP_LOGE(TAG, "COUNT DECREASED BY", delta);
+        ESP_LOGE(TAG, "COUNT DECREASED BY %d", delta);
     }
     return delta;
 }
