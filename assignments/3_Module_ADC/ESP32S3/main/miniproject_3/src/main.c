@@ -58,8 +58,21 @@
 
 /* ============================== Encoder ============================== */
 
-#define ENCODER_COUNTS_PER_DETENT  1   // X4: one click = full quadrature cycle = 4 edges (set 2 if one click gives delta=2)
-#define GLITCH_FILTER_DELAY_NS 10000 
+/* Decoding mode, chosen at compile time:
+ *   0 = X1: one channel, rising edge of A only (lesson 3.6). 1 count per click.
+ *   1 = X4: two channels, both edges of A and B. 4 counts per click, bounce cancels in +1/-1 pairs.
+ * Build with:  idf.py -DENCODER_X4=ON build   (OFF = X1, see main/CMakeLists.txt)
+ * or change the default below. */
+#ifndef ENCODER_QUADRATURE_X4
+#define ENCODER_QUADRATURE_X4      1
+#endif
+
+#if ENCODER_QUADRATURE_X4
+#define ENCODER_COUNTS_PER_DETENT  4   // X4: one click = full quadrature cycle = 4 edges (set 2 if one click gives delta=2)
+#else
+#define ENCODER_COUNTS_PER_DETENT  1   // X1: one click = one rising edge of A
+#endif
+#define GLITCH_FILTER_DELAY_NS 1000
 
 /* ================ Servo: LEDC timer 0 / channel 0 ================= */
 #define SERVO_LEDC_MODE         LEDC_LOW_SPEED_MODE
@@ -222,7 +235,8 @@ void app_main(void)
 
 /* ============================== Init ============================== */
 
-/* Ініціалізація апаратного лічильника для енкодера (з lesson 3.6, режим X1) */
+/* Ініціалізація апаратного лічильника для енкодера (з lesson 3.6)
+ * Режим X1 або X4 обирається під час компіляції: ENCODER_QUADRATURE_X4 */
 static void encoder_init(void)
 {
     // Межі лічильника (діапазон 16-бітного знакового числа)
@@ -236,7 +250,46 @@ static void encoder_init(void)
     pcnt_glitch_filter_config_t filter_config = { .max_glitch_ns = GLITCH_FILTER_DELAY_NS };
     ESP_ERROR_CHECK(pcnt_unit_set_glitch_filter(pcnt_unit, &filter_config));
 
-    // Канал рахує фронти сигналу A, а сигнал B визначає напрямок обертання
+#if ENCODER_QUADRATURE_X4
+    // X4 quadrature: two channels, each counts both edges of its own signal and
+    // uses the other signal as direction. Contact bounce on either line then
+    // produces +1/-1 pairs that cancel, unlike X1 (one channel, rising A only),
+    // where bounce on A's FALLING edge creates extra rising edges that are
+    // counted with B's current level — i.e. in the wrong direction.
+    pcnt_channel_handle_t chan_a = NULL;
+    pcnt_chan_config_t chan_a_config = {
+        .edge_gpio_num  = ENCODER_GPIO_A,
+        .level_gpio_num = ENCODER_GPIO_B,
+    };
+    ESP_ERROR_CHECK(pcnt_new_channel(pcnt_unit, &chan_a_config, &chan_a));
+
+    pcnt_channel_handle_t chan_b = NULL;
+    pcnt_chan_config_t chan_b_config = {
+        .edge_gpio_num  = ENCODER_GPIO_B,
+        .level_gpio_num = ENCODER_GPIO_A,
+    };
+    ESP_ERROR_CHECK(pcnt_new_channel(pcnt_unit, &chan_b_config, &chan_b));
+
+    // Same sign as the old X1 setup (A rising while B high = +1).
+    // If CW counts down, swap INCREASE/DECREASE in BOTH edge actions.
+    ESP_ERROR_CHECK(pcnt_channel_set_edge_action(chan_a,
+        PCNT_CHANNEL_EDGE_ACTION_INCREASE,     // A rising
+        PCNT_CHANNEL_EDGE_ACTION_DECREASE));   // A falling
+    ESP_ERROR_CHECK(pcnt_channel_set_level_action(chan_a,
+        PCNT_CHANNEL_LEVEL_ACTION_KEEP,        // B high
+        PCNT_CHANNEL_LEVEL_ACTION_INVERSE));   // B low
+    ESP_ERROR_CHECK(pcnt_channel_set_edge_action(chan_b,
+        PCNT_CHANNEL_EDGE_ACTION_DECREASE,     // B rising
+        PCNT_CHANNEL_EDGE_ACTION_INCREASE));   // B falling
+    ESP_ERROR_CHECK(pcnt_channel_set_level_action(chan_b,
+        PCNT_CHANNEL_LEVEL_ACTION_KEEP,        // A high
+        PCNT_CHANNEL_LEVEL_ACTION_INVERSE));   // A low
+
+    // Bare encoders have no pull-ups; KY-040 boards do. Harmless either way.
+    gpio_pullup_en(ENCODER_GPIO_A);
+    gpio_pullup_en(ENCODER_GPIO_B);
+#else
+    // X1: канал рахує фронти сигналу A, а сигнал B визначає напрямок обертання
     pcnt_channel_handle_t chan_a = NULL;
     pcnt_chan_config_t chan_a_config = {
         .edge_gpio_num  = ENCODER_GPIO_A,
@@ -254,12 +307,17 @@ static void encoder_init(void)
     ESP_ERROR_CHECK(pcnt_channel_set_level_action(chan_a,
         PCNT_CHANNEL_LEVEL_ACTION_KEEP,
         PCNT_CHANNEL_LEVEL_ACTION_INVERSE));
+#endif
 
     ESP_ERROR_CHECK(pcnt_unit_enable(pcnt_unit));
     ESP_ERROR_CHECK(pcnt_unit_clear_count(pcnt_unit));
     ESP_ERROR_CHECK(pcnt_unit_start(pcnt_unit));
 
+#if ENCODER_QUADRATURE_X4
+    ESP_LOGI(TAG, "PCNT X4 initialized, %d counts per detent", ENCODER_COUNTS_PER_DETENT);
+#else
     ESP_LOGI(TAG, "PCNT X1 initialized");
+#endif
 }
 
 /* Encoder push button: polled input, SW shorts to GND when pressed */
@@ -338,7 +396,9 @@ static void encoder_debug_init(void)
 /* ======================== Superloop blocks ======================== */
 
 /* 1. Update encoder ticks
- * Returns the tick delta since the previous cycle (+ CW / - CCW). */
+ * Returns the click delta since the previous call (+ CW / - CCW).
+ * X1: 1 count = 1 click, the count delta is returned as is.
+ * X4: 4 counts = 1 click; leftover edges are kept for the next call. */
 static int32_t encoder_update_ticks(void)
 {
     static int prev_count = 0;
@@ -346,15 +406,24 @@ static int32_t encoder_update_ticks(void)
     if (pcnt_unit_get_count(pcnt_unit, &count) != ESP_OK) {
         return 0;                   // read failed: report no movement, keep prev_count
     }
-    int32_t delta = count - prev_count;
+    int32_t delta = count - prev_count;     // raw PCNT counts (edges in X4)
     prev_count = count;
     if (delta > 0 ) {
-        ESP_LOGW(TAG, "COUNT INCREASED BY %d", delta);
+        ESP_LOGW(TAG, "COUNT INCREASED BY %" PRId32, delta);
     }
     if (delta < 0 ) {
-        ESP_LOGE(TAG, "COUNT DECREASED BY %d", delta);
+        ESP_LOGE(TAG, "COUNT DECREASED BY %" PRId32, delta);
     }
+
+#if ENCODER_QUADRATURE_X4
+    static int32_t residual = 0;    // edges not yet adding up to a full click
+    residual += delta;
+    int32_t clicks = residual / ENCODER_COUNTS_PER_DETENT;   // truncates toward 0: symmetric for +/-
+    residual -= clicks * ENCODER_COUNTS_PER_DETENT;
+    return clicks;
+#else
     return delta;
+#endif
 }
 
 /* Debug probe: mirrors the glitch-filtered PCNT count on ENCODER_DEBUG_GPIO.
