@@ -1,10 +1,5 @@
-# <3.5>
-
+# Міні-проєкт 3 — Керування сервоприводом енкодером
 > Модуль 3. ЦАП та ШИМ модуляція
-
-> Завдання 3.5 Точне керування положенням (Серво)  
-
-
 ### Схемотехніка
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/1d9b4079-1a9c-4b3b-b021-867db9eda888)
@@ -12,16 +7,36 @@
 
 ### Вимоги до програми (Код)
 
-Потенціометр керує положенням валу сервоприводу в пропорції 1:1.
-Розбіжність кута повороту сервоприводу та потенціометра обрізаються і використовується тільки та частина діапазону, котра збігатися.
-Кут відхилення від крайнього лівого положення логується в консолі.
-### Що виконано
+Завдання - Керування сервоприводом
 
-1. 0-4095 (POT_GPIO4) -> 0-270 (POT_ANGLE) (Мапа на кут Потенціометра) 
-2. 0-270 -> (SERVO_ANGLE) 0-180 (Обрізання до положення сервомотора SG90) -> 
-3. 0-180 -> 1-2 мс (Маппінг у довжину PWM пульсу) 
-4. 1-2мс (SERVO_PULSE) -> Ширина duty cycle (SERVO_DUTY) 1/50 - 1/25 Гц 
-5. Помилка між POT_ANGLE та SERVO_PULSE, конвертований в кут, з функцією duty_to_servo_angle_deg()
+Керувати сервоприводом за допомогою енкодера
+Один тік енкодера повертає вал сервоприводу на певний кут у відповідному напрямку
+Натискання кнопки енкодера зменшує кут повороту вала сервоприводу удвічі на кожен тік.
+Повторне натискання кнопки повертає точність до більшого кута на кожен тік.
+Коли вал сервоприводу у крайніх положеннях, програвати короткий сигнал у разі спроби прокрутити вал за межі.
+Опційно: довге утримання кнопки переводить вал сервоприводу у центральне положення.
+
+### Як працює програма 
+
+[](Посилання на програму )
+0. Ініціалізується ticks, speed_k, button_state, структура servo_status 
+ticks - це віднос
+
+speed_k - Це мультиплікатор обертів сервомотора відносно обертів енкодера
+
+Структура servo_status_t - зберігає проміжні змінні для обрахування кута серво на поточному етапі 
+
+1. Кожен цикл CPU Оновлюється значення ticks; Якщо ticks не нуль - лише тоді оновлюється положення серво через модифікацію servo_status, інакше CPU пропускає дію
+
+3. Конвертація з положення енкодера у duty cycle, враховуючи обмеження обертів серво у 180 градусів
+
+4. Кнопка поки що нічого не робить
+
+5. Якщо серво оновилось та більше за крайні значення, баззер грає звук 
+
+6. Раз у 2 секунди викликається лог значень записаних у servo_status
+
+7.  Цикл повторюється
 
 ## Набір деталей
 
@@ -37,12 +52,51 @@
 
 ### Вихід програми 
 
-#### Опис Дебаггінгу 
-
 1. Writing a single pulse at a time 
 
 First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
 
+2. Вибір проміжку пропуску частот для Low-pass filter  
+
+За простотою виконання (без катушки індуктивності) було обрано пару Resistor + Capacitor 
+
+### Таблиця виконання двигуна 
+| Video title  | Logic Analyzer log           | C, uF | R, Ohm | Longest bounce, ms (Ch A) | Max bounce frequency, kHZ (Avg frequency kHZ) | Maximum ticks per pcnt cycle |
+|--------------|------------------------------|-------|--------|---------------------------|-----------------------------------------------|------------------------------|
+|              | 09.11_0_filter_              | 0     | 0      | 13.08                     | 510 (62)                                      | 7                            |
+|              | 09.11 cwccw encodeerbaseline | 0     | 0      | 3.756                     | 6000 (5.44)                                   | 2                            |
+|              | 09.11_encoder600om_rc_filter | 0.47  | 600    | 6.69                      | 12000 (73.02)                                 | 2                            |
+|              | 104_capacitor_x4             | 0.1   | 0      | 0.25                      | 20 (8.017)                                    | 4                            |
+|              | 10kohm_rc                    | 0.47  | 10000  | 5.1                       | 12000 (128.521)                               | 10-15                        |
+|              | 720ohm_rc                    | 0.47  | 720    | 13.11                     | 12000 (212)                                   | 7                            |
+|              | 1220ohm_rc                   | 0.47  | 1200   | 5.85                      | 12000 (141)                                   | 7                            |
+|              | 2000ohm_rc                   | 0.47  | 2000   | 7.5                       | 12000 (145)                                   | 7                            |
+|              | 1k_100nF_rc                  | 0.1   | 10000  | 5.1                       | 12000(128)                                    | 10-15                        |
+| New encoder, |                              | 0.1   | 0      | 0.64                      | 12000(232)                                    | 2                            |
+
+The bounce frequency itself is random. The time itself that bounces is the one that correlates with resistor value. 
+
+Hello, another small project to show - an mechanical encoder controlling a PWM servo 
+The highlight is I tried learning filter theory by connecting rc filter and comparing the length of bounce period in logic to the resistor which I put in.
+I made a table on github and added the recordings from Saleae Logic 2 for each setup. Maybe you'd like to fact check if the conclusions i made based  table make sense
+
+
+
+## Журнал налагодження
+### 1. Runaway кута сервоприводу (06.11)      ← commit 084d557
+### 2. Лічильник рахує лише вгору (08.11)      ← commit 9814e05
+### 3. Дребезг енкодера та RC-фільтр (09.11)
+#### Методика
+#### Результати
+#### Спостереження
+#### Інтерпретація
+#### Висновок
+
+## Відомі проблеми / TODO
+## Передумови (версії)
+
+
+One hypothesis is that the duration is the time for the signal to transition from low state to high state, which is what RC circuit does - it delays the transition to a lower state 
 
 ```
 I (766285) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-100.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-110.00 deg (-1100.00%)
