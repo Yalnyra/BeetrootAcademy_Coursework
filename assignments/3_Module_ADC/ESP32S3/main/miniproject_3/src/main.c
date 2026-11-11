@@ -49,12 +49,6 @@
 /* =========================== Superloop ============================ */
 #define SUPERLOOP_DELAY_MS      50     // vTaskDelay per cycle (FREERTOS_HZ=100 -> 5 ticks)
 #define LOG_PERIOD_MS           2000
-#define ENCODER_POLL_PERIOD_MS  200     // how often the PCNT count is read; the hardware keeps
-                                        // counting in between, so a slower poll loses no clicks,
-                                        // it only batches them (servo moves in bigger jumps)
-#if ENCODER_POLL_PERIOD_MS < SUPERLOOP_DELAY_MS
-#warning "ENCODER_POLL_PERIOD_MS < SUPERLOOP_DELAY_MS: encoder is polled every cycle, the define has no effect"
-#endif
 
 /* ============================== Encoder ============================== */
 
@@ -64,7 +58,7 @@
  * Build with:  idf.py -DENCODER_X4=ON build   (OFF = X1, see main/CMakeLists.txt)
  * or change the default below. */
 #ifndef ENCODER_QUADRATURE_X4
-#define ENCODER_QUADRATURE_X4      1
+#define ENCODER_QUADRATURE_X4      0
 #endif
 
 #if ENCODER_QUADRATURE_X4
@@ -78,8 +72,8 @@
 #define SERVO_LEDC_MODE         LEDC_LOW_SPEED_MODE
 #define SERVO_LEDC_TIMER        LEDC_TIMER_0
 #define SERVO_LEDC_CHANNEL      LEDC_CHANNEL_0
-#define SERVO_MIN_PULSE_US   1000U                    // 1ms -> 0 deg
-#define SERVO_MAX_PULSE_US   2000U                    // 2ms -> 180 deg
+#define SERVO_MIN_PULSE_US   500U                    // 1ms -> 0 deg
+#define SERVO_MAX_PULSE_US   2500U                    // 2ms -> 180 deg
 #define SERVO_FREQ_HZ           50                    // pwm update frequency
 #define SERVO_PERIOD_US         (1000000 / SERVO_FREQ_HZ)   // 20 000 us
 #define SERVO_DUTY_RES          LEDC_TIMER_13_BIT
@@ -95,8 +89,8 @@
 #define SERVO_RANGE_DEG         180     // physical range: 0..180 deg ...
 #define SERVO_MIN_US            500     // ... maps to 500..2500 us pulse
 #define SERVO_MAX_US            2500
-#define SERVO_MIN_DEG           10      // travel limits: trying to go past
-#define SERVO_MAX_DEG           170     // these triggers the beep
+#define SERVO_MIN_DEG           00      // travel limits: trying to go past
+#define SERVO_MAX_DEG           180     // these triggers the beep
 #define SERVO_INIT_DEG          0
 
 #define SERVO_MAX_RANGE_DEG  180.0f
@@ -179,10 +173,9 @@ void app_main(void)
 
     int32_t speed_k = SPEED_K_INIT;    // k: step multiplier
     TickType_t last_log = xTaskGetTickCount();
-    TickType_t last_encoder_poll = last_log;
     servo_status_t servo_status = {0};
 
-    ESP_LOGI(TAG, "superloop started, delay %d ms, encoder poll %d ms", SUPERLOOP_DELAY_MS, ENCODER_POLL_PERIOD_MS);
+    ESP_LOGI(TAG, "superloop started, delay %d ms, encoder poll %d ms", SUPERLOOP_DELAY_MS);
 
     while (1)
     {
@@ -466,6 +459,7 @@ static bool button_pressed_event(void)
     //  - level = gpio_get_level(ENCODER_GPIO_SW)    (0 = pressed)
     //  - return true only on the 1 -> 0 transition; keep the previous level in a `static int` local
     //  - polling every SUPERLOOP_DELAY_MS is slower than contact bounce, so this already debounces
+    
     return false;
 }
 
