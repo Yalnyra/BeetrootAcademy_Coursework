@@ -1,19 +1,31 @@
+## Журнал налагодження
 
+### 1. Runaway кута сервоприводу (06.11)
 
+<!-- Симптом → Як відтворити → Доказ → Причина → Виправлення (commit 084d557) -->
+
+### 2. Лічильник рахує лише вгору (08.11)
+
+<!-- Симптом → Як відтворити → Доказ → Причина → Виправлення (commit 9814e05) -->
+
+### 3. Дребезг енкодера та RC-фільтр (09.11)
+
+#### Методика
 
 ! This Visualization comes from [Falstad](https://falstad.com/circuit/)
 
 ![Actual schema of the switch](rc_and_switch.png)
 
-1. Writing a single pulse at a time 
-
-First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
-
 2. Вибір проміжку пропуску частот для Low-pass filter  
 
 За простотою виконання (без катушки індуктивності) було обрано пару Resistor + Capacitor 
 
-### Таблиця виконання двигуна 
+1. Writing a single pulse at a time 
+
+First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
+
+#### Результати
+
 | Video title  | Logic Analyzer log           | C, uF | R, Ohm | Longest bounce, ms (Ch A) | Max bounce frequency, kHZ (Avg frequency kHZ) | Maximum ticks per pcnt cycle |
 |--------------|------------------------------|-------|--------|---------------------------|-----------------------------------------------|------------------------------|
 |              | 09.11_0_filter_              | 0     | 0      | 13.08                     | 510 (62)                                      | 7                            |
@@ -25,111 +37,79 @@ First half is scrolling encoder wheel fast, first in cw, then in ccw direction, 
 |              | 1220ohm_rc                   | 0.47  | 1200   | 5.85                      | 12000 (141)                                   | 7                            |
 |              | 2000ohm_rc                   | 0.47  | 2000   | 7.5                       | 12000 (145)                                   | 7                            |
 |              | 1k_100nF_rc                  | 0.1   | 10000  | 5.1                       | 12000(128)                                    | 10-15                        |
-| New encoder, |                              | 0.1   | 0      | 0.64                      | 12000(232)                                    | 2                            |
-
-The bounce frequency itself is random. The time itself that bounces is the one that correlates with resistor value. 
-
-Hello, another small project to show - an mechanical encoder controlling a PWM servo 
-The highlight is I tried learning filter theory by connecting rc filter and comparing the length of bounce period in logic to the resistor which I put in.
-I made a table on github and added the recordings from Saleae Logic 2 for each setup. Maybe you'd like to fact check if the conclusions i made based  table make sense
+| New encoder, |                              | 0.1   | 0      | 0.64                      | 12000(232)                                    | 2                        
 
 
-One hypothesis is that the duration is the time for the signal to transition from low state to high state, which is what RC circuit does - it delays the transition to a lower state 
+##### R = 0 Ω, C = 0 F
+
+[0ohm_0capacitor](../../../output/videos/0ohm_0capacitor.mp4)
+- Saleae Logic 2: [09.11 cwccw encodeerbaseline](../../../output/09.11_encoder_baseline)
+
+Примітка: циклічний шум на відео - шум частотою 12Mhz, від живлення 3.3V та прибирається glitch filter 
+
+Поворот в режимі X2: рахуються лише з зростаючого фронту - код не помічає обертів проти годинникової стрілки, бо зі сторони спадаючих фронтів різниця між CLK та DT фронтами занадто мала для коду, або прихована за брязкітом.
+
+Кожен поворот рахується лише один раз, як видно в лозі `"COUNT INCREASED BY 1"`
+
+##### C = 0.1 µF (104), без резистора
+
+- Відео: [410_capacitor_2x_encoding_12_03.mp4](../../../output/videos/410_capacitor_2x_encoding_12_03.mp4)
+- Відео: [410_capacitor_4x_encoding.mp4](../../../output/videos/410_capacitor_4x_encoding.mp4)
+- Saleae Logic 2: [104_capacitor_x4.sal](../../../output/104_capacitor_x4.sal)
+
+В режимі X2 нема повторів, і довжина брязкоту в перехідному  періоді мінімальна - 0.64 мс
+Мінуси - енкодер менш чутливий до швидкого прокручування і пропускає деякі оберти
+Навантаженням в цій схемі виступає лише pull-up резистор на стороні енкодера 
+
+
+##### R = 720 Ω, C = 0.47 µF
+
+- Відео: [720_Ohm_44m.mp4](../../../output/videos/720_Ohm_44m.mp4)
+- Saleae Logic 2: [720ohm_rc.sal](../../../output/720ohm_rc.sal)
+
+Часті пересчитування - - `Count increased by 1` повторюється по декілька разів за один тік. 
+Тобто, хоча шумів і немає - з'явився небажаний шум, високочастотний (12Mhz) між низьким і високим положенням напруги
+Рахується в режимі - X4 
+Тобто і передній, і задній фронт рахуються як 2 оберти
+<!-- Опис запису: що відбувається на відео, на якій секунді -->
+
+##### R = 1220 Ω, C = 0.47 µF
+
+- Відео: [1220_Ohm_47.mp4](../../../output/videos/1220_Ohm_47.mp4)
+- Saleae Logic 2: [1220ohm_rc.sal](../../../output/1220ohm_rc.sal)
+
+<!-- Опис запису: що відбувається на відео, на якій секунді -->
+
+##### R = 2000 Ω, C = 0.47 µF
+
+- Відео: [2000_Ohm_55.mp4](../../../output/videos/2000_Ohm_55.mp4)
+- Saleae Logic 2: [2000ohm_rc.sal](../../../output/2000ohm_rc.sal)
+
+<!-- Опис запису: що відбувається на відео, на якій секунді -->
+
+##### R = 10 kΩ, C = 0.47 µF
+
+- Відео: [10kohmrc_miniproject3.mp4](../../../output/videos/10kohmrc_miniproject3.mp4)
+- Відео: [10kohmrc_miniproject3_2.mp4](../../../output/videos/10kohmrc_miniproject3_2.mp4)
+- Відео: [10kohmrc_lesson3.6_4x.mp4](../../../output/videos/10kohmrc_lesson3.6_4x.mp4)
+- Saleae Logic 2: [10kohm_rc.sal](../../../output/10kohm_rc.sal)
+
+<!-- Опис запису: що відбувається на відео, на якій секунді -->
+
+
+output\videos\Miniproject3_output.mp4
+##### Кінцевий результат - Енкодер з коробки +  C = 0.1 µF (104), без резистора
+
+- Відео: [410_capacitor_2x_encoding_12_03.mp4](../../../output/videos/410_capacitor_2x_encoding_12_03.mp4)
+- Saleae Logic 2: [720ohm_rc.sal](../../../output/new_encoder_2x_104_capacitor.sal)
+
+**Лог програми з RC-фільтром:**
 
 ```
-I (766285) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-100.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-110.00 deg (-1100.00%)
-I (766285) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
-E (766335) mini_project_3: COUNT DECREASED BY -2
-E (766385) mini_project_3: COUNT DECREASED BY -3
-E (766435) mini_project_3: COUNT DECREASED BY -3
-E (766485) mini_project_3: COUNT DECREASED BY -4
-E (766535) mini_project_3: COUNT DECREASED BY -4
-E (766585) mini_project_3: COUNT DECREASED BY -2
-E (766635) mini_project_3: COUNT DECREASED BY -3
-E (766685) mini_project_3: COUNT DECREASED BY -4
-E (766735) mini_project_3: COUNT DECREASED BY -5
-E (766785) mini_project_3: COUNT DECREASED BY -4
-E (766835) mini_project_3: COUNT DECREASED BY -7
-E (766885) mini_project_3: COUNT DECREASED BY -4
-E (766935) mini_project_3: COUNT DECREASED BY -3
-W (767335) mini_project_3: COUNT INCREASED BY 4
-W (767385) mini_project_3: COUNT INCREASED BY 2
-W (767435) mini_project_3: COUNT INCREASED BY 2
-W (767485) mini_project_3: COUNT INCREASED BY 2
-W (767535) mini_project_3: COUNT INCREASED BY 2
-W (767635) mini_project_3: COUNT INCREASED BY 2
-W (767685) mini_project_3: COUNT INCREASED BY 2
-W (767785) mini_project_3: COUNT INCREASED BY 2
-W (767835) mini_project_3: COUNT INCREASED BY 2
-W (767935) mini_project_3: COUNT INCREASED BY 4
-W (767985) mini_project_3: COUNT INCREASED BY 2
-W (768035) mini_project_3: COUNT INCREASED BY 2
-W (768085) mini_project_3: COUNT INCREASED BY 4
-W (768135) mini_project_3: COUNT INCREASED BY 6
-W (768185) mini_project_3: COUNT INCREASED BY 4
-W (768235) mini_project_3: COUNT INCREASED BY 2
-I (768285) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-110.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-120.00 deg (-1200.00%)
-I (768285) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
-E (768485) mini_project_3: COUNT DECREASED BY -2
-E (768535) mini_project_3: COUNT DECREASED BY -3
-E (768585) mini_project_3: COUNT DECREASED BY -3
-E (768635) mini_project_3: COUNT DECREASED BY -2
-E (768685) mini_project_3: COUNT DECREASED BY -3
-E (768735) mini_project_3: COUNT DECREASED BY -3
-E (768785) mini_project_3: COUNT DECREASED BY -4
-E (768835) mini_project_3: COUNT DECREASED BY -1
-E (768885) mini_project_3: COUNT DECREASED BY -3
-E (768935) mini_project_3: COUNT DECREASED BY -2
-E (768985) mini_project_3: COUNT DECREASED BY -2
-E (769085) mini_project_3: COUNT DECREASED BY -2
-E (769135) mini_project_3: COUNT DECREASED BY -2
-E (769185) mini_project_3: COUNT DECREASED BY -1
-E (769235) mini_project_3: COUNT DECREASED BY -3
-W (769885) mini_project_3: COUNT INCREASED BY 2
-W (769935) mini_project_3: COUNT INCREASED BY 2
-W (769985) mini_project_3: COUNT INCREASED BY 2
-W (770035) mini_project_3: COUNT INCREASED BY 2
-W (770185) mini_project_3: COUNT INCREASED BY 1
-W (770235) mini_project_3: COUNT INCREASED BY 1
-W (770285) mini_project_3: COUNT INCREASED BY 2
-I (770285) mini_project_3: ENCODER_PULSES=1, ENCODER_ANGLE=-170.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-180.00 deg (-1800.00%)
-I (770285) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
-E (770745) mini_project_3: COUNT DECREASED BY -2
-E (770795) mini_project_3: COUNT DECREASED BY -2
-E (770895) mini_project_3: COUNT DECREASED BY -1
-E (770945) mini_project_3: COUNT DECREASED BY -1
-E (770995) mini_project_3: COUNT DECREASED BY -2
-W (771345) mini_project_3: COUNT INCREASED BY 2
-W (771395) mini_project_3: COUNT INCREASED BY 2
-W (771545) mini_project_3: COUNT INCREASED BY 2
-W (771595) mini_project_3: COUNT INCREASED BY 2
-W (771745) mini_project_3: COUNT INCREASED BY 2
-W (771795) mini_project_3: COUNT INCREASED BY 2
-E (772195) mini_project_3: COUNT DECREASED BY -1
-E (772245) mini_project_3: COUNT DECREASED BY -3
-I (772295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-170.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-180.00 deg (-1800.00%)
-I (772295) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
-E (772345) mini_project_3: COUNT DECREASED BY -1
-E (772395) mini_project_3: COUNT DECREASED BY -1
-E (772445) mini_project_3: COUNT DECREASED BY -2
-W (773045) mini_project_3: COUNT INCREASED BY 1
-W (773095) mini_project_3: COUNT INCREASED BY 3
-W (773245) mini_project_3: COUNT INCREASED BY 2
-W (773295) mini_project_3: COUNT INCREASED BY 2
-E (773695) mini_project_3: COUNT DECREASED BY -1
-E (773745) mini_project_3: COUNT DECREASED BY -3
-E (773795) mini_project_3: COUNT DECREASED BY -1
-E (773845) mini_project_3: COUNT DECREASED BY -3
-E (774295) mini_project_3: COUNT DECREASED BY -1
-I (774295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-180.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-190.00 deg (-1900.00%)
-I (774295) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
-E (774355) mini_project_3: COUNT DECREASED BY -1
-E (774405) mini_project_3: COUNT DECREASED BY -2
+todo
 ```
 
-### Worth mentioning 
-
-#### Quadrature 
+**Квадратурне декодування (X4), лог:**
 
 ```
 
@@ -232,3 +212,19 @@ I (114005) mini_project_3: status update error, at 10 deg
 W (114055) mini_project_3: COUNT INCREASED BY 5
 I (114055) mini_project_3: status update error, at 10 deg
 ```
+
+#### Спостереження
+
+- 
+
+- З огляду на лог відео X4 Модуляція більш чутлива до зміни положення при великих шумах на переході - але при цьому рахує по 7-10 за один перехід в залежності від довжини переходу до HIGH стану
+
+The bounce frequency itself is random. The time itself that bounces is the one that correlates with resistor value. 
+
+#### Інтерпретація
+
+One hypothesis is that the duration is the time for the signal to transition from low state to high state, which is what RC circuit does - it delays the transition to a lower state 
+
+#### Висновок
+
+<!-- Обрані R і C та чому -->
