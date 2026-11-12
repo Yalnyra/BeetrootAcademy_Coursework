@@ -1,5 +1,16 @@
 # Міні-проєкт 3 — Керування сервоприводом енкодером
 > Модуль 3. ЦАП та ШИМ модуляція
+
+The highlight of this project - learning balance how to balance to the resistor which I put in. rc filter values with length of bounce period in digital logic input.
+
+I made a table on github and added the recordings from Saleae Logic 2 for each setup. Described in more detail [debouncing experiment log in /docs](../docs/debouncing.md)
+
+
+<!-- Чернетка допису:
+
+-->
+
+
 ### Схемотехніка
 
 [Посилання на Діаграму](https://app.cirkitdesigner.com/project/1d9b4079-1a9c-4b3b-b021-867db9eda888)
@@ -52,7 +63,7 @@ speed_k - Це мультиплікатор обертів сервомотор�
 
 ### Вихід програми 
 
-Дивіться [Опис процесу дебаунсингу в](../docs/debouncing.md)
+Описано детально у [експериментальному звіті за дебаунсінг:](../docs/debouncing.md)
 
 ## Передумови (версії, з якими зібрано проєкт)
 

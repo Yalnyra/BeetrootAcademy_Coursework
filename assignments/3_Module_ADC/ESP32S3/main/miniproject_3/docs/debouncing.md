@@ -1,4 +1,10 @@
 
+
+
+! This Visualization comes from [Falstad](https://falstad.com/circuit/)
+
+![Actual schema of the switch](rc_and_switch.png)
+
 1. Writing a single pulse at a time 
 
 First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
