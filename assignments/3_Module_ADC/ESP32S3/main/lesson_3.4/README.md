@@ -20,77 +20,26 @@
 
 ### Що виконано
 
-Обрано використовувати два окремих таймери, бо LED та Серво працюють на різних частотах: 1024 Гц та 50 Гц відповідно
+main_3.1_passive_buzzer - програвання тонів в порядку
 
-0. Виправлено помилки з передаванням об'єкту adc_handle для ініціалізації потенціометра (Передача параметру значенням, а не вказівником)
+main_3.2_2r_1r_dac - перевірка аналогової схеми DAC постійного зближення 2R_1R на 3 бітах
 
-1. Керування положенням серво за допомогою LEDC
-Ініціалізація мотора SG90: [Даташит](https://www.friendlywire.com/projects/ne555-servo-safe/SG90-datasheet.pdf)
+main_3.3_touch_keyboard - ксилофон, програвання тонів за допомогою дотику - TODO
 
-2. Перевірка потужності пінів 2 та 7
-GPIO7  між землею та PWM: 0.17-0.31V від положення 0 до 180 градусів.
-Між VCC та GND: 6.07v
 
-2. Оновлення швидкості обертання за допомогою софтверного таймера 
-xTaskGetTickCount()
 
 ## Набір деталей
 
 | Деталь | Опис |
 |------|--------|
 | Плата | ESP32-S3 (devkit) |
-| Потенціометр | x1 |
-| Резистор | x1 220 Ом |
-| Світлодіод | x1 Червоний |
-| Сервопривід | x1 SG90 (Tower Pro) |
-| Джерело живлення | 5V зовнішнє |
+| Резистор | x6 1000 Ом |
+| Баззер | Пасивний |
 
 ### Вихід програми 
-```
-I (13335) hw_3_3: SERVO SET SUCCESS=1, period=500 ms
-I (13775) hw_3_3: POT_GPIO4=0, SERVO_PERIOD=500 ms, SERVO_ANGLE=1440 deg/180, GPIO7_HIGH=102/256, LED_GPIO6=1070162112/1023
-I (13835) hw_3_3: SERVO SET SUCCESS=1, period=500 ms
-I (14275) hw_3_3: POT_GPIO4=181, SERVO_PERIOD=481 ms, SERVO_ANGLE=1485 deg/180, GPIO7_HIGH=143/256, LED_GPIO6=1070162112/1023
-I (14315) hw_3_3: SERVO SET SUCCESS=1, period=477 ms
-I (14755) hw_3_3: SERVO SET SUCCESS=1, period=442 ms
-I (14775) hw_3_3: POT_GPIO4=546, SERVO_PERIOD=441 ms, SERVO_ANGLE=1575 deg/180, GPIO7_HIGH=225/256, LED_GPIO6=1070162112/1023
-I (15175) hw_3_3: SERVO SET SUCCESS=1, period=418 ms
-I (15275) hw_3_3: POT_GPIO4=814, SERVO_PERIOD=413 ms, SERVO_ANGLE=1620 deg/180, GPIO7_HIGH=285/256, LED_GPIO6=1070162112/1023
-I (15575) hw_3_3: SERVO SET SUCCESS=1, period=398 ms
-I (15775) hw_3_3: POT_GPIO4=1031, SERVO_PERIOD=389 ms, SERVO_ANGLE=1665 deg/180, GPIO7_HIGH=334/256, LED_GPIO6=1070162112/1023
-I (15955) hw_3_3: SERVO SET SUCCESS=1, period=373 ms
-I (16275) hw_3_3: POT_GPIO4=1575, SERVO_PERIOD=331 ms, SERVO_ANGLE=1710 deg/180, GPIO7_HIGH=457/256, LED_GPIO6=1070162112/1023
-I (16295) hw_3_3: SERVO SET SUCCESS=1, period=327 ms
-I (16595) hw_3_3: SERVO SET SUCCESS=1, period=309 ms
-I (16775) hw_3_3: POT_GPIO4=1835, SERVO_PERIOD=303 ms, SERVO_ANGLE=1800 deg/180, GPIO7_HIGH=515/256, LED_GPIO6=1070162112/1023
-I (16895) hw_3_3: SERVO SET SUCCESS=1, period=299 ms
-I (17175) hw_3_3: SERVO SET SUCCESS=1, period=284 ms
-I (17275) hw_3_3: POT_GPIO4=2056, SERVO_PERIOD=279 ms, SERVO_ANGLE=1890 deg/180, GPIO7_HIGH=565/256, LED_GPIO6=1070162112/1023
-I (17435) hw_3_3: SERVO SET SUCCESS=1, period=265 ms
-I (17695) hw_3_3: SERVO SET SUCCESS=1, period=253 ms
-I (17775) hw_3_3: POT_GPIO4=2355, SERVO_PERIOD=247 ms, SERVO_ANGLE=1980 deg/180, GPIO7_HIGH=632/256, LED_GPIO6=1070162112/1023
-I (17935) hw_3_3: SERVO SET SUCCESS=1, period=235 ms
-I (18155) hw_3_3: SERVO SET SUCCESS=1, period=219 ms
-I (18275) hw_3_3: POT_GPIO4=2724, SERVO_PERIOD=207 ms, SERVO_ANGLE=2070 deg/180, GPIO7_HIGH=715/256, LED_GPIO6=1070162112/1023
-I (18355) hw_3_3: SERVO SET SUCCESS=1, period=198 ms
-I (18535) hw_3_3: SERVO SET SUCCESS=1, period=177 ms
-I (18695) hw_3_3: SERVO SET SUCCESS=1, period=152 ms
-I (18775) hw_3_3: POT_GPIO4=3352, SERVO_PERIOD=140 ms, SERVO_ANGLE=2205 deg/180, GPIO7_HIGH=857/256, LED_GPIO6=1070162112/1023
-I (18835) hw_3_3: SERVO SET SUCCESS=1, period=127 ms
-I (18955) hw_3_3: SERVO SET SUCCESS=1, period=108 ms
-I (19055) hw_3_3: SERVO SET SUCCESS=1, period=87 ms
-I (19135) hw_3_3: SERVO SET SUCCESS=1, period=71 ms
-I (19195) hw_3_3: SERVO SET SUCCESS=1, period=61 ms
-I (19255) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19275) hw_3_3: POT_GPIO4=4095, SERVO_PERIOD=60 ms, SERVO_ANGLE=2475 deg/180, GPIO7_HIGH=1024/256, LED_GPIO6=1070162112/1023
-I (19315) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19375) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19435) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19495) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19555) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19615) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-I (19675) hw_3_3: SERVO SET SUCCESS=1, period=60 ms
-```
+
+TODO
+
 ## Передумови (версії, з якими зібрано проєкт)
 
 | Компонент | Версія / шлях |

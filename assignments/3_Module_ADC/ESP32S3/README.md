@@ -3,17 +3,21 @@
 > Модуль 3. ЦАП та ШИМ модуляція
 
 
-> Завдання 3.2 Перетворюємо "сирі" дані ADC: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](.\main_2_potentiotemer_adc_calbiration)
+> Завдання 3.2 Перетворюємо "сирі" дані ADC: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](main\lesson_3.1\main_2_potentiotemer_adc_calbiration)
 
 
 
-> Завдання 3.3 Керування потужністю та швидкістю: як змінювати яскравість світла та оберти двигуна: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](.\task_3.3_motor_pot.c)
+> Завдання 3.3 Керування потужністю та швидкістю: як змінювати яскравість світла та оберти двигуна: [main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c](main\lesson_3.1\main_2_potentiotemer_adc_calbiration.c)
 
 
-> Завдання 3.4 Зворотна дія: перетворюємо число на напругу (DAC): TODO 
+> Завдання 3.4 Зворотна дія: перетворюємо число на напругу (DAC): [main\lesson_3.4](main\lesson_3.4)
 
 
-> Завдання 3.5 Точне керування положенням (Серво): [main\lesson_3.5\main_3.5_2_pot_to_motor_map.c](.\task_3.3_motor_pot.c)
+> Завдання 3.5 Точне керування положенням (Серво): [main\lesson_3.5\main_3.5_2_pot_to_motor_map.c](main\lesson_3.5\main_3.5_2_pot_to_motor_map.c)
+
+> Завдання 3.6 Рахування за допомогою енкодера: [main\lesson_3.6\main.c](main\lesson_3.6\main.c)
+
+> Міні-проєкт 3 — Керування сервоприводом енкодером [main\miniproject_3\src\main.c](main\miniproject_3\src\main.c)
 
 
 ## Передумови (версії, з якими зібрано проєкт)

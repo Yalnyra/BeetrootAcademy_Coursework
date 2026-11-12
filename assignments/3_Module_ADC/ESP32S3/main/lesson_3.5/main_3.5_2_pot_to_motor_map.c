@@ -211,6 +211,8 @@ esp_err_t servo_set_angle_deg(float angle_deg, servo_status_t *status)
     } else if (cmd_angle_deg > SERVO_MAX_RANGE_DEG) {
         cmd_angle_deg = SERVO_MAX_RANGE_DEG;
     }
+
+    // Mapping to number ticks per second (0-8192)
     float ratio = (cmd_angle_deg - SERVO_MIN_RANGE_DEG) /
                   (SERVO_MAX_RANGE_DEG - SERVO_MIN_RANGE_DEG);
 
@@ -224,12 +226,13 @@ esp_err_t servo_set_angle_deg(float angle_deg, servo_status_t *status)
     if (status != NULL) {
         status->angle_deg      = cmd_angle_deg;
         status->duty_ticks     = duty;
+        // Mapping to ms (0-2ms)
         status->pulse_width_ms = (float)duty * SERVO_PERIOD_US / SERVO_PERIOD_TICKS / 1000.0f;
         status->achieved_angle_deg = achieved_angle_deg;
         status->angle_dev_deg = angle_dev_deg;
         status->deviation_deg = cmd_angle_deg - achieved_angle_deg;
     }
-
+    // Requires duty cycle, not time ms 
     esp_err_t err = ledc_set_duty(PWM_MODE, SERVO_CHANNEL, duty);
     if (err != ESP_OK) {
         return err;
