@@ -65,6 +65,101 @@ speed_k - Це мультиплікатор обертів сервомотор�
 
 Описано детально у [експериментальному звіті за дебаунсінг:](../docs/debouncing.md)
 
+1. Writing a single pulse at a time 
+
+First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
+
+
+```
+I (766285) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-100.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-110.00 deg (-1100.00%)
+I (766285) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
+E (766335) mini_project_3: COUNT DECREASED BY -2
+E (766385) mini_project_3: COUNT DECREASED BY -3
+E (766435) mini_project_3: COUNT DECREASED BY -3
+E (766485) mini_project_3: COUNT DECREASED BY -4
+E (766535) mini_project_3: COUNT DECREASED BY -4
+E (766585) mini_project_3: COUNT DECREASED BY -2
+E (766635) mini_project_3: COUNT DECREASED BY -3
+E (766685) mini_project_3: COUNT DECREASED BY -4
+E (766735) mini_project_3: COUNT DECREASED BY -5
+E (766785) mini_project_3: COUNT DECREASED BY -4
+E (766835) mini_project_3: COUNT DECREASED BY -7
+E (766885) mini_project_3: COUNT DECREASED BY -4
+E (766935) mini_project_3: COUNT DECREASED BY -3
+W (767335) mini_project_3: COUNT INCREASED BY 4
+W (767385) mini_project_3: COUNT INCREASED BY 2
+W (767435) mini_project_3: COUNT INCREASED BY 2
+W (767485) mini_project_3: COUNT INCREASED BY 2
+W (767535) mini_project_3: COUNT INCREASED BY 2
+W (767635) mini_project_3: COUNT INCREASED BY 2
+W (767685) mini_project_3: COUNT INCREASED BY 2
+W (767785) mini_project_3: COUNT INCREASED BY 2
+W (767835) mini_project_3: COUNT INCREASED BY 2
+W (767935) mini_project_3: COUNT INCREASED BY 4
+W (767985) mini_project_3: COUNT INCREASED BY 2
+W (768035) mini_project_3: COUNT INCREASED BY 2
+W (768085) mini_project_3: COUNT INCREASED BY 4
+W (768135) mini_project_3: COUNT INCREASED BY 6
+W (768185) mini_project_3: COUNT INCREASED BY 4
+W (768235) mini_project_3: COUNT INCREASED BY 2
+I (768285) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-110.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-120.00 deg (-1200.00%)
+I (768285) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
+E (768485) mini_project_3: COUNT DECREASED BY -2
+E (768535) mini_project_3: COUNT DECREASED BY -3
+E (768585) mini_project_3: COUNT DECREASED BY -3
+E (768635) mini_project_3: COUNT DECREASED BY -2
+E (768685) mini_project_3: COUNT DECREASED BY -3
+E (768735) mini_project_3: COUNT DECREASED BY -3
+E (768785) mini_project_3: COUNT DECREASED BY -4
+E (768835) mini_project_3: COUNT DECREASED BY -1
+E (768885) mini_project_3: COUNT DECREASED BY -3
+E (768935) mini_project_3: COUNT DECREASED BY -2
+E (768985) mini_project_3: COUNT DECREASED BY -2
+E (769085) mini_project_3: COUNT DECREASED BY -2
+E (769135) mini_project_3: COUNT DECREASED BY -2
+E (769185) mini_project_3: COUNT DECREASED BY -1
+E (769235) mini_project_3: COUNT DECREASED BY -3
+W (769885) mini_project_3: COUNT INCREASED BY 2
+W (769935) mini_project_3: COUNT INCREASED BY 2
+W (769985) mini_project_3: COUNT INCREASED BY 2
+W (770035) mini_project_3: COUNT INCREASED BY 2
+W (770185) mini_project_3: COUNT INCREASED BY 1
+W (770235) mini_project_3: COUNT INCREASED BY 1
+W (770285) mini_project_3: COUNT INCREASED BY 2
+I (770285) mini_project_3: ENCODER_PULSES=1, ENCODER_ANGLE=-170.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-180.00 deg (-1800.00%)
+I (770285) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
+E (770745) mini_project_3: COUNT DECREASED BY -2
+E (770795) mini_project_3: COUNT DECREASED BY -2
+E (770895) mini_project_3: COUNT DECREASED BY -1
+E (770945) mini_project_3: COUNT DECREASED BY -1
+E (770995) mini_project_3: COUNT DECREASED BY -2
+W (771345) mini_project_3: COUNT INCREASED BY 2
+W (771395) mini_project_3: COUNT INCREASED BY 2
+W (771545) mini_project_3: COUNT INCREASED BY 2
+W (771595) mini_project_3: COUNT INCREASED BY 2
+W (771745) mini_project_3: COUNT INCREASED BY 2
+W (771795) mini_project_3: COUNT INCREASED BY 2
+E (772195) mini_project_3: COUNT DECREASED BY -1
+E (772245) mini_project_3: COUNT DECREASED BY -3
+I (772295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-170.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-180.00 deg (-1800.00%)
+I (772295) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
+E (772345) mini_project_3: COUNT DECREASED BY -1
+E (772395) mini_project_3: COUNT DECREASED BY -1
+E (772445) mini_project_3: COUNT DECREASED BY -2
+W (773045) mini_project_3: COUNT INCREASED BY 1
+W (773095) mini_project_3: COUNT INCREASED BY 3
+W (773245) mini_project_3: COUNT INCREASED BY 2
+W (773295) mini_project_3: COUNT INCREASED BY 2
+E (773695) mini_project_3: COUNT DECREASED BY -1
+E (773745) mini_project_3: COUNT DECREASED BY -3
+E (773795) mini_project_3: COUNT DECREASED BY -1
+E (773845) mini_project_3: COUNT DECREASED BY -3
+E (774295) mini_project_3: COUNT DECREASED BY -1
+I (774295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-180.00 deg, SERVO_ANGLE=10/180 deg, ANGLE_ERROR=-190.00 deg (-1900.00%)
+I (774295) mini_project_3: SERVO_DUTY=410 ticks, SERVO_PULSE=1.001 ms, SPEED_K=2
+E (774355) mini_project_3: COUNT DECREASED BY -1
+E (774405) mini_project_3: COUNT DECREASED BY -2
+```
 ## Передумови (версії, з якими зібрано проєкт)
 
 | Компонент | Версія / шлях |
