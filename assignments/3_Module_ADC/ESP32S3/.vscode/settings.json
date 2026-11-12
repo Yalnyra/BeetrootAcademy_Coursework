@@ -33,5 +33,6 @@
     "--query-driver=**",
     "--compile-commands-dir=d:\\!SOFT\\!Documents\\embed\\training\\beetroot\\assignments\\2.6_ESPIDF_Debounce\\build"
   ],
-  "idf.flashType": "UART"
+  "idf.flashType": "UART",
+  "markdown.validate.enabled": true
 }

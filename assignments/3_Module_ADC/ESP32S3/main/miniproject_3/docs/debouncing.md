@@ -12,17 +12,51 @@
 
 #### Методика
 
-! This Visualization comes from [Falstad](https://falstad.com/circuit/)
+Схема під'єднання: [TODO]()
 
-![Actual schema of the switch](rc_and_switch.png)
+
+! Дякую за візуалізацію порталу [Falstad](https://falstad.com/circuit/)
+
+![Схема підключення RC фільтра](rc_and_switch.png)
+
+0. Програма, яку треба виконати на ESP-32s3
+
+```cmakelists
+
+idf_component_register(SRCS "miniproject_3/src/main.c"
+                          REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log esp_driver_pcnt freertos)
+
+# Miniproject 3 encoder decoding mode (compile-time flag ENCODER_QUADRATURE_X4):
+#   idf.py -DENCODER_X4=ON  build   -> X4 quadrature (2 PCNT channels, 4 counts per click)
+#   idf.py -DENCODER_X4=OFF build   -> X1 (lesson 3.6, default)
+# The value is stored in the CMake cache, so it stays until you set it again.
+option(ENCODER_X4 "Miniproject 3: X4 quadrature encoder decoding instead of X1" OFF)
+if(ENCODER_X4)
+    target_compile_definitions(${COMPONENT_LIB} PRIVATE ENCODER_QUADRATURE_X4=1)
+endif()
+
+```
+
+[Посилання на код](..\src\main.c)
+
+Комміт - 2ae0ea4f3fa0c35af9baf969eb23216129efc112
+
+
+1. Як відбувається запис 
+
+Спочатку за годинниковою стрілкою 2-3 оберти, потім проти годинникової.
+
+Перший 10-20 обертів: Дуже повільно, По черзі.
+
+Решта обертів: Прокручування на 90 градусів дуже швидко
+
+
+First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
+
 
 2. Вибір проміжку пропуску частот для Low-pass filter  
 
 За простотою виконання (без катушки індуктивності) було обрано пару Resistor + Capacitor 
-
-1. Writing a single pulse at a time 
-
-First half is scrolling encoder wheel fast, first in cw, then in ccw direction, second half is rotating one step at a time in ccw directio
 
 #### Результати
 
@@ -39,11 +73,12 @@ First half is scrolling encoder wheel fast, first in cw, then in ccw direction, 
 |              | 1k_100nF_rc                  | 0.1   | 10000  | 5.1                       | 12000(128)                                    | 10-15                        |
 | New encoder, |                              | 0.1   | 0      | 0.64                      | 12000(232)                                    | 2                        
 
+ Оригінальна таблиця - [09.11 cwccw encodeerbaseline](../../../output/docs/Miniproject3_debounce)
 
 ##### R = 0 Ω, C = 0 F
 
 [0ohm_0capacitor](../../../output/videos/0ohm_0capacitor.mp4)
-- Saleae Logic 2: [09.11 cwccw encodeerbaseline](../../../output/09.11_encoder_baseline)
+- Saleae Logic 2: [09.11 cwccw encodeerbaseline](../../../output/09.11_encoder_baseline.sal)
 
 Примітка: циклічний шум на відео - шум частотою 12Mhz, від живлення 3.3V та прибирається glitch filter 
 
@@ -78,6 +113,7 @@ First half is scrolling encoder wheel fast, first in cw, then in ccw direction, 
 - Відео: [1220_Ohm_47.mp4](../../../output/videos/1220_Ohm_47.mp4)
 - Saleae Logic 2: [1220ohm_rc.sal](../../../output/1220ohm_rc.sal)
 
+
 <!-- Опис запису: що відбувається на відео, на якій секунді -->
 
 ##### R = 2000 Ω, C = 0.47 µF
@@ -101,12 +137,134 @@ output\videos\Miniproject3_output.mp4
 ##### Кінцевий результат - Енкодер з коробки +  C = 0.1 µF (104), без резистора
 
 - Відео: [410_capacitor_2x_encoding_12_03.mp4](../../../output/videos/410_capacitor_2x_encoding_12_03.mp4)
-- Saleae Logic 2: [720ohm_rc.sal](../../../output/new_encoder_2x_104_capacitor.sal)
+- Saleae Logic 2: [new_encoder_2x_104_capacitor](../../../output/new_encoder_2x_104_capacitor.sal)
 
-**Лог програми з RC-фільтром:**
+**Лог програми з лише з capacitor фільтром,  ШВИДКЕ ОБЕРТАННЯ**
 
 ```
-todo
+
+I (30125) mini_project_3: status update error, at 0 deg
+I (30275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-10.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=-10.00 deg (0.00%)
+I (30275) mini_project_3: SERVO_DUTY=205 ticks, SERVO_PULSE=0.500 ms, SPEED_K=2
+W (30675) mini_project_3: COUNT INCREASED BY 1
+I (30675) mini_project_3: status update error, at 0 deg
+W (30725) mini_project_3: COUNT INCREASED BY 2
+W (30825) mini_project_3: COUNT INCREASED BY 2
+W (30875) mini_project_3: COUNT INCREASED BY 2
+W (30975) mini_project_3: COUNT INCREASED BY 1
+W (31325) mini_project_3: COUNT INCREASED BY 1
+W (31375) mini_project_3: COUNT INCREASED BY 3
+W (31475) mini_project_3: COUNT INCREASED BY 2
+I (32275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=120.00 deg, SERVO_ANGLE=120/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (32275) mini_project_3: SERVO_DUTY=751 ticks, SERVO_PULSE=1.833 ms, SPEED_K=2
+I (34275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=120.00 deg, SERVO_ANGLE=120/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (34275) mini_project_3: SERVO_DUTY=751 ticks, SERVO_PULSE=1.833 ms, SPEED_K=2
+W (35025) mini_project_3: COUNT INCREASED BY 1
+W (35525) mini_project_3: COUNT INCREASED BY 1
+W (35825) mini_project_3: COUNT INCREASED BY 1
+I (36275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=150.00 deg, SERVO_ANGLE=150/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (36275) mini_project_3: SERVO_DUTY=887 ticks, SERVO_PULSE=2.166 ms, SPEED_K=2
+E (37725) mini_project_3: COUNT DECREASED BY -1
+E (38125) mini_project_3: COUNT DECREASED BY -1
+I (38275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=130.00 deg, SERVO_ANGLE=130/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (38275) mini_project_3: SERVO_DUTY=796 ticks, SERVO_PULSE=1.943 ms, SPEED_K=2
+E (38475) mini_project_3: COUNT DECREASED BY -1
+I (40275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=120.00 deg, SERVO_ANGLE=120/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (40275) mini_project_3: SERVO_DUTY=751 ticks, SERVO_PULSE=1.833 ms, SPEED_K=2
+E (41225) mini_project_3: COUNT DECREASED BY -1
+I (42275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=110.00 deg, SERVO_ANGLE=110/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (42275) mini_project_3: SERVO_DUTY=705 ticks, SERVO_PULSE=1.721 ms, SPEED_K=2
+E (43775) mini_project_3: COUNT DECREASED BY -1
+E (43825) mini_project_3: COUNT DECREASED BY -1
+E (43925) mini_project_3: COUNT DECREASED BY -1
+E (44025) mini_project_3: COUNT DECREASED BY -1
+E (44075) mini_project_3: COUNT DECREASED BY -1
+E (44125) mini_project_3: COUNT DECREASED BY -1
+I (44275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=50.00 deg, SERVO_ANGLE=50/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (44275) mini_project_3: SERVO_DUTY=432 ticks, SERVO_PULSE=1.055 ms, SPEED_K=2
+I (46275) mini_project_3
+```
+
+**RC-фільтр 720 Ом, (X2), №1 - ПОВІЛЬНЕ ОБЕРТАННЯ**
+
+Немає false positives, кожен поворот в правильну сторону
+
+```
+I (24275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (24275) mini_project_3: SERVO_DUTY=0 ticks, SERVO_PULSE=0.000 ms, SPEED_K=2
+E (25675) mini_project_3: COUNT DECREASED BY -1
+E (25775) mini_project_3: COUNT DECREASED BY -1
+E (25825) mini_project_3: COUNT DECREASED BY -1
+E (25875) mini_project_3: COUNT DECREASED BY -1
+E (25925) mini_project_3: COUNT DECREASED BY -1
+E (25975) mini_project_3: COUNT DECREASED BY -1
+I (26275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-60.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=-60.00 deg (0.00%)
+I (26275) mini_project_3: SERVO_DUTY=205 ticks, SERVO_PULSE=0.500 ms, SPEED_K=2
+W (26575) mini_project_3: COUNT INCREASED BY 1
+W (26775) mini_project_3: COUNT INCREASED BY 1
+W (26825) mini_project_3: COUNT INCREASED BY 1
+W (27075) mini_project_3: COUNT INCREASED BY 1
+W (27375) mini_project_3: COUNT INCREASED BY 1
+W (27675) mini_project_3: COUNT INCREASED BY 1
+I (27675) mini_project_3: status update error, at 0 deg
+I (28275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-10.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=-10.00 deg (0.00%)
+I (28275) mini_project_3: SERVO_DUTY=205 ticks, SERVO_PULSE=0.500 ms, SPEED_K=2
+E (28325) mini_project_3: COUNT DECREASED BY -1
+E (28425) mini_project_3: COUNT DECREASED BY -1
+E (28575) mini_project_3: COUNT DECREASED BY -1
+E (28775) mini_project_3: COUNT DECREASED BY -1
+W (30175) mini_project_3: COUNT INCREASED BY 1
+W (30225) mini_project_3: COUNT INCREASED BY 1
+I (30275) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=-30.00 deg, SERVO_ANGLE=0/180 deg, ANGLE_ERROR=-30.00 deg (0.00%)
+```
+
+
+
+**RC-фільтр 720 Ом, (X2), №2 - ШВИДКЕ ОБЕРТАННЯ**
+
+Частіше оберт зараховується не в ту сторону, а кількість обертів за один цикл збільшилось в 3-4x рази
+
+```
+
+I (48295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=180/180 deg, ANGLE_ERROR=0.00 deg (0.00%)
+I (48295) mini_project_3: SERVO_DUTY=1024 ticks, SERVO_PULSE=2.500 ms, SPEED_K=2
+W (48795) mini_project_3: COUNT INCREASED BY 1
+W (48845) mini_project_3: COUNT INCREASED BY 3
+E (49145) mini_project_3: COUNT DECREASED BY -1
+W (49195) mini_project_3: COUNT INCREASED BY 4
+W (49245) mini_project_3: COUNT INCREASED BY 4
+W (49495) mini_project_3: COUNT INCREASED BY 1
+W (49545) mini_project_3: COUNT INCREASED BY 4
+W (49595) mini_project_3: COUNT INCREASED BY 1
+E (49895) mini_project_3: COUNT DECREASED BY -1
+E (49945) mini_project_3: COUNT DECREASED BY -1
+E (49995) mini_project_3: COUNT DECREASED BY -2
+I (50295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=310.00 deg, SERVO_ANGLE=180/180 deg, ANGLE_ERROR=130.00 deg (72.22%)
+I (50295) mini_project_3: SERVO_DUTY=1024 ticks, SERVO_PULSE=2.500 ms, SPEED_K=2
+E (50345) mini_project_3: COUNT DECREASED BY -2
+W (50395) mini_project_3: COUNT INCREASED BY 2
+W (50445) mini_project_3: COUNT INCREASED BY 1
+W (50745) mini_project_3: COUNT INCREASED BY 4
+W (50795) mini_project_3: COUNT INCREASED BY 2
+W (51095) mini_project_3: COUNT INCREASED BY 4
+W (51145) mini_project_3: COUNT INCREASED BY 2
+W (51445) mini_project_3: COUNT INCREASED BY 1
+W (51495) mini_project_3: COUNT INCREASED BY 4
+W (51795) mini_project_3: COUNT INCREASED BY 1
+W (51845) mini_project_3: COUNT INCREASED BY 4
+W (52145) mini_project_3: COUNT INCREASED BY 4
+W (52195) mini_project_3: COUNT INCREASED BY 1
+I (52295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=590.00 deg, SERVO_ANGLE=180/180 deg, ANGLE_ERROR=410.00 deg (227.78%)
+I (52295) mini_project_3: SERVO_DUTY=1024 ticks, SERVO_PULSE=2.500 ms, SPEED_K=2
+E (52495) mini_project_3: COUNT DECREASED BY -1
+W (52545) mini_project_3: COUNT INCREASED BY 3
+W (52595) mini_project_3: COUNT INCREASED BY 2
+W (52845) mini_project_3: COUNT INCREASED BY 5
+W (52895) mini_project_3: COUNT INCREASED BY 1
+W (53145) mini_project_3: COUNT INCREASED BY 4
+E (53195) mini_project_3: COUNT DECREASED BY -1
+I (54295) mini_project_3: ENCODER_PULSES=0, ENCODER_ANGLE=720.00 deg, SERVO_ANGLE=180/180 deg, ANGLE_ERROR=540.00 deg (300.00%)
+I (54295) mini_project_3: SERVO_DUTY=1024 ticks, SERVO_PULSE=2.500 ms, SPEED_K=2
 ```
 
 **Квадратурне декодування (X4), лог:**
@@ -215,14 +373,19 @@ I (114055) mini_project_3: status update error, at 10 deg
 
 #### Спостереження
 
-- 
+- З огляду на середнє значення (в дужках) в таблиці **частота брязкоту** повністю випадкова. 
 
-- З огляду на лог відео X4 Модуляція більш чутлива до зміни положення при великих шумах на переході - але при цьому рахує по 7-10 за один перехід в залежності від довжини переходу до HIGH стану
+- Довжина брязкоту неперервно зростає зі збільшенням опору (0.64 мс на схемі з конденсатором, 3.7 мс при прямому підключенні, проти 7.5мс на 2000 Ом) - функція переходу RC фільтра більш плавно зростає та спалає
 
-The bounce frequency itself is random. The time itself that bounces is the one that correlates with resistor value. 
+- X4 Модуляція більш чутлива до зміни положення при великих шумах на переході - але при цьому рахує по 7-10 за один перехід в залежності від довжини переходу до HIGH стану
+
+ З огляду на відео 104_capacitor_2x_encoding_12_03.mp4 проти 410_capacitor_2x_encoding_12_03.mp4 проти 104_capacitor_4x_encoding.mp4
 
 #### Інтерпретація
 
+Гіпотеза в тому, що час брязкоту коррелює із часом встановлення із LOW стану напруги до HIGH. Так як він напряму підключений до цифрового GPIO входу, то 
+
+Для перевірки швидкості зростання аналогових в hardware, а не симуляації потрібен цифровий осциллограф, а також TODO - додати до схеми Тріггер Шмітта (є в наявності) і повторити експеримент на 720 Ом та конденсатором
 One hypothesis is that the duration is the time for the signal to transition from low state to high state, which is what RC circuit does - it delays the transition to a lower state 
 
 #### Висновок
