@@ -12,7 +12,7 @@
 
 #### Методика
 
-Схема під'єднання: [TODO]()
+Схема під'єднання: [Circit designer schema](https://app.cirkitdesigner.com/project/5414e24e-41d8-4ac3-a82e-da22955947e3)
 
 
 ! Дякую за візуалізацію порталу [Falstad](https://falstad.com/circuit/)

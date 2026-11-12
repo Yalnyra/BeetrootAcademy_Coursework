@@ -1,9 +1,10 @@
 # Міні-проєкт 3 — Керування сервоприводом енкодером
 > Модуль 3. ЦАП та ШИМ модуляція
 
-The highlight of this project - learning balance how to balance to the resistor which I put in. rc filter values with length of bounce period in digital logic input.
 
-I made a table on github and added the recordings from Saleae Logic 2 for each setup. Described in more detail [debouncing experiment log in /docs](../docs/debouncing.md)
+Основна частина проєкту - вивчити як підібрати аналогові елементи в RC фільтрі, під довжину брязкоту, використовуючи логічний аналізатор 
+
+Більше про лог розробки та аналіз дебансингу енкодера в папці [/docs](../docs/debouncing.md)
 
 
 <!-- Чернетка допису:
@@ -13,8 +14,8 @@ I made a table on github and added the recordings from Saleae Logic 2 for each s
 
 ### Схемотехніка
 
-[Посилання на Діаграму](https://app.cirkitdesigner.com/project/1d9b4079-1a9c-4b3b-b021-867db9eda888)
-[Вивід в консоль](output/3.5_output.log)
+[Посилання на Діаграму](https://app.cirkitdesigner.com/project/5414e24e-41d8-4ac3-a82e-da22955947e3)
+[Вивід в консоль](..\..\..\output\miniproject_output.log)
 
 ### Вимоги до програми (Код)
 
@@ -29,7 +30,7 @@ I made a table on github and added the recordings from Saleae Logic 2 for each s
 
 ### Як працює програма 
 
-[](Посилання на програму )
+[Блок-схема програми](https://www.tldraw.com/f/smqRW6pEFIte72JPZ8eqK)
 0. Ініціалізується ticks, speed_k, button_state, структура servo_status 
 ticks - це віднос
 
