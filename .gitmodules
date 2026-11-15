@@ -1,0 +1,3 @@
+[submodule "stm32f411re/1_UART_Driver"]
+	path = stm32f411re/1_UART_Driver
+	url = git@github.com:Yalnyra/0_Embedded_UART_CLI.git
