@@ -175,7 +175,7 @@ void app_main(void)
     TickType_t last_log = xTaskGetTickCount();
     servo_status_t servo_status = {0};
 
-    ESP_LOGI(TAG, "superloop started, delay %d ms, encoder poll %d ms", SUPERLOOP_DELAY_MS);
+    ESP_LOGI(TAG, "superloop started, delay %d ms", SUPERLOOP_DELAY_MS);
 
     while (1)
     {
@@ -301,8 +301,6 @@ static void encoder_init(void)
         PCNT_CHANNEL_LEVEL_ACTION_KEEP,
         PCNT_CHANNEL_LEVEL_ACTION_INVERSE));
 #endif
-#endif
-
     ESP_ERROR_CHECK(pcnt_unit_enable(pcnt_unit));
     ESP_ERROR_CHECK(pcnt_unit_clear_count(pcnt_unit));
     ESP_ERROR_CHECK(pcnt_unit_start(pcnt_unit));
@@ -310,11 +308,7 @@ static void encoder_init(void)
 #if ENCODER_QUADRATURE_X4
     ESP_LOGI(TAG, "PCNT X4 initialized, %d counts per detent", ENCODER_COUNTS_PER_DETENT);
 #else
-#if ENCODER_QUADRATURE_X4
-    ESP_LOGI(TAG, "PCNT X4 initialized, %d counts per detent", ENCODER_COUNTS_PER_DETENT);
-#else
     ESP_LOGI(TAG, "PCNT X1 initialized");
-#endif
 #endif
 }
 
@@ -396,10 +390,8 @@ static void encoder_debug_init(void)
 /* 1. Update encoder ticks
  * Returns the click delta since the previous call (+ CW / - CCW).
  * X1: 1 count = 1 click, the count delta is returned as is.
- * X4: 4 counts = 1 click; leftover edges are kept for the next call. */
- * Returns the click delta since the previous call (+ CW / - CCW).
- * X1: 1 count = 1 click, the count delta is returned as is.
- * X4: 4 counts = 1 click; leftover edges are kept for the next call. */
+ * X4: 4 counts = 1 click; leftover edges are kept for the next call. 
+ */
 static int32_t encoder_update_ticks(void)
 {
     static int prev_count = 0;
@@ -415,14 +407,6 @@ static int32_t encoder_update_ticks(void)
     if (delta < 0 ) {
         ESP_LOGE(TAG, "COUNT DECREASED BY %" PRId32, delta);
     }
-
-#if ENCODER_QUADRATURE_X4
-    static int32_t residual = 0;    // edges not yet adding up to a full click
-    residual += delta;
-    int32_t clicks = residual / ENCODER_COUNTS_PER_DETENT;   // truncates toward 0: symmetric for +/-
-    residual -= clicks * ENCODER_COUNTS_PER_DETENT;
-    return clicks;
-#else
 
 #if ENCODER_QUADRATURE_X4
     static int32_t residual = 0;    // edges not yet adding up to a full click
