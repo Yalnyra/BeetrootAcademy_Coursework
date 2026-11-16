@@ -15,8 +15,11 @@
 #                           REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log esp_driver_pcnt freertos)
 
 
-idf_component_register(SRCS "miniproject_3/src/main.c"
-                          REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log esp_driver_pcnt freertos)
+# Miniproject 3: drivers live in ../components (encoder, button, servo, buzzer)
+idf_component_register(SRCS "miniproject_3/src/main.c" "miniproject_3/src/speed.c"
+                          INCLUDE_DIRS "miniproject_3/include"
+                          REQUIRES esp_adc esp_driver_gpio esp_timer esp_driver_ledc log esp_driver_pcnt freertos
+                                   encoder button servo buzzer)
 
 # Miniproject 3 encoder decoding mode (compile-time flag ENCODER_QUADRATURE_X4):
 #   idf.py -DENCODER_X4=ON  build   -> X4 quadrature (2 PCNT channels, 4 counts per click)
