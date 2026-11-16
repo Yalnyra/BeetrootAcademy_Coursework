@@ -41,6 +41,11 @@
 #define ENCODER_PCNT_HIGH_LIMIT    32767    // Верхня межа лічильника
 #define ENCODER_PCNT_LOW_LIMIT     -32768   // Нижня межа лічильника
 
+/* ================ Encoder: Button  ================= */
+
+#define DEBOUNCE_MS        30u
+#define SHORT_TIME_LIMIT   800u   // hold longer than this → long press
+
 /* ================ Servo: LEDC timer 0 / channel 0 ================= */
 #define SERVO_LEDC_MODE         LEDC_LOW_SPEED_MODE
 #define SERVO_LEDC_TIMER        LEDC_TIMER_0

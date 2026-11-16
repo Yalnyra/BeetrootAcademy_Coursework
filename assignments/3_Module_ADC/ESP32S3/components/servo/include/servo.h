@@ -53,3 +53,6 @@ void servo_init(servo_t *s, const servo_config_t *cfg);
  * Returns true if the duty was written; false if the angle did not change
  * or writing failed. */
 bool servo_set_angle(servo_t *s, int32_t cmd_angle_deg);
+
+/* Command the servo back to cfg.init_deg. Same return value as servo_set_angle(). */
+bool servo_reset_angle(servo_t *s);

@@ -54,7 +54,9 @@ static const encoder_config_t encoder_cfg = {
 };
 
 static const button_config_t button_cfg = {
-    .gpio = ENCODER_GPIO_SW,
+    .gpio          = ENCODER_GPIO_SW,
+    .debounce_ms   = DEBOUNCE_MS,
+    .long_press_ms = SHORT_TIME_LIMIT,
 };
 
 static const servo_config_t servo_cfg = {
@@ -88,6 +90,20 @@ static button_t  button;
 static servo_t   servo;
 static buzzer_t  buzzer;
 
+/* ======================= Button event actions ====================== */
+
+/* What a button event does in this project:
+ *   long  press (held past SHORT_TIME_LIMIT) -> servo back to SERVO_INIT_DEG
+ *   short press (released before that)       -> k = 2k (mod N) */
+static void button_pressed_event(button_event_t evt, int32_t *speed_k)
+{
+    switch (evt) {
+    case BTN_EVT_LONG:  servo_reset_angle(&servo);          break;
+    case BTN_EVT_SHORT: *speed_k = speed_update(*speed_k);  break;
+    default: break;
+    }
+}
+
 /* ============================ app_main ============================ */
 
 void app_main(void)
@@ -111,11 +127,9 @@ void app_main(void)
         int32_t ticks = encoder_update_ticks(&encoder);
 
         /* 2. Button event pressed? (once per press, no auto-repeat) */
-        if (button_pressed_event(&button))
-        {
-            speed_k = speed_update(speed_k);    // Yes: k = 2k (mod N)
-        }
-        // No: do nothing
+        bool pressed = !gpio_get_level(button.cfg.gpio);  // LOW = 0 - pressed
+        button_event_t button_event = button_poll(&button, pdTICKS_TO_MS(now), pressed);  // times are in ms
+        button_pressed_event(button_event, &speed_k);  // long: reset servo, short: k = 2k (mod N)
 
         /* 3. Update servo PWM duty cycle
          * Moves the servo by ticks * SERVO_STEP_FINE_DEG * speed_k degrees.
@@ -136,23 +150,28 @@ void app_main(void)
         }
         // No: do nothing
 
-
+        
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             last_log = now;
             ESP_LOGI(TAG,
-                    "ENCODER_PULSES=%" PRId32 ", ENCODER_ANGLE=%.2f deg, SERVO_ANGLE=%" PRId32 "/%.0f deg, ANGLE_ERROR=%.2f deg (%.2f%%)",
-                    ticks,
+                    "SPEED_K=%" PRId32, "button pressed %d, has button updated? %d, ",
+                    speed_k, 
+                    pressed,
+                    button_event
+                );
+
+            ESP_LOGI(TAG,
+                    "ENCODER_ANGLE=%.2f deg, SERVO_ANGLE=%" PRId32 "/%.0f deg, ANGLE_ERROR=%.2f deg (%.2f%%)",
                     servo.status.angle_deg,
                     servo.status.achieved_angle_deg,
                     SERVO_MAX_RANGE_DEG,
                     servo.status.deviation_deg,
                     servo.status.angle_dev_pcnt);
 
-            ESP_LOGI(TAG,
-                    "SERVO_DUTY=%" PRId32 " ticks, SERVO_PULSE=%.3f ms, SPEED_K=%" PRId32,
-                    servo.status.duty_ticks,
-                    servo.status.pulse_width_ms,
-                    speed_k);
+            // ESP_LOGI(TAG,
+            //         "SERVO_DUTY=%" PRId32 " ticks, SERVO_PULSE=%.3f ms",
+            //         servo.status.duty_ticks,
+            //         servo.status.pulse_width_ms);
         }
 
         vTaskDelay(pdMS_TO_TICKS(SUPERLOOP_DELAY_MS));

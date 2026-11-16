@@ -65,6 +65,12 @@ bool servo_set_angle(servo_t *s, int32_t cmd_angle_deg)
     return set_err == ESP_OK && ledc_update_duty(s->cfg.mode, s->cfg.channel) == ESP_OK;
 }
 
+bool servo_reset_angle(servo_t *s)
+{
+    if (s == NULL) { ESP_LOGE(TAG, "servo struct init error: servo is null pointer"); return false; }
+    return servo_set_angle(s, s->cfg.init_deg);
+}
+
 /* ============================ Helpers ============================= */
 
 static bool servo_update_status(servo_t *s, int32_t cmd_angle_deg)
@@ -85,13 +91,6 @@ static bool servo_update_status(servo_t *s, int32_t cmd_angle_deg)
     status->deviation_deg = deviation_deg;
     status->buzzer_error_flag = buzzer_error_flag;
     return true;
-}
-
-static float duty_to_servo_angle_deg(const servo_t *s, uint32_t duty)
-{
-    return map_valuef((float)duty,
-                       (float)s->min_ticks, (float)s->max_ticks,
-                       0.0f, (float)s->cfg.range_deg);
 }
 
 /* Servo angle (0..range_deg) -> LEDC duty ticks */
