@@ -8,6 +8,8 @@
 #include "freertos/task.h"
 #include "driver/i2c_master.h"
 #include "esp_log.h"
+#include "esp_timer.h"
+#include "encoder.h"
 
 static const char *TAG = "SSD1306";
 
@@ -22,6 +24,37 @@ static const char *TAG = "SSD1306";
 #define OLED_H 64             // Висота дисплея в пікселях
 #define OLED_PAGES (OLED_H / 8) // Кількість сторінок пам'яті (64 / 8 = 8 сторінок по 8 рядків пікселів)
 
+/* ============================== Encoder ============================== */
+
+
+// Rotary encoder GPIO pins
+#define ENC_A_GPIO     15     // CLK pin
+#define ENC_B_GPIO     16     // DT pin
+#define ENC_SW_GPIO    17     // Switch (button) pin — optional
+
+/* Decoding mode, chosen at compile time:
+ *   0 = X1: one channel, rising edge of A only (lesson 3.6). 1 count per click.
+ *   1 = X4: two channels, both edges of A and B. 4 counts per click, bounce cancels in +1/-1 pairs.
+ * Build with:  idf.py -DENCODER_X4=ON build   (OFF = X1, see main/CMakeLists.txt)
+ * or change the default below. */
+#ifndef ENCODER_QUADRATURE_X4
+#define ENCODER_QUADRATURE_X4      0
+#endif
+
+#if ENCODER_QUADRATURE_X4
+#define ENCODER_COUNTS_PER_DETENT  4   // X4: one click = full quadrature cycle = 4 edges (set 2 if one click gives delta=2)
+#else
+#define ENCODER_COUNTS_PER_DETENT  1   // X1: one click = one rising edge of A
+#endif
+#define GLITCH_FILTER_DELAY_NS 1000
+#define ENCODER_PCNT_HIGH_LIMIT    32767    // Верхня межа лічильника
+#define ENCODER_PCNT_LOW_LIMIT     -32768   // Нижня межа лічильника
+
+/* ================ Encoder: Button  ================= */
+
+#define DEBOUNCE_MS        30u
+#define SHORT_TIME_LIMIT   800u   // hold longer than this → long press
+
 // Керуючі байти протоколу SSD1306 (перший байт після адреси пристрою)
 #define CTRL_CMD  0x00   // Co=0, D/C#=0 -> наступні байти є командами налаштування
 #define CTRL_DATA 0x40   // Co=0, D/C#=1 -> наступні байти є графічними даними для відеопам'яті (GDDRAM)
@@ -30,6 +63,8 @@ static i2c_master_dev_handle_t oled;             // Дескриптор (handle
 static uint8_t fb[OLED_W * OLED_PAGES];          // Локальний кадровий буфер у RAM мікроконтролера (1024 байти)
 static uint8_t tx[1 + OLED_W * OLED_PAGES];      // Буфер відправки по I2C: 1 керуючий байт (0x40) + 1024 байти кадру
 
+// Rotary encoder handle
+static encoder_t enc;
 // ---------- низький рівень (обмін по I2C) ----------
 
 // Відправка однієї однобайтової команди дисплею
@@ -37,7 +72,11 @@ static esp_err_t oled_cmd(uint8_t c)
 {
     uint8_t buf[2] = {CTRL_CMD, c};
     // Передаємо 2 байти з таймаутом очікування 100 мс
-    return i2c_master_transmit(oled, buf, 2, 100);
+    int64_t t0 = esp_timer_get_time();
+    esp_err_t ret = i2c_master_transmit(oled, buf, 2, 100);
+    int64_t dt = esp_timer_get_time() - t0;
+    ESP_LOGI(TAG, "i2c CMD  0x%02X | %zu bytes | %lld us", c, (size_t)2, dt);
+    return ret;
 }
 
 // Відправка команди разом з її аргументами (наприклад, команда + 1 або 2 байти параметрів)
@@ -46,7 +85,11 @@ static esp_err_t oled_cmds(const uint8_t *c, size_t n)
     uint8_t buf[16];
     buf[0] = CTRL_CMD;          // Повідомляємо контролер дисплея, що далі йдуть команди
     memcpy(&buf[1], c, n);      // Копіюємо послідовність команд у буфер
-    return i2c_master_transmit(oled, buf, n + 1, 100);
+    int64_t t0 = esp_timer_get_time();
+    esp_err_t ret = i2c_master_transmit(oled, buf, n + 1, 100);
+    int64_t dt = esp_timer_get_time() - t0;
+    ESP_LOGI(TAG, "i2c CMDS 0x%02X+%zu | %zu bytes | %lld us", c[0], n - 1, n + 1, dt);
+    return ret;
 }
 
 // Початкова ініціалізація контролера SSD1306
@@ -97,7 +140,10 @@ static void oled_flush(void)
     tx[0] = CTRL_DATA;                                // Вказуємо, що далі йдуть піксельні дані
     memcpy(&tx[1], fb, sizeof(fb));                   // Копіюємо 1024 байти кадру слідом за керуючим байтом
     // Передаємо весь кадр однією I2C-транзакцією (таймаут 1000 мс, оскільки пакет великий)
+    int64_t t0 = esp_timer_get_time();
     ESP_ERROR_CHECK(i2c_master_transmit(oled, tx, sizeof(tx), 1000));
+    int64_t dt = esp_timer_get_time() - t0;
+    ESP_LOGI(TAG, "i2c FLUSH full frame | %zu bytes | %lld us", sizeof(tx), dt);
 }
 
 // ---------- графіка (робота з локальним буфером fb) ----------
@@ -240,7 +286,10 @@ static void oled_write_page(uint8_t page)
     uint8_t buf[1 + OLED_W];
     buf[0] = CTRL_DATA;
     memcpy(&buf[1], &fb[page * OLED_W], OLED_W);
+    int64_t t0 = esp_timer_get_time();
     ESP_ERROR_CHECK(i2c_master_transmit(oled, buf, sizeof(buf), 200));
+    int64_t dt = esp_timer_get_time() - t0;
+    ESP_LOGI(TAG, "i2c PAGE %u | %zu bytes | %lld us", page, sizeof(buf), dt);
 }
 
 // Зміна Display Start Line — який рядок GDDRAM відображається зверху екрана
@@ -319,9 +368,9 @@ static void menu_draw_full(void)
         draw_menu_item(i, idx, idx == menu_sel);
     }
     // Якщо пунктів менше ніж рядків — очистити залишок
-    for (int i = MENU_COUNT - menu_top; i < MENU_VISIBLE; i++) {
-        memset(&fb[i * OLED_W], 0x00, OLED_W);
-    }
+    // for (int i = MENU_COUNT - menu_top; i < MENU_VISIBLE; i++) {
+    //     memset(&fb[i * OLED_W], 0x00, OLED_W); // 
+    // }
     oled_flush();
 }
 
@@ -456,28 +505,37 @@ void app_main(void)
 
     ESP_LOGI(TAG, "Меню відображено. Пунктів: %d", MENU_COUNT);
 
-    // ====== ДЕМО-ЦИКЛ: Автоматична навігація по меню ======
-    // (Замінити на реальний ввід від rotary encoder у фінальному проєкті)
+    // ====== ENCODER INIT ======
+    static const encoder_config_t enc_cfg = {
+        .gpio_a            = ENC_A_GPIO,
+        .gpio_b            = ENC_B_GPIO,
+        .debug_gpio        = GPIO_NUM_NC,
+        .quadrature_x4     = ENCODER_QUADRATURE_X4,
+        .counts_per_detent = ENCODER_COUNTS_PER_DETENT,
+        .glitch_filter_ns  = GLITCH_FILTER_DELAY_NS,
+        .high_limit        = ENCODER_PCNT_HIGH_LIMIT,
+        .low_limit         = ENCODER_PCNT_LOW_LIMIT,
+    };
+    
+    encoder_init(&enc, &enc_cfg);
+    ESP_LOGI(TAG, "Encoder initialized on GPIO %d/%d", ENC_A_GPIO, ENC_B_GPIO);
+
+    // ====== MAIN LOOP: encoder-driven menu navigation ======
     while (1) {
-        // Рухаємось вниз до кінця
-        for (int i = 0; i < MENU_COUNT - 1; i++) {
-            vTaskDelay(pdMS_TO_TICKS(600));
-            menu_move(+1);
+        int32_t clicks = encoder_update_ticks(&enc);
+
+        if (clicks > 0) {
+            for (int32_t i = 0; i < clicks; i++) {
+                menu_move(+1);
+            }
+            ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
+        } else if (clicks < 0) {
+            for (int32_t i = 0; i > clicks; i--) {
+                menu_move(-1);
+            }
             ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
         }
-        vTaskDelay(pdMS_TO_TICKS(1000));
 
-        // Рухаємось вгору до початку
-        for (int i = 0; i < MENU_COUNT - 1; i++) {
-            vTaskDelay(pdMS_TO_TICKS(600));
-            menu_move(-1);
-            ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
-        }
-        vTaskDelay(pdMS_TO_TICKS(1000));
-
-        // Демо e-ink переходу: меню → бут → меню
-        eink_transition(boot_fb);
-        vTaskDelay(pdMS_TO_TICKS(1500));
-        eink_transition(menu_fb);
+        vTaskDelay(pdMS_TO_TICKS(10));  // ~100 Hz polling
     }
 }

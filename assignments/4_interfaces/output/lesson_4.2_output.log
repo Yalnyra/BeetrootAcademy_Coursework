@@ -1,0 +1,117 @@
+
+I (267) SSD1306: SSD1306 знайдено за адресою 0x3C
+I (267) SSD1306: i2c CMDS 0xAE+0 | 2 bytes | 283 us
+I (277) SSD1306: i2c CMDS 0xD5+1 | 3 bytes | 199 us
+I (277) SSD1306: i2c CMDS 0xA8+1 | 3 bytes | 200 us
+I (287) SSD1306: i2c CMDS 0xD3+1 | 3 bytes | 195 us
+I (287) SSD1306: i2c CMDS 0x40+0 | 2 bytes | 173 us
+I (287) SSD1306: i2c CMDS 0x8D+1 | 3 bytes | 194 us
+I (297) SSD1306: i2c CMDS 0x20+1 | 3 bytes | 194 us
+I (297) SSD1306: i2c CMDS 0xA1+0 | 2 bytes | 172 us
+I (307) SSD1306: i2c CMDS 0xC8+0 | 2 bytes | 172 us
+I (307) SSD1306: i2c CMDS 0xDA+1 | 3 bytes | 195 us
+I (317) SSD1306: i2c CMDS 0x81+1 | 3 bytes | 194 us
+I (317) SSD1306: i2c CMDS 0xD9+1 | 3 bytes | 195 us
+I (327) SSD1306: i2c CMDS 0xDB+1 | 3 bytes | 195 us
+I (327) SSD1306: i2c CMDS 0xA4+0 | 2 bytes | 172 us
+I (337) SSD1306: i2c CMDS 0xA6+0 | 2 bytes | 172 us
+I (337) SSD1306: i2c CMDS 0xAF+0 | 2 bytes | 172 us
+I (347) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 221 us
+I (347) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 217 us
+I (377) SSD1306: i2c FLUSH full frame | 1025 bytes | 23857 us
+I (2377) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 228 us
+I (2377) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 222 us
+I (2397) SSD1306: i2c FLUSH full frame | 1025 bytes | 23857 us
+I (2397) SSD1306: i2c CMD  0xA7 | 2 bytes | 174 us
+I (2477) SSD1306: i2c CMD  0xA6 | 2 bytes | 177 us
+I (2527) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 218 us
+I (2527) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 217 us
+I (2547) SSD1306: i2c FLUSH full frame | 1025 bytes | 23852 us
+I (2547) SSD1306: Меню відображено. Пунктів: 6
+I (2547) encoder: PCNT X1 initialized
+I (2547) SSD1306: Encoder initialized on GPIO 15/16
+I (8457) SSD1306: Обрано: [5] ABOUT
+E (9057) encoder: COUNT DECREASED BY -1
+I (9057) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 236 us
+I (9057) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 223 us
+I (9057) SSD1306: i2c PAGE 5 | 129 bytes | 3112 us
+I (9057) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (9067) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (9067) SSD1306: i2c PAGE 4 | 129 bytes | 3110 us
+I (9077) SSD1306: Обрано: [4] SETTINGS
+E (9197) encoder: COUNT DECREASED BY -1
+I (9197) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 244 us
+I (9197) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 224 us
+I (9197) SSD1306: i2c PAGE 4 | 129 bytes | 3113 us
+I (9197) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (9207) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (9207) SSD1306: i2c PAGE 3 | 129 bytes | 3110 us
+I (9217) SSD1306: Обрано: [3] CALIBRATE
+E (9367) encoder: COUNT DECREASED BY -1
+I (9367) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 237 us
+I (9367) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 223 us
+I (9367) SSD1306: i2c PAGE 3 | 129 bytes | 3113 us
+I (9367) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (9377) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (9377) SSD1306: i2c PAGE 2 | 129 bytes | 3110 us
+I (9387) SSD1306: Обрано: [2] HEALTH
+E (9497) encoder: COUNT DECREASED BY -1
+I (9497) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 244 us
+I (9497) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 224 us
+I (9497) SSD1306: i2c PAGE 2 | 129 bytes | 3113 us
+I (9497) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (9507) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (9507) SSD1306: i2c PAGE 1 | 129 bytes | 3110 us
+I (9517) SSD1306: Обрано: [1] LOG BROWSER
+E (9647) encoder: COUNT DECREASED BY -1
+I (9647) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 237 us
+I (9647) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 223 us
+I (9647) SSD1306: i2c PAGE 1 | 129 bytes | 3113 us
+I (9647) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (9657) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (9657) SSD1306: i2c PAGE 0 | 129 bytes | 3110 us
+I (9667) SSD1306: Обрано: [0] LIVE VIEW
+E (9777) encoder: COUNT DECREASED BY -1
+I (9777) SSD1306: Обрано: [0] LIVE VIEW
+W (10377) encoder: COUNT INCREASED BY 1
+I (10377) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 244 us
+I (10377) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 223 us
+I (10377) SSD1306: i2c PAGE 0 | 129 bytes | 3112 us
+I (10377) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (10387) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (10387) SSD1306: i2c PAGE 1 | 129 bytes | 3110 us
+I (10397) SSD1306: Обрано: [1] LOG BROWSER
+W (10517) encoder: COUNT INCREASED BY 1
+I (10517) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 231 us
+I (10517) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 221 us
+I (10517) SSD1306: i2c PAGE 1 | 129 bytes | 3110 us
+I (10517) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (10527) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (10527) SSD1306: i2c PAGE 2 | 129 bytes | 3110 us
+I (10537) SSD1306: Обрано: [2] HEALTH
+W (10637) encoder: COUNT INCREASED BY 1
+I (10637) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 238 us
+I (10637) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 221 us
+I (10637) SSD1306: i2c PAGE 2 | 129 bytes | 3110 us
+I (10637) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (10647) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (10647) SSD1306: i2c PAGE 3 | 129 bytes | 3110 us
+I (10657) SSD1306: Обрано: [3] CALIBRATE
+W (10767) encoder: COUNT INCREASED BY 1
+I (10767) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 231 us
+I (10767) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 222 us
+I (10767) SSD1306: i2c PAGE 3 | 129 bytes | 3110 us
+I (10767) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (10777) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (10777) SSD1306: i2c PAGE 4 | 129 bytes | 3110 us
+I (10787) SSD1306: Обрано: [4] SETTINGS
+W (10997) encoder: COUNT INCREASED BY 1
+I (10997) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 238 us
+I (10997) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 222 us
+I (10997) SSD1306: i2c PAGE 4 | 129 bytes | 3110 us
+I (10997) SSD1306: i2c CMDS 0x21+2 | 4 bytes | 215 us
+I (11007) SSD1306: i2c CMDS 0x22+2 | 4 bytes | 215 us
+I (11007) SSD1306: i2c PAGE 5 | 129 bytes | 3110 us
+I (11017) SSD1306: Обрано: [5] ABOUT
+W (11237) encoder: COUNT INCREASED BY 1
+I (11237) SSD1306: Обрано: [5] ABOUT

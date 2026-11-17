@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SSD1306 128×64 — конвертер зображення (горизонтальний режим)</title>
+  <style>
+    :root {
+      --bg: #f4f6f0;
+      --fg: #14302a;
+      --card: #ffffff;
+      --border: #cfd8d0;
+      --accent: #1a8f4d;
+      --off: #e6ebe7;
+      --code-bg: #10261f;
+      --code-fg: #d7efe3;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1a17;
+        --fg: #e3efe9;
+        --card: #172622;
+        --border: #2b3d37;
+        --accent: #4cd98a;
+        --off: #223530;
+        --code-bg: #09110f;
+      }
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+      margin: 0;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 720px;
+      width: 100%;
+    }
+    h2 { margin-top: 0; font-size: 1.25rem; }
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    label { font-size: 0.9rem; }
+    input[type="file"] { font: inherit; font-size: 0.85rem; }
+    input[type="range"] { width: 140px; accent-color: var(--accent); }
+    button {
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      color: #0b1914;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .preview-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .preview-box {
+      text-align: center;
+    }
+    .preview-box span {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-bottom: 4px;
+    }
+    canvas.oled {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      image-rendering: pixelated;
+      background: #000;
+    }
+    .info {
+      font: 0.82rem ui-monospace, Consolas, monospace;
+      opacity: 0.7;
+      margin-bottom: 12px;
+    }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font: 600 0.82rem/1.45 ui-monospace, Consolas, monospace;
+      overflow-x: auto;
+      margin: 0 0 12px 0;
+      max-height: 320px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    select {
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+    }
+  </style>
+</head>
+<body>
+
+<div class="panel">
+  <h2>SSD1306 128×64 — конвертер зображення</h2>
+
+  <div class="controls">
+    <label>Зображення: <input type="file" id="filein" accept="image/*"></label>
+  </div>
+  <div class="controls">
+    <label>Поріг: <input type="range" id="thresh" min="1" max="255" value="128"></label>
+    <span id="threshVal" style="font:0.85rem ui-monospace,Consolas,monospace">128</span>
+    <label><input type="checkbox" id="invertChk"> Інвертувати</label>
+    <label>Масштаб:
+      <select id="scaleMode">
+        <option value="contain" selected>Вписати (contain)</option>
+        <option value="cover">Заповнити (cover)</option>
+        <option value="stretch">Розтягнути</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="preview-row">
+    <div class="preview-box">
+      <span>Оригінал (масштабовано)</span>
+      <canvas id="srcCanvas" class="oled" width="128" height="64" style="width:256px;height:128px"></canvas>
+    </div>
+    <div class="preview-box">
+      <span>Результат 1-біт</span>
+      <canvas id="dstCanvas" class="oled" width="128" height="64" style="width:256px;height:128px"></canvas>
+    </div>
+  </div>
+
+  <div class="info" id="info">Завантажте зображення ↑</div>
+
+  <pre id="out">// Завантажте зображення для генерації C-масиву</pre>
+
+  <div class="btn-row">
+    <button class="primary" id="copyArr">Копіювати масив</button>
+    <button id="copyRaw">Копіювати тільки байти</button>
+    <button id="downloadBin">Завантажити .bin</button>
+  </div>
+</div>
+
+<script>
+const W = 128, H = 64;
+const PAGES = H / 8; // 8
+
+const filein    = document.getElementById('filein');
+const threshIn  = document.getElementById('thresh');
+const threshVal = document.getElementById('threshVal');
+const invertChk = document.getElementById('invertChk');
+const scaleMode = document.getElementById('scaleMode');
+const srcCanvas = document.getElementById('srcCanvas');
+const dstCanvas = document.getElementById('dstCanvas');
+const infoEl    = document.getElementById('info');
+const outEl     = document.getElementById('out');
+
+const srcCtx = srcCanvas.getContext('2d');
+const dstCtx = dstCanvas.getContext('2d');
+
+let loadedImg = null;
+
+/* ---- завантаження зображення ---- */
+filein.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => { loadedImg = img; convert(); };
+  img.src = URL.createObjectURL(file);
+});
+
+threshIn.addEventListener('input', () => { threshVal.textContent = threshIn.value; if (loadedImg) convert(); });
+invertChk.addEventListener('change', () => { if (loadedImg) convert(); });
+scaleMode.addEventListener('change', () => { if (loadedImg) convert(); });
+
+/* ---- масштабування + центрування ---- */
+function drawScaled(img) {
+  srcCtx.fillStyle = '#000';
+  srcCtx.fillRect(0, 0, W, H);
+
+  const mode = scaleMode.value;
+  let dw, dh, dx, dy;
+
+  if (mode === 'stretch') {
+    dw = W; dh = H; dx = 0; dy = 0;
+  } else {
+    const ratioW = W / img.width;
+    const ratioH = H / img.height;
+    const ratio = mode === 'contain' ? Math.min(ratioW, ratioH) : Math.max(ratioW, ratioH);
+    dw = Math.round(img.width * ratio);
+    dh = Math.round(img.height * ratio);
+    dx = Math.round((W - dw) / 2);
+    dy = Math.round((H - dh) / 2);
+  }
+
+  srcCtx.drawImage(img, dx, dy, dw, dh);
+}
+
+/* ---- конвертація ---- */
+function convert() {
+  drawScaled(loadedImg);
+
+  const imgData = srcCtx.getImageData(0, 0, W, H);
+  const px = imgData.data;
+  const threshold = parseInt(threshIn.value);
+  const inv = invertChk.checked;
+
+  // 1-бітовий масив пікселів (true = світлий)
+  const mono = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) {
+    const r = px[i * 4], g = px[i * 4 + 1], b = px[i * 4 + 2];
+    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+    let on = lum >= threshold ? 1 : 0;
+    if (inv) on ^= 1;
+    mono[i] = on;
+  }
+
+  // малюємо результат на dstCanvas
+  const dstData = dstCtx.createImageData(W, H);
+  for (let i = 0; i < W * H; i++) {
+    const v = mono[i] ? 255 : 0;
+    dstData.data[i * 4]     = v;
+    dstData.data[i * 4 + 1] = v;
+    dstData.data[i * 4 + 2] = v;
+    dstData.data[i * 4 + 3] = 255;
+  }
+  dstCtx.putImageData(dstData, 0, 0);
+
+  // --- кодування для SSD1306, горизонтальний режим (0x20, 0x00) ---
+  // Порядок байтів: page 0 col 0..127, page 1 col 0..127, ... page 7 col 0..127
+  // Кожен байт: біт 0 = верхній піксель сторінки, біт 7 = нижній
+  const buf = new Uint8Array(W * PAGES); // 1024 байти
+  for (let page = 0; page < PAGES; page++) {
+    for (let col = 0; col < W; col++) {
+      let byte = 0;
+      for (let bit = 0; bit < 8; bit++) {
+        const row = page * 8 + bit;
+        if (mono[row * W + col]) {
+          byte |= (1 << bit);
+        }
+      }
+      buf[page * W + col] = byte;
+    }
+  }
+
+  // підрахунок пікселів
+  const litCount = mono.reduce((a, v) => a + v, 0);
+  infoEl.textContent =
+    `Оригінал: ${loadedImg.width}×${loadedImg.height} → ` +
+    `${W}×${H}, ${litCount} пікселів увімкнено (${(litCount * 100 / (W * H)).toFixed(1)}%), ` +
+    `${buf.length} байтів (горизонтальний режим)`;
+
+  // форматуємо C-масив
+  const hexLines = [];
+  for (let page = 0; page < PAGES; page++) {
+    const start = page * W;
+    const slice = buf.slice(start, start + W);
+    const hex = Array.from(slice).map(v => '0x' + v.toString(16).toUpperCase().padStart(2, '0'));
+    // розбиваємо по 16 байтів у рядку
+    for (let i = 0; i < hex.length; i += 16) {
+      hexLines.push('    ' + hex.slice(i, i + 16).join(','));
+    }
+    if (page < PAGES - 1) hexLines[hexLines.length - 1] += ',';
+  }
+
+  window._buf = buf;
+  window._hexLines = hexLines;
+
+  outEl.textContent =
+    `// SSD1306 128×64, horizontal addressing mode (0x20,0x00)\n` +
+    `// Source: ${loadedImg.width}×${loadedImg.height}, threshold=${threshold}${inv ? ', inverted' : ''}\n` +
+    `static const uint8_t image_128x64[${buf.length}] = {\n` +
+    hexLines.join('\n') +
+    `\n};`;
+}
+
+/* ---- кнопки ---- */
+document.getElementById('copyArr').onclick = (e) => {
+  navigator.clipboard.writeText(outEl.textContent);
+  flash(e.target, 'Скопійовано!', 'Копіювати масив');
+};
+
+document.getElementById('copyRaw').onclick = (e) => {
+  if (!window._buf) return;
+  const raw = Array.from(window._buf).map(v => '0x' + v.toString(16).toUpperCase().padStart(2, '0')).join(',');
+  navigator.clipboard.writeText(raw);
+  flash(e.target, 'Скопійовано!', 'Копіювати тільки байти');
+};
+
+document.getElementById('downloadBin').onclick = (e) => {
+  if (!window._buf) return;
+  const blob = new Blob([window._buf], { type: 'application/octet-stream' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'image_128x64.bin';
+  a.click();
+  flash(e.target, 'Завантажено!', 'Завантажити .bin');
+};
+
+function flash(btn, msg, orig) {
+  btn.textContent = msg;
+  setTimeout(() => btn.textContent = orig, 1200);
+}
+</script>
+</body>
+</html>
