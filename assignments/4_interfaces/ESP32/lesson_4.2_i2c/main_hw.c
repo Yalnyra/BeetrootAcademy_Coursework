@@ -13,6 +13,10 @@
 
 static const char *TAG = "SSD1306";
 
+#define NAME "SENSOR LOGGER"
+#define VERSION "V1.01"
+#define AUTHOR "BEETROOT ACADEMY"
+
 // Налаштування апаратної шини I2C
 #define I2C_SDA_GPIO   6      // Пін даних SDA (змініть під свою плату)
 #define I2C_SCL_GPIO   7      // Пін тактування SCL
@@ -23,6 +27,43 @@ static const char *TAG = "SSD1306";
 #define OLED_W 128            // Ширина дисплея в пікселях
 #define OLED_H 64             // Висота дисплея в пікселях
 #define OLED_PAGES (OLED_H / 8) // Кількість сторінок пам'яті (64 / 8 = 8 сторінок по 8 рядків пікселів)
+
+// Font 5×7: glyph dimensions and horizontal advance
+#define FONT_GLYPH_W       5     // Ширина одного символу (стовпців)
+#define FONT_GLYPH_H       7     // Висота одного символу (рядків)
+#define FONT_CHAR_ADVANCE   (FONT_GLYPH_W + 1)  // Крок між символами (гліф + 1 px пробіл)
+
+// Menu item pixel layout
+#define MENU_ICON_X         2     // X-відступ іконки від лівого краю
+#define MENU_TEXT_X         12    // X-відступ тексту (після іконки + проміжок)
+
+// I2C transaction timeouts (ms)
+#define I2C_CMD_TIMEOUT_MS      100
+#define I2C_FLUSH_TIMEOUT_MS    1000
+#define I2C_PAGE_TIMEOUT_MS     200
+
+// Max command payload for oled_cmds() scratch buffer
+#define OLED_CMD_BUF_SIZE   16
+
+// SSD1306 command bytes
+#define SSD1306_CMD_DISPLAY_OFF     0xAE
+#define SSD1306_CMD_DISPLAY_ON      0xAF
+#define SSD1306_CMD_NORMAL_DISPLAY  0xA6
+#define SSD1306_CMD_INVERSE_DISPLAY 0xA7
+#define SSD1306_CMD_SET_COL_ADDR    0x21
+#define SSD1306_CMD_SET_PAGE_ADDR   0x22
+#define SSD1306_CMD_START_LINE_BASE 0x40  // OR з номером рядка: 0x40 | (line & 0x3F)
+#define SSD1306_START_LINE_MASK     0x3F  // 6-бітна маска для номера рядка (0..63)
+
+// E-ink style transition timing (ms)
+#define EINK_FLASH_DURATION_MS  80   // Тривалість інверсійного спалаху
+#define EINK_PAUSE_DURATION_MS  50   // Пауза перед завантаженням нового кадру
+
+// Boot screen hold time (ms)
+#define BOOT_SCREEN_HOLD_MS     2000
+
+// Main loop encoder polling interval (ms)
+#define ENCODER_POLL_MS         10
 
 /* ============================== Encoder ============================== */
 
@@ -38,7 +79,7 @@ static const char *TAG = "SSD1306";
  * Build with:  idf.py -DENCODER_X4=ON build   (OFF = X1, see main/CMakeLists.txt)
  * or change the default below. */
 #ifndef ENCODER_QUADRATURE_X4
-#define ENCODER_QUADRATURE_X4      0
+#define ENCODER_QUADRATURE_X4      1
 #endif
 
 #if ENCODER_QUADRATURE_X4
@@ -73,7 +114,7 @@ static esp_err_t oled_cmd(uint8_t c)
     uint8_t buf[2] = {CTRL_CMD, c};
     // Передаємо 2 байти з таймаутом очікування 100 мс
     int64_t t0 = esp_timer_get_time();
-    esp_err_t ret = i2c_master_transmit(oled, buf, 2, 100);
+    esp_err_t ret = i2c_master_transmit(oled, buf, 2, I2C_CMD_TIMEOUT_MS);
     int64_t dt = esp_timer_get_time() - t0;
     ESP_LOGI(TAG, "i2c CMD  0x%02X | %zu bytes | %lld us", c, (size_t)2, dt);
     return ret;
@@ -82,11 +123,11 @@ static esp_err_t oled_cmd(uint8_t c)
 // Відправка команди разом з її аргументами (наприклад, команда + 1 або 2 байти параметрів)
 static esp_err_t oled_cmds(const uint8_t *c, size_t n)
 {
-    uint8_t buf[16];
+    uint8_t buf[OLED_CMD_BUF_SIZE];
     buf[0] = CTRL_CMD;          // Повідомляємо контролер дисплея, що далі йдуть команди
     memcpy(&buf[1], c, n);      // Копіюємо послідовність команд у буфер
     int64_t t0 = esp_timer_get_time();
-    esp_err_t ret = i2c_master_transmit(oled, buf, n + 1, 100);
+    esp_err_t ret = i2c_master_transmit(oled, buf, n + 1, I2C_CMD_TIMEOUT_MS);
     int64_t dt = esp_timer_get_time() - t0;
     ESP_LOGI(TAG, "i2c CMDS 0x%02X+%zu | %zu bytes | %lld us", c[0], n - 1, n + 1, dt);
     return ret;
@@ -132,8 +173,8 @@ static void oled_init(void)
 // Відправка всього кадрового буфера (fb) у відеопам'ять дисплея (GDDRAM)
 static void oled_flush(void)
 {
-    const uint8_t col[] = {0x21, 0, OLED_W - 1};      // Задаємо діапазон стовпців: від 0 до 127
-    const uint8_t page[] = {0x22, 0, OLED_PAGES - 1}; // Задаємо діапазон сторінок: від 0 до 7
+    const uint8_t col[] = {SSD1306_CMD_SET_COL_ADDR, 0, OLED_W - 1};  // Діапазон стовпців: 0..127
+    const uint8_t page[] = {SSD1306_CMD_SET_PAGE_ADDR, 0, OLED_PAGES - 1}; // Діапазон сторінок: 0..7
     oled_cmds(col, sizeof(col));
     oled_cmds(page, sizeof(page));
 
@@ -141,7 +182,7 @@ static void oled_flush(void)
     memcpy(&tx[1], fb, sizeof(fb));                   // Копіюємо 1024 байти кадру слідом за керуючим байтом
     // Передаємо весь кадр однією I2C-транзакцією (таймаут 1000 мс, оскільки пакет великий)
     int64_t t0 = esp_timer_get_time();
-    ESP_ERROR_CHECK(i2c_master_transmit(oled, tx, sizeof(tx), 1000));
+    ESP_ERROR_CHECK(i2c_master_transmit(oled, tx, sizeof(tx), I2C_FLUSH_TIMEOUT_MS));
     int64_t dt = esp_timer_get_time() - t0;
     ESP_LOGI(TAG, "i2c FLUSH full frame | %zu bytes | %lld us", sizeof(tx), dt);
 }
@@ -168,6 +209,7 @@ static const glyph_t font[] = {
     {':', {0x00,0x36,0x36,0x00,0x00}},
     {'-', {0x08,0x08,0x08,0x08,0x08}},
     {'>', {0x41,0x22,0x14,0x08,0x00}},  // стрілка-курсор для меню
+    {'<', {0x0C,0x12,0x24,0x12,0x0C}},
     {'0', {0x3E,0x51,0x49,0x45,0x3E}},
     {'1', {0x00,0x42,0x7F,0x40,0x00}},
     {'2', {0x42,0x61,0x51,0x49,0x46}},
@@ -219,7 +261,12 @@ typedef enum {
     MENU_CALIBRATE,     // Калібрування сенсора
     MENU_SETTINGS,      // Налаштування пристрою
     MENU_ABOUT,         // Інформація про прошивку
-    MENU_COUNT          // Завжди останній — загальна кількість пунктів
+    MENU_UNASSIGNED0,         // Новий 
+    MENU_UNASSIGNED1,         // Новий 
+    MENU_UNASSIGNED2,
+    MENU_UNASSIGNED3,
+    MENU_COUNT,          // Завжди останній — загальна кількість пунктів
+
 } menu_id_t;
 
 // Текстові назви пунктів (відповідають menu_id_t за індексом)
@@ -230,6 +277,10 @@ static const char *menu_labels[MENU_COUNT] = {
     [MENU_CALIBRATE] = "CALIBRATE",
     [MENU_SETTINGS]  = "SETTINGS",
     [MENU_ABOUT]     = "ABOUT",
+    [MENU_UNASSIGNED0] = "TEST1",
+    [MENU_UNASSIGNED1] = "TEST2",
+    [MENU_UNASSIGNED2] = "TEST3",
+    [MENU_UNASSIGNED3] = "TEST4"
 };
 
 // Однобуквені символи-іконки зліва від тексту (прості ASCII-маркери)
@@ -241,6 +292,10 @@ static const char menu_icons[MENU_COUNT] = {
     [MENU_CALIBRATE] = 'C',   // калібрування
     [MENU_SETTINGS]  = 'S',   // шестерня
     [MENU_ABOUT]     = 'I',   // інфо
+    [MENU_UNASSIGNED0] = '!',
+    [MENU_UNASSIGNED1] = '<',
+    [MENU_UNASSIGNED2] = ':',
+    [MENU_UNASSIGNED3] = '.'
 };
 
 
@@ -250,8 +305,8 @@ static void draw_char(int x, int y, char c)
     for (size_t g = 0; g < sizeof(font) / sizeof(font[0]); g++) {
         if (font[g].ch != c) continue;
         // Проходимо по 5 стовпцях і 7 рядках символу
-        for (int cx = 0; cx < 5; cx++)
-            for (int cy = 0; cy < 7; cy++)
+        for (int cx = 0; cx < FONT_GLYPH_W; cx++)
+            for (int cy = 0; cy < FONT_GLYPH_H; cy++)
                 px(x + cx, y + cy, font[g].col[cx] & (1 << cy));
         return;
     }
@@ -260,7 +315,7 @@ static void draw_char(int x, int y, char c)
 // Виведення рядка тексту (крок 6 пікселів: 5 пікселів символ + 1 піксель пробіл між літерами)
 static void draw_text(int x, int y, const char *s)
 {
-    for (; *s; s++, x += 6) draw_char(x, y, *s);
+    for (; *s; s++, x += FONT_CHAR_ADVANCE) draw_char(x, y, *s);
 }
 
 // Малювання контуру прямокутника за координатами протилежних кутів
@@ -315,8 +370,8 @@ static int menu_top  = 0;    // Індекс першого видимого п�
 // Економить ~7/8 трафіку I2C при оновленні одного рядка меню
 static void oled_write_page(uint8_t page)
 {
-    const uint8_t col_cmd[]  = {0x21, 0x00, 0x7F};        // Стовпці 0..127
-    const uint8_t page_cmd[] = {0x22, page, page};         // Лише одна сторінка
+    const uint8_t col_cmd[]  = {SSD1306_CMD_SET_COL_ADDR, 0x00, OLED_W - 1}; // Стовпці 0..127
+    const uint8_t page_cmd[] = {SSD1306_CMD_SET_PAGE_ADDR, page, page};       // Лише одна сторінка
     oled_cmds(col_cmd, sizeof(col_cmd));
     oled_cmds(page_cmd, sizeof(page_cmd));
 
@@ -325,7 +380,7 @@ static void oled_write_page(uint8_t page)
     buf[0] = CTRL_DATA;
     memcpy(&buf[1], &fb[page * OLED_W], OLED_W);
     int64_t t0 = esp_timer_get_time();
-    ESP_ERROR_CHECK(i2c_master_transmit(oled, buf, sizeof(buf), 200));
+    ESP_ERROR_CHECK(i2c_master_transmit(oled, buf, sizeof(buf), I2C_PAGE_TIMEOUT_MS));
     int64_t dt = esp_timer_get_time() - t0;
     ESP_LOGI(TAG, "i2c PAGE %u | %zu bytes | %lld us", page, sizeof(buf), dt);
 }
@@ -335,8 +390,8 @@ static void oled_write_page(uint8_t page)
 // апаратний покажчик читання. Обхід циклічний: після рядка 63 йде рядок 0.
 static void oled_set_start_line(uint8_t line)
 {
-    line &= 0x3F;                        // Обмежуємо діапазон 0..63
-    oled_cmd(0x40 | line);               // Команда Set Display Start Line
+    line &= SSD1306_START_LINE_MASK;     // Обмежуємо діапазон 0..63
+    oled_cmd(SSD1306_CMD_START_LINE_BASE | line); // Команда Set Display Start Line
     current_start_line = line;           // Зберігаємо для розрахунків позиції
 }
 
@@ -352,8 +407,8 @@ static void draw_menu_item(uint8_t page, int idx, bool selected)
 
     // 2. Малюємо іконку-символ ліворуч (x=2) та назву (x=12, після іконки + пробіл)
     int y = page * 8;
-    draw_char(2, y, menu_icons[idx]);
-    draw_text(12, y, menu_labels[idx]);
+    draw_char(MENU_ICON_X, y, menu_icons[idx]);
+    draw_text(MENU_TEXT_X, y, menu_labels[idx]);
 
     // 3. Якщо пункт обрано — інвертуємо весь рядок (білий текст на чорному тлі)
     if (selected) {
@@ -421,12 +476,12 @@ static bool menu_move(int dir)
 static void eink_transition(const uint8_t *target_fb)
 {
     // Крок 1: Спалах — апаратна інверсія (жодної зміни GDDRAM)
-    oled_cmd(0xA7);                                  // Inverse Display ON
-    vTaskDelay(pdMS_TO_TICKS(80));                   // Утримуємо негатив ~80 мс
+    oled_cmd(SSD1306_CMD_INVERSE_DISPLAY);           // Inverse Display ON
+    vTaskDelay(pdMS_TO_TICKS(EINK_FLASH_DURATION_MS)); // Утримуємо негатив
 
     // Крок 2: Повернення до нормального режиму — показує старий кадр на мить
-    oled_cmd(0xA6);                                  // Normal Display
-    vTaskDelay(pdMS_TO_TICKS(50));                   // Пауза ~50 мс
+    oled_cmd(SSD1306_CMD_NORMAL_DISPLAY);            // Normal Display
+    vTaskDelay(pdMS_TO_TICKS(EINK_PAUSE_DURATION_MS)); // Пауза перед новим кадром
 
     // Крок 3: Завантажити новий кадр
     if (target_fb) {
@@ -453,7 +508,7 @@ void app_main(void)
     ESP_ERROR_CHECK(i2c_new_master_bus(&bus_cfg, &bus));
 
     // 2. Перевірка наявності дисплея на шині
-    ESP_ERROR_CHECK(i2c_master_probe(bus, SSD1306_ADDR, 100));
+    ESP_ERROR_CHECK(i2c_master_probe(bus, SSD1306_ADDR, I2C_CMD_TIMEOUT_MS));
     ESP_LOGI(TAG, "SSD1306 знайдено за адресою 0x%02X", SSD1306_ADDR);
 
     // 3. Реєстрація дисплея як пристрою на шині
@@ -471,13 +526,13 @@ void app_main(void)
     // Простий стартовий екран з назвою та рамкою
     memset(fb, 0, sizeof(fb));
     draw_rect(0, 0, OLED_W - 1, OLED_H - 1);
-    draw_text(22, 12, "SENSOR LOGGER");
-    draw_text(40, 28, "V1.0");
-    draw_text(16, 44, "BEETROOT ACADEMY");
+    draw_text(22, 12, NAME);
+    draw_text(40, 28, VERSION);
+    draw_text(16, 44, AUTHOR);
     oled_flush();
 
     // Показуємо бут-екран 2 секунди
-    vTaskDelay(pdMS_TO_TICKS(2000));
+    vTaskDelay(pdMS_TO_TICKS(BOOT_SCREEN_HOLD_MS));
 
     // ====== E-INK TRANSITION: boot → menu ======
     // Готуємо кадр меню в тимчасовому буфері, потім переходимо зі спалахом
@@ -538,6 +593,6 @@ void app_main(void)
             ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(10));  // ~100 Hz polling
+        vTaskDelay(pdMS_TO_TICKS(ENCODER_POLL_MS));  // ~100 Hz polling
     }
 }
