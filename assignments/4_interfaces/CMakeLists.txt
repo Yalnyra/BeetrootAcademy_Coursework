@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Build only main + what it depends on (skips esp_lcd, wifi, bt, ...)
-set(COMPONENTS main)
+# set(COMPONENTS lesson_4.1_uart)
+set(COMPONENTS lesson_4.2_i2c)
 
 # Tell ESP-IDF to also look inside ESP32/ for components (finds ESP32/main/)
 set(EXTRA_COMPONENT_DIRS "ESP32")

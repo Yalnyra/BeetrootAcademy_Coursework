@@ -1,4 +1,7 @@
-/ SSD1306 128x64 по I2C, ESP32-S3, ESP-IDF v5.x (новий драйвер i2c_master)
+/** Scroll menu for encoder based control 
+ * 
+ */
+// SSD1306 128x64 по I2C, ESP32-S3, ESP-IDF v5.x (новий драйвер i2c_master)
 #include <stdio.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
@@ -110,21 +113,51 @@ static void px(int x, int y, bool on)
 }
 
 // Компактний растровий шрифт 5x7 пікселів (кожен байт — вертикальний стовпець, біт 0 — верхній піксель)
+// Повний набір A-Z, 0-9 та спецсимволи для меню
 typedef struct { char ch; uint8_t col[5]; } glyph_t;
 static const glyph_t font[] = {
     {' ', {0x00,0x00,0x00,0x00,0x00}},
+    {'!', {0x00,0x00,0x5F,0x00,0x00}},
+    {'.', {0x00,0x60,0x60,0x00,0x00}},
+    {':', {0x00,0x36,0x36,0x00,0x00}},
+    {'-', {0x08,0x08,0x08,0x08,0x08}},
+    {'>', {0x41,0x22,0x14,0x08,0x00}},  // стрілка-курсор для меню
     {'0', {0x3E,0x51,0x49,0x45,0x3E}},
     {'1', {0x00,0x42,0x7F,0x40,0x00}},
     {'2', {0x42,0x61,0x51,0x49,0x46}},
     {'3', {0x21,0x41,0x45,0x4B,0x31}},
+    {'4', {0x18,0x14,0x12,0x7F,0x10}},
+    {'5', {0x27,0x45,0x45,0x45,0x39}},
     {'6', {0x3C,0x4A,0x49,0x49,0x30}},
+    {'7', {0x01,0x71,0x09,0x05,0x03}},
+    {'8', {0x36,0x49,0x49,0x49,0x36}},
+    {'9', {0x06,0x49,0x49,0x29,0x1E}},
+    {'A', {0x7E,0x11,0x11,0x11,0x7E}},
+    {'B', {0x7F,0x49,0x49,0x49,0x36}},
     {'C', {0x3E,0x41,0x41,0x41,0x22}},
     {'D', {0x7F,0x41,0x41,0x22,0x1C}},
+    {'E', {0x7F,0x49,0x49,0x49,0x41}},
+    {'F', {0x7F,0x09,0x09,0x09,0x01}},
+    {'G', {0x3E,0x41,0x49,0x49,0x7A}},
+    {'H', {0x7F,0x08,0x08,0x08,0x7F}},
     {'I', {0x00,0x41,0x7F,0x41,0x00}},
+    {'J', {0x20,0x40,0x41,0x3F,0x01}},
     {'K', {0x7F,0x08,0x14,0x22,0x41}},
+    {'L', {0x7F,0x40,0x40,0x40,0x40}},
+    {'M', {0x7F,0x02,0x0C,0x02,0x7F}},
+    {'N', {0x7F,0x04,0x08,0x10,0x7F}},
     {'O', {0x3E,0x41,0x41,0x41,0x3E}},
+    {'P', {0x7F,0x09,0x09,0x09,0x06}},
+    {'Q', {0x3E,0x41,0x51,0x21,0x5E}},
+    {'R', {0x7F,0x09,0x19,0x29,0x46}},
     {'S', {0x46,0x49,0x49,0x49,0x31}},
-    {'Z', {0x0F,0x78,0x1C,0x78,0x0F}},
+    {'T', {0x01,0x01,0x7F,0x01,0x01}},
+    {'U', {0x3F,0x40,0x40,0x40,0x3F}},
+    {'V', {0x1F,0x20,0x40,0x20,0x1F}},
+    {'W', {0x3F,0x40,0x38,0x40,0x3F}},
+    {'X', {0x63,0x14,0x08,0x14,0x63}},
+    {'Y', {0x07,0x08,0x70,0x08,0x07}},
+    {'Z', {0x61,0x51,0x49,0x45,0x43}},
 };
 
 // Малювання одного символу за координатами верхнього лівого кута (x, y)
@@ -185,36 +218,173 @@ static void fb_invert_rect_fast(int x0, int y0, int x1, int y1)
     }
 }
 
+// ---------- апаратне керування відображенням ----------
 
-static void invert_single_page(int page)
+// Поточний зсув Display Start Line — який рядок GDDRAM зверху екрана
+static uint8_t current_start_line = 0;
+
+// Позиція курсора меню та кількість видимих рядків
+static int menu_sel  = 0;    // Індекс обраного пункту
+static int menu_top  = 0;    // Індекс першого видимого пункту (для прокрутки)
+
+// Запис одної сторінки (128 байт) у GDDRAM замість повного oled_flush (1024 байти)
+// Економить ~7/8 трафіку I2C при оновленні одного рядка меню
+static void oled_write_page(uint8_t page)
 {
-    static const uint8_t init_seq[] = {
-        0xAE,             // Display OFF — вимкнути екран на час налаштування
-       
-    };
+    const uint8_t col_cmd[]  = {0x21, 0x00, 0x7F};        // Стовпці 0..127
+    const uint8_t page_cmd[] = {0x22, page, page};         // Лише одна сторінка
+    oled_cmds(col_cmd, sizeof(col_cmd));
+    oled_cmds(page_cmd, sizeof(page_cmd));
 
-    // Розбираємо масив і відправляємо кожну команду (1 байт або 2 байти з аргументом) окремою транзакцією
-    size_t i = 0;
-    while (i < sizeof(init_seq)) {
-        uint8_t c = init_seq[i];
-        size_t len = 1;
-        // Перелік двобайтових команд, які потребують 1 байт параметра після коду команди
-        if (c == 0xD5 || c == 0xA8 || c == 0xD3 || c == 0x8D || c == 0x20 ||
-            c == 0xDA || c == 0x81 || c == 0xD9 || c == 0xDB) {
-            len = 2;
-        }
-        ESP_ERROR_CHECK(oled_cmds(&init_seq[i], len));
-        i += len;
-    }
+    // Формуємо міні-пакет: 1 керуючий байт + 128 байт даних
+    uint8_t buf[1 + OLED_W];
+    buf[0] = CTRL_DATA;
+    memcpy(&buf[1], &fb[page * OLED_W], OLED_W);
+    ESP_ERROR_CHECK(i2c_master_transmit(oled, buf, sizeof(buf), 200));
 }
 
-// Set Page address (iterate to a new page)
+// Зміна Display Start Line — який рядок GDDRAM відображається зверху екрана
+// Однобайтова команда: 0x40 | (line & 0x3F). GDDRAM не змінюється — зсувається лише
+// апаратний покажчик читання. Обхід циклічний: після рядка 63 йде рядок 0.
+static void oled_set_start_line(uint8_t line)
+{
+    line &= 0x3F;                        // Обмежуємо діапазон 0..63
+    oled_cmd(0x40 | line);               // Команда Set Display Start Line
+    current_start_line = line;           // Зберігаємо для розрахунків позиції
+}
 
-// Second step: vertical scrolling 
+// ---------- елементи меню ----------
 
-// Third step: a fade in eink 
+// Ідентифікатори пунктів меню — порядок визначає позицію на екрані
+typedef enum {
+    MENU_LIVE,          // Дані сенсора в реальному часі
+    MENU_LOG,           // Перегляд журналу записів
+    MENU_HEALTH,        // Стан системи (батарея, пам'ять, аптайм)
+    MENU_CALIBRATE,     // Калібрування сенсора
+    MENU_SETTINGS,      // Налаштування пристрою
+    MENU_ABOUT,         // Інформація про прошивку
+    MENU_COUNT          // Завжди останній — загальна кількість пунктів
+} menu_id_t;
 
-// Fourth ink: draw a custom logo
+// Текстові назви пунктів (відповідають menu_id_t за індексом)
+static const char *menu_labels[MENU_COUNT] = {
+    [MENU_LIVE]      = "LIVE VIEW",
+    [MENU_LOG]       = "LOG BROWSER",
+    [MENU_HEALTH]    = "HEALTH",
+    [MENU_CALIBRATE] = "CALIBRATE",
+    [MENU_SETTINGS]  = "SETTINGS",
+    [MENU_ABOUT]     = "ABOUT",
+};
+
+// Однобуквені символи-іконки зліва від тексту (прості ASCII-маркери)
+// Можна замінити на 8×8 бітмап-іконки, коли буде потрібно
+static const char menu_icons[MENU_COUNT] = {
+    [MENU_LIVE]      = '>',   // стрілка — живий потік
+    [MENU_LOG]       = 'L',   // журнал
+    [MENU_HEALTH]    = 'H',   // серце / стан
+    [MENU_CALIBRATE] = 'C',   // калібрування
+    [MENU_SETTINGS]  = 'S',   // шестерня
+    [MENU_ABOUT]     = 'I',   // інфо
+};
+
+// Максимум видимих пунктів одночасно (64px / 8px = 8 рядків)
+#define MENU_VISIBLE  OLED_PAGES
+
+// Малювання одного пункту меню в задану сторінку кадрового буфера
+// page     — номер сторінки (0..7) у fb, куди малюємо
+// idx      — індекс пункту з menu_labels[]
+// selected — чи цей пункт обрано (XOR-інверсія)
+static void draw_menu_item(uint8_t page, int idx, bool selected)
+{
+    // 1. Очищаємо рядок
+    memset(&fb[page * OLED_W], 0x00, OLED_W);
+
+    // 2. Малюємо іконку-символ ліворуч (x=2) та назву (x=12, після іконки + пробіл)
+    int y = page * 8;
+    draw_char(2, y, menu_icons[idx]);
+    draw_text(12, y, menu_labels[idx]);
+
+    // 3. Якщо пункт обрано — інвертуємо весь рядок (білий текст на чорному тлі)
+    if (selected) {
+        fb_invert_rect_fast(0, y, OLED_W - 1, y + 7);
+    }
+    // Не робимо flush тут — викликач вирішує коли і що оновити
+}
+
+// Перемальовує все видиме вікно меню (до 8 пунктів) і оновлює екран
+static void menu_draw_full(void)
+{
+    for (int i = 0; i < MENU_VISIBLE && (menu_top + i) < MENU_COUNT; i++) {
+        int idx = menu_top + i;
+        draw_menu_item(i, idx, idx == menu_sel);
+    }
+    // Якщо пунктів менше ніж рядків — очистити залишок
+    for (int i = MENU_COUNT - menu_top; i < MENU_VISIBLE; i++) {
+        memset(&fb[i * OLED_W], 0x00, OLED_W);
+    }
+    oled_flush();
+}
+
+// Переміщення виділення на +1 або -1 з мінімальним оновленням
+// Повертає true якщо позиція змінилась
+static bool menu_move(int dir)
+{
+    int prev = menu_sel;
+    menu_sel += dir;
+
+    // Обмежуємо діапазон
+    if (menu_sel < 0) menu_sel = 0;
+    if (menu_sel >= MENU_COUNT) menu_sel = MENU_COUNT - 1;
+    if (menu_sel == prev) return false;
+
+    // Перевірка: чи потрібно прокрутити вікно
+    bool scrolled = false;
+    if (menu_sel < menu_top) {
+        menu_top = menu_sel;
+        scrolled = true;
+    }
+    if (menu_sel >= menu_top + MENU_VISIBLE) {
+        menu_top = menu_sel - MENU_VISIBLE + 1;
+        scrolled = true;
+    }
+
+    if (scrolled) {
+        // Вікно зсунулось — перемалювати все
+        menu_draw_full();
+    } else {
+        // Оновити тільки два рядки: старий і новий виділений
+        int prev_page = prev - menu_top;
+        int new_page  = menu_sel - menu_top;
+        draw_menu_item(prev_page, prev, false);     // Зняти виділення
+        draw_menu_item(new_page, menu_sel, true);    // Нове виділення
+        oled_write_page(prev_page);                  // Оновити тільки ці 2 сторінки
+        oled_write_page(new_page);
+    }
+    return true;
+}
+
+// ---------- e-ink стиль перехід між екранами ----------
+
+// Апаратна інверсія-спалах: весь екран миготить негативом і потім показує новий зміст
+// target_fb — вказівник на 1024-байтний буфер з новим кадром (або NULL щоб flush поточний fb)
+static void eink_transition(const uint8_t *target_fb)
+{
+    // Крок 1: Спалах — апаратна інверсія (жодної зміни GDDRAM)
+    oled_cmd(0xA7);                                  // Inverse Display ON
+    vTaskDelay(pdMS_TO_TICKS(80));                   // Утримуємо негатив ~80 мс
+
+    // Крок 2: Повернення до нормального режиму — показує старий кадр на мить
+    oled_cmd(0xA6);                                  // Normal Display
+    vTaskDelay(pdMS_TO_TICKS(50));                   // Пауза ~50 мс
+
+    // Крок 3: Завантажити новий кадр
+    if (target_fb) {
+        memcpy(fb, target_fb, sizeof(fb));
+    }
+
+    // Крок 4: Відправити на дисплей
+    oled_flush();
+}
 
 // ---------- головна функція програми ----------
 void app_main(void)
@@ -225,17 +395,17 @@ void app_main(void)
         .i2c_port = I2C_NUM_0,
         .sda_io_num = I2C_SDA_GPIO,
         .scl_io_num = I2C_SCL_GPIO,
-        .glitch_ignore_cnt = 7,                 // Фільтрація коротких імпульсних завад на лінії
-        .flags.enable_internal_pullup = true,   // Внутрішня підтяжка GPIO (для надійності краще додати зовнішні 4.7 кОм)
+        .glitch_ignore_cnt = 7,
+        .flags.enable_internal_pullup = true,
     };
     i2c_master_bus_handle_t bus;
     ESP_ERROR_CHECK(i2c_new_master_bus(&bus_cfg, &bus));
 
-    // 2. Перевірка наявності дисплея на шині (очікуємо ACK від адреси 0x3C протягом 100 мс)
+    // 2. Перевірка наявності дисплея на шині
     ESP_ERROR_CHECK(i2c_master_probe(bus, SSD1306_ADDR, 100));
     ESP_LOGI(TAG, "SSD1306 знайдено за адресою 0x%02X", SSD1306_ADDR);
 
-    // 3. Реєстрація дисплея як пристрою на створеній шині I2C
+    // 3. Реєстрація дисплея як пристрою на шині
     i2c_device_config_t dev_cfg = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
         .device_address = SSD1306_ADDR,
@@ -243,21 +413,71 @@ void app_main(void)
     };
     ESP_ERROR_CHECK(i2c_master_bus_add_device(bus, &dev_cfg, &oled));
 
-    // 4. Ініціалізація дисплея та малювання стартового кадру
+    // 4. Ініціалізація дисплея
     oled_init();
 
-    memset(fb, 0, sizeof(fb));                      // Очищаємо кадровий буфер (усі пікселі вимкнені)
-    draw_rect(0, 0, OLED_W - 1, OLED_H - 1);        // Малюємо рамку по периметру екрана
-    draw_text(20, 20, "SSD1306 I2C OK Z");            // Виводимо текстовий напис
-    // Малюємо декоративну пунктирну/східчасту лінію під текстом
-    //for (int x = 4; x < OLED_W - 4; x++) px(x, 40 + (x % 8 < 4 ? 0 : 1), 1);
-    oled_flush();                                   // Відправляємо сформований кадр на екран
+    // ====== BOOT SCREEN ======
+    // Простий стартовий екран з назвою та рамкою
+    memset(fb, 0, sizeof(fb));
+    draw_rect(0, 0, OLED_W - 1, OLED_H - 1);
+    draw_text(22, 12, "SENSOR LOGGER");
+    draw_text(40, 28, "V1.0");
+    draw_text(16, 44, "BEETROOT ACADEMY");
+    oled_flush();
 
-    // 5. Нескінченний цикл: демонстрація апаратної інверсії кольорів дисплея раз на секунду
+    // Показуємо бут-екран 2 секунди
+    vTaskDelay(pdMS_TO_TICKS(2000));
+
+    // ====== E-INK TRANSITION: boot → menu ======
+    // Готуємо кадр меню в тимчасовому буфері, потім переходимо зі спалахом
+    uint8_t menu_fb[OLED_W * OLED_PAGES];
+    memset(menu_fb, 0, sizeof(menu_fb));
+
+    // Тимчасово підмінюємо fb для draw_menu_item (вони пишуть у глобальний fb)
+    // Збережемо бут-кадр, намалюємо меню, потім відновимо для eink_transition
+    uint8_t boot_fb[OLED_W * OLED_PAGES];
+    memcpy(boot_fb, fb, sizeof(fb));
+
+    // Малюємо початковий стан меню
+    menu_sel = 0;
+    menu_top = 0;
+    for (int i = 0; i < MENU_VISIBLE && i < MENU_COUNT; i++) {
+        draw_menu_item(i, i, i == menu_sel);
+    }
+    // fb тепер містить меню — зберегти
+    memcpy(menu_fb, fb, sizeof(fb));
+
+    // Повернути бут-кадр у fb (eink_transition покаже його перед переходом)
+    memcpy(fb, boot_fb, sizeof(fb));
+    oled_flush();
+
+    // Виконуємо перехід: спалах інверсією → новий кадр меню
+    eink_transition(menu_fb);
+
+    ESP_LOGI(TAG, "Меню відображено. Пунктів: %d", MENU_COUNT);
+
+    // ====== ДЕМО-ЦИКЛ: Автоматична навігація по меню ======
+    // (Замінити на реальний ввід від rotary encoder у фінальному проєкті)
     while (1) {
+        // Рухаємось вниз до кінця
+        for (int i = 0; i < MENU_COUNT - 1; i++) {
+            vTaskDelay(pdMS_TO_TICKS(600));
+            menu_move(+1);
+            ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
+        }
         vTaskDelay(pdMS_TO_TICKS(1000));
-        // oled_cmd(0xA7);   // Inverse Display (0 = світиться, 1 = темний)
-        // vTaskDelay(pdMS_TO_TICKS(1000));
-        // oled_cmd(0xA6);   // Normal Display (повернення до звичайного режиму)
+
+        // Рухаємось вгору до початку
+        for (int i = 0; i < MENU_COUNT - 1; i++) {
+            vTaskDelay(pdMS_TO_TICKS(600));
+            menu_move(-1);
+            ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
+        }
+        vTaskDelay(pdMS_TO_TICKS(1000));
+
+        // Демо e-ink переходу: меню → бут → меню
+        eink_transition(boot_fb);
+        vTaskDelay(pdMS_TO_TICKS(1500));
+        eink_transition(menu_fb);
     }
 }
