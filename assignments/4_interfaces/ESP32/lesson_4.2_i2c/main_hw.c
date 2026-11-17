@@ -206,6 +206,44 @@ static const glyph_t font[] = {
     {'Z', {0x61,0x51,0x49,0x45,0x43}},
 };
 
+
+// ---------- елементи меню ----------
+// Максимум видимих пунктів одночасно (64px / 8px = 8 рядків)
+#define MENU_VISIBLE  OLED_PAGES
+
+// Ідентифікатори пунктів меню — порядок визначає позицію на екрані
+typedef enum {
+    MENU_LIVE,          // Дані сенсора в реальному часі
+    MENU_LOG,           // Перегляд журналу записів
+    MENU_HEALTH,        // Стан системи (батарея, пам'ять, аптайм)
+    MENU_CALIBRATE,     // Калібрування сенсора
+    MENU_SETTINGS,      // Налаштування пристрою
+    MENU_ABOUT,         // Інформація про прошивку
+    MENU_COUNT          // Завжди останній — загальна кількість пунктів
+} menu_id_t;
+
+// Текстові назви пунктів (відповідають menu_id_t за індексом)
+static const char *menu_labels[MENU_COUNT] = {
+    [MENU_LIVE]      = "LIVE VIEW",
+    [MENU_LOG]       = "LOG BROWSER",
+    [MENU_HEALTH]    = "HEALTH",
+    [MENU_CALIBRATE] = "CALIBRATE",
+    [MENU_SETTINGS]  = "SETTINGS",
+    [MENU_ABOUT]     = "ABOUT",
+};
+
+// Однобуквені символи-іконки зліва від тексту (прості ASCII-маркери)
+// Можна замінити на 8×8 бітмап-іконки, коли буде потрібно
+static const char menu_icons[MENU_COUNT] = {
+    [MENU_LIVE]      = '>',   // стрілка — живий потік
+    [MENU_LOG]       = 'L',   // журнал
+    [MENU_HEALTH]    = 'H',   // серце / стан
+    [MENU_CALIBRATE] = 'C',   // калібрування
+    [MENU_SETTINGS]  = 'S',   // шестерня
+    [MENU_ABOUT]     = 'I',   // інфо
+};
+
+
 // Малювання одного символу за координатами верхнього лівого кута (x, y)
 static void draw_char(int x, int y, char c)
 {
@@ -302,42 +340,6 @@ static void oled_set_start_line(uint8_t line)
     current_start_line = line;           // Зберігаємо для розрахунків позиції
 }
 
-// ---------- елементи меню ----------
-
-// Ідентифікатори пунктів меню — порядок визначає позицію на екрані
-typedef enum {
-    MENU_LIVE,          // Дані сенсора в реальному часі
-    MENU_LOG,           // Перегляд журналу записів
-    MENU_HEALTH,        // Стан системи (батарея, пам'ять, аптайм)
-    MENU_CALIBRATE,     // Калібрування сенсора
-    MENU_SETTINGS,      // Налаштування пристрою
-    MENU_ABOUT,         // Інформація про прошивку
-    MENU_COUNT          // Завжди останній — загальна кількість пунктів
-} menu_id_t;
-
-// Текстові назви пунктів (відповідають menu_id_t за індексом)
-static const char *menu_labels[MENU_COUNT] = {
-    [MENU_LIVE]      = "LIVE VIEW",
-    [MENU_LOG]       = "LOG BROWSER",
-    [MENU_HEALTH]    = "HEALTH",
-    [MENU_CALIBRATE] = "CALIBRATE",
-    [MENU_SETTINGS]  = "SETTINGS",
-    [MENU_ABOUT]     = "ABOUT",
-};
-
-// Однобуквені символи-іконки зліва від тексту (прості ASCII-маркери)
-// Можна замінити на 8×8 бітмап-іконки, коли буде потрібно
-static const char menu_icons[MENU_COUNT] = {
-    [MENU_LIVE]      = '>',   // стрілка — живий потік
-    [MENU_LOG]       = 'L',   // журнал
-    [MENU_HEALTH]    = 'H',   // серце / стан
-    [MENU_CALIBRATE] = 'C',   // калібрування
-    [MENU_SETTINGS]  = 'S',   // шестерня
-    [MENU_ABOUT]     = 'I',   // інфо
-};
-
-// Максимум видимих пунктів одночасно (64px / 8px = 8 рядків)
-#define MENU_VISIBLE  OLED_PAGES
 
 // Малювання одного пункту меню в задану сторінку кадрового буфера
 // page     — номер сторінки (0..7) у fb, куди малюємо
