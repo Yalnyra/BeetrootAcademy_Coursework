@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Генератор символів шрифту 5×7 (glyph_t)</title>
+  <style>
+    :root {
+      --bg: #f4f6f0;
+      --fg: #14302a;
+      --card: #ffffff;
+      --border: #cfd8d0;
+      --accent: #1a8f4d;
+      --off: #e6ebe7;
+      --code-bg: #10261f;
+      --code-fg: #d7efe3;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1a17;
+        --fg: #e3efe9;
+        --card: #172622;
+        --border: #2b3d37;
+        --accent: #4cd98a;
+        --off: #223530;
+        --code-bg: #09110f;
+      }
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+      margin: 0;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 440px;
+      width: 100%;
+    }
+    h2 { margin-top: 0; font-size: 1.25rem; }
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    input[type="text"] {
+      width: 42px;
+      text-align: center;
+      font: 700 1.1rem ui-monospace, Consolas, monospace;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    button {
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      color: #0b1914;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .grid-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      user-select: none;
+    }
+    .row-labels {
+      display: grid;
+      grid-template-rows: repeat(7, 36px);
+      gap: 5px;
+      font: 12px ui-monospace, Consolas, monospace;
+      opacity: 0.7;
+      align-items: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 36px);
+      grid-template-rows: repeat(7, 36px);
+      gap: 5px;
+    }
+    .cell {
+      background: var(--off);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .cell.on {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .col-bytes {
+      display: grid;
+      grid-template-columns: repeat(5, 36px);
+      gap: 5px;
+      margin-left: 48px;
+      margin-bottom: 16px;
+      text-align: center;
+      font: 600 12px ui-monospace, Consolas, monospace;
+    }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font: 600 0.95rem ui-monospace, Consolas, monospace;
+      overflow-x: auto;
+      margin: 0 0 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="panel">
+  <h2>Генератор символу 5×7 (glyph_t)</h2>
+
+  <div class="controls">
+    <label>Символ: <input type="text" id="ch" maxlength="1" value="K"></label>
+    <button id="clear">Очистити</button>
+    <button id="invert">Інвертувати</button>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="row-labels" id="rlabels"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+  <div class="col-bytes" id="cbytes"></div>
+
+  <pre id="out"></pre>
+  <button class="primary" id="copy">Копіювати рядок для C</button>
+</div>
+
+<script>
+  const COLS = 5, ROWS = 7;
+  // Початковий стан: літера 'K' {0x7F, 0x08, 0x14, 0x22, 0x41}
+  let cols = [0x7F, 0x08, 0x14, 0x22, 0x41];
+  let drawing = false, drawState = 1;
+
+  const gridEl = document.getElementById('grid');
+  const rlabelsEl = document.getElementById('rlabels');
+  const cbytesEl = document.getElementById('cbytes');
+  const chEl = document.getElementById('ch');
+  const outEl = document.getElementById('out');
+
+  // Підписи бітів зліва (біт 0 — верх, біт 6 — низ)
+  for (let r = 0; r < ROWS; r++) {
+    const lbl = document.createElement('div');
+    lbl.textContent = 'біт ' + r;
+    rlabelsEl.appendChild(lbl);
+  }
+
+  // Створення сітки 5x7 та підписів байтів знизу
+  const cells = Array.from({ length: ROWS }, () => Array(COLS));
+  const byteLabels = [];
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.onmousedown = (e) => {
+        e.preventDefault();
+        drawing = true;
+        drawState = ((cols[c] >> r) & 1) ? 0 : 1;
+        setPixel(c, r, drawState);
+      };
+      cell.onmouseenter = () => {
+        if (drawing) setPixel(c, r, drawState);
+      };
+      gridEl.appendChild(cell);
+      cells[r][c] = cell;
+    }
+  }
+  window.addEventListener('mouseup', () => drawing = false);
+
+  for (let c = 0; c < COLS; c++) {
+    const b = document.createElement('div');
+    cbytesEl.appendChild(b);
+    byteLabels.push(b);
+  }
+
+  function setPixel(c, r, val) {
+    if (val) cols[c] |= (1 << r);
+    else cols[c] &= ~(1 << r);
+    render();
+  }
+
+  function hex(v) {
+    return '0x' + v.toString(16).toUpperCase().padStart(2, '0');
+  }
+
+  function render() {
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        cells[r][c].classList.toggle('on', Boolean((cols[c] >> r) & 1));
+      }
+    }
+    const hexArr = cols.map(hex);
+    hexArr.forEach((h, c) => byteLabels[c].textContent = h);
+
+    const ch = chEl.value || ' ';
+    const escaped = (ch === "'" || ch === "\\") ? "\\" + ch : ch;
+    outEl.textContent = `{'${escaped}', {${hexArr.join(',')}}},`;
+  }
+
+  chEl.oninput = render;
+
+  document.getElementById('clear').onclick = () => {
+    cols = [0, 0, 0, 0, 0];
+    render();
+  };
+
+  document.getElementById('invert').onclick = () => {
+    cols = cols.map(v => (~v) & 0x7F);
+    render();
+  };
+
+  document.getElementById('copy').onclick = (e) => {
+    navigator.clipboard.writeText(outEl.textContent);
+    const btn = e.target;
+    btn.textContent = 'Скопійовано!';
+    setTimeout(() => btn.textContent = 'Копіювати рядок для C', 1200);
+  };
+
+  render();
+</script>
+</body>
+</html>

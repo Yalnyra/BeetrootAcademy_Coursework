@@ -6,5 +6,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Build only main + what it depends on (skips esp_lcd, wifi, bt, ...)
 set(COMPONENTS main)
 
+# Tell ESP-IDF to also look inside ESP32/ for components (finds ESP32/main/)
+set(EXTRA_COMPONENT_DIRS "ESP32")
+
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(4_Interfaces)
