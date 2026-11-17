@@ -20,8 +20,14 @@ static const char *TAG = "SSD1306";
 // Налаштування апаратної шини I2C
 #define I2C_SDA_GPIO   6      // Пін даних SDA (змініть під свою плату)
 #define I2C_SCL_GPIO   7      // Пін тактування SCL
-#define I2C_FREQ_HZ    400000 // Частота шини: 400 кГц (Fast Mode)
+
+#define I2C_OLED_FREQ_HZ        400000 // Частота шини: 100 кГц (Standart Mode) - найвища частота, підтримувана дисплеєм
+#define I2C_RTC_FREQ_HZ    100000 // Частота шини: 100 кГц (Standart Mode) - найвища частота, підтримувана таймером
 #define SSD1306_ADDR   0x3C   // 7-бітна I2C-адреса дисплея (драйвер сам додасть біт R/W)
+
+#define DS1307_ADDR 0x68 // I2C адреса таймера 
+#define ADDR_LENGTH I2C_ADDR_BIT_LEN_7
+#define TIME_BYTES 7 
 
 // Роздільна здатність екрана та організація пам'яті
 #define OLED_W 128            // Ширина дисплея в пікселях
@@ -104,6 +110,10 @@ static i2c_master_dev_handle_t oled;             // Дескриптор (handle
 static uint8_t fb[OLED_W * OLED_PAGES];          // Локальний кадровий буфер у RAM мікроконтролера (1024 байти)
 static uint8_t tx[1 + OLED_W * OLED_PAGES];      // Буфер відправки по I2C: 1 керуючий байт (0x40) + 1024 байти кадру
 
+// RTC handle 
+i2c_master_dev_handle_t rtc;  // Дескриптор (handle) зареєстрованого пристрою на шині
+static uint8_t time[TIME_BYTES];          // Буфер всього регістра в мікроконтролері 
+
 // Rotary encoder handle
 static encoder_t enc;
 // ---------- низький рівень (обмін по I2C) ----------
@@ -131,6 +141,41 @@ static esp_err_t oled_cmds(const uint8_t *c, size_t n)
     int64_t dt = esp_timer_get_time() - t0;
     ESP_LOGI(TAG, "i2c CMDS 0x%02X+%zu | %zu bytes | %lld us", c[0], n - 1, n + 1, dt);
     return ret;
+}
+
+/**
+ * Read `len` bytes starting from register `reg`.
+ * Uses a single write-then-read transaction (repeated START).
+ *
+ * Wire: START → 0xD0(W) → reg → REP.START → 0xD1(R) → [len bytes] → STOP
+ */
+static esp_err_t rtc_read(uint8_t reg, uint8_t *data, size_t len)
+{
+    return i2c_master_transmit_receive(
+        rtc,
+        &reg, 1,            // write phase: register pointer
+        data, len,           // read phase
+        I2C_TIMEOUT_MS
+    );
+}
+
+/**
+ * Write `len` bytes starting from register embedded in data[0].
+ * data[] = { reg_addr, byte0, byte1, ... }
+ *
+ * Wire: START → 0xD0(W) → reg → byte0 → byte1 → ... → STOP
+ */
+static esp_err_t rtc_write(const uint8_t *data, size_t len)
+{
+    return i2c_master_transmit(rtc, data, len, I2C_TIMEOUT_MS);
+}
+
+/**
+ * BCD → decimal helper (DS1307 stores time in BCD format)
+ */
+static inline uint8_t bcd2dec(uint8_t bcd)
+{
+    return (bcd >> 4) * 10 + (bcd & 0x0F);
 }
 
 // Початкова ініціалізація контролера SSD1306
@@ -507,17 +552,30 @@ void app_main(void)
     i2c_master_bus_handle_t bus;
     ESP_ERROR_CHECK(i2c_new_master_bus(&bus_cfg, &bus));
 
-    // 2. Перевірка наявності дисплея на шині
-    ESP_ERROR_CHECK(i2c_master_probe(bus, SSD1306_ADDR, I2C_CMD_TIMEOUT_MS));
-    ESP_LOGI(TAG, "SSD1306 знайдено за адресою 0x%02X", SSD1306_ADDR);
+    // 1. Додати девайс  
 
-    // 3. Реєстрація дисплея як пристрою на шині
-    i2c_device_config_t dev_cfg = {
+    ESP_ERROR_CHECK(i2c_master_probe(bus, DS1307_ADDR, I2C_CMD_TIMEOUT_MS));
+    ESP_LOGI(TAG, "RTC DS1307_ADDR знайдено за адресою 0x%02X", DS1307_ADDR);
+ // 3. Реєстрація  як пристрою на шині
+    i2c_device_config_t rtc_cfg = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
         .device_address = SSD1306_ADDR,
-        .scl_speed_hz = I2C_FREQ_HZ,
+        .scl_speed_hz = I2C_OLED_FREQ_HZ,
     };
-    ESP_ERROR_CHECK(i2c_master_bus_add_device(bus, &dev_cfg, &oled));
+    i2c_master_bus_add_device(bus, &rtc_cfg, &rtc);
+
+
+    // 2. Перевірка наявності дисплея на шині
+    ESP_ERROR_CHECK(i2c_master_probe(bus, SSD1306_ADDR, I2C_CMD_TIMEOUT_MS));
+    ESP_LOGI(TAG, "SSD1306 знайдено за адресою 0x%02X", DS1307_ADDR);
+
+    // 3. Реєстрація дисплея як пристрою на шині
+    i2c_device_config_t oled_cfg = {
+        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
+        .device_address = SSD1306_ADDR,
+        .scl_speed_hz = I2C_OLED_FREQ_HZ,
+    };
+    ESP_ERROR_CHECK(i2c_master_bus_add_device(bus, &oled_cfg, &oled));
 
     // 4. Ініціалізація дисплея
     oled_init();
@@ -591,6 +649,24 @@ void app_main(void)
                 menu_move(-1);
             }
             ESP_LOGI(TAG, "Обрано: [%d] %s", menu_sel, menu_labels[menu_sel]);
+        }
+
+        // RTC clock byte 
+        esp_err_t err = rtc_read(0x00, timebuf, TIME_BYTES);
+
+        if (err == ESP_OK) {
+            uint8_t sec   = bcd2dec(timebuf[0] & 0x7F); // mask CH bit
+            uint8_t min   = bcd2dec(timebuf[1]);
+            uint8_t hr    = bcd2dec(timebuf[2] & 0x3F); // 24-hr mask
+            uint8_t dow   = timebuf[3];                  // 1-7
+            uint8_t date  = bcd2dec(timebuf[4]);
+            uint8_t month = bcd2dec(timebuf[5]);
+            uint8_t year  = bcd2dec(timebuf[6]);
+
+            ESP_LOGI(TAG, "%02u:%02u:%02u  %02u/%02u/20%02u  (day %u)",
+                     hr, min, sec, date, month, year, dow);
+        } else {
+            ESP_LOGE(TAG, "RTC read failed: %s", esp_err_to_name(err));
         }
 
         vTaskDelay(pdMS_TO_TICKS(ENCODER_POLL_MS));  // ~100 Hz polling
