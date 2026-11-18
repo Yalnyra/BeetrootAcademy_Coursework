@@ -135,9 +135,11 @@ void app_main(void)
          * Moves the servo by ticks * SERVO_STEP_FINE_DEG * speed_k degrees.
          * ticks == 0: angle did not change, the servo is not touched. */
         bool servo_updated = false;
+        // Baseline - current servo angle; 
+        int32_t cmd_angle_deg = servo.status.angle_deg;
         if (ticks != 0)
         {
-            int32_t cmd_angle_deg = servo.status.angle_deg + ticks * SERVO_STEP_FINE_DEG * speed_k; // Updates based on current speed
+            cmd_angle_deg += ticks * SERVO_STEP_FINE_DEG * speed_k; // Updates based on current speed
             servo_updated = servo_set_angle(&servo, cmd_angle_deg);
         }
 
@@ -154,7 +156,7 @@ void app_main(void)
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             last_log = now;
             ESP_LOGI(TAG,
-                    "SPEED_K=%" PRId32, "button pressed %d, has button updated? %d, ",
+                    "SPEED_K=%d, is button pin HIGH = %d, button evt type ? %d, ",
                     speed_k, 
                     pressed,
                     button_event
@@ -162,8 +164,8 @@ void app_main(void)
 
             ESP_LOGI(TAG,
                     "ENCODER_ANGLE=%.2f deg, SERVO_ANGLE=%" PRId32 "/%.0f deg, ANGLE_ERROR=%.2f deg (%.2f%%)",
+                    cmd_angle_deg,
                     servo.status.angle_deg,
-                    servo.status.achieved_angle_deg,
                     SERVO_MAX_RANGE_DEG,
                     servo.status.deviation_deg,
                     servo.status.angle_dev_pcnt);

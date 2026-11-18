@@ -57,7 +57,7 @@ bool servo_set_angle(servo_t *s, int32_t cmd_angle_deg)
 {
     if (s == NULL) { ESP_LOGE(TAG, "servo struct init error: servo is null pointer"); return false; }
 
-    if (!servo_update_status(s, cmd_angle_deg)) {  ESP_LOGI(TAG, "status update error, at %" PRId32 " deg", s->status.achieved_angle_deg); return false; }
+    if (!servo_update_status(s, cmd_angle_deg)) {  ESP_LOGI(TAG, "status update error, current angle = " PRId32 ", %d cmd = " PRId32 " deg",  s->status.angle_deg, cmd_angle_deg); return false; }
 
     //ESP_LOGI(*TAG, "servo idle, at %d deg", s->status.achieved_angle_deg
     // Requires duty cycle, not time ms
@@ -76,20 +76,18 @@ bool servo_reset_angle(servo_t *s)
 static bool servo_update_status(servo_t *s, int32_t cmd_angle_deg)
 {
     servo_status_t *status = &s->status;
-    if (cmd_angle_deg == status->achieved_angle_deg) return false;
-    int32_t duty_ticks = servo_angle_to_duty_ticks(s, cmd_angle_deg);
-    // float achieved_angle_deg = duty_to_servo_angle_deg(s, duty_ticks);
     int32_t achieved_angle_deg =  val_clamp(cmd_angle_deg, s->cfg.min_deg, s->cfg.max_deg);
-    int32_t deviation_deg = cmd_angle_deg - achieved_angle_deg;
-    bool buzzer_error_flag = abs(deviation_deg) == 0;  // todo, separate change was made from angle was not made
+    int32_t deviation_deg = cmd_angle_deg - achieved_angle_deg; 
+    bool buzzer_error_flag = (status->deviation_deg != 0); // was inverted (abs(...) == 0)
+    status->deviation_deg = deviation_deg; // != 0: tried to turn past a limit
+    status->buzzer_error_flag = buzzer_error_flag;  
+    if (buzzer_error_flag) return false; // was the angle clamped?  
+    status->angle_deg = achieved_angle_deg;
 
-    status->angle_deg      = cmd_angle_deg;
-    status->duty_ticks     = servo_angle_to_duty_ticks(s, cmd_angle_deg);
+    int32_t duty_ticks = servo_angle_to_duty_ticks(s, achieved_angle_deg);
+    status->duty_ticks     = servo_angle_to_duty_ticks(s, achieved_angle_deg);
     status->pulse_width_ms = duty_to_pulse_width_ms(s, duty_ticks);
-    status->achieved_angle_deg = achieved_angle_deg;
     status->angle_dev_pcnt = calc_deviation_percentf(cmd_angle_deg, achieved_angle_deg);
-    status->deviation_deg = deviation_deg;
-    status->buzzer_error_flag = buzzer_error_flag;
     return true;
 }
 

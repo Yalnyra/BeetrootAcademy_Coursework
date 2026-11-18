@@ -1,12 +1,11 @@
 # Mini-project 3 — servo runaway bug handoff
 
-Nov 6, 2026 · @Gosha
-
+Nov 6, 2026 Eugen Vinokur 
 ## Symptom
 
 The servo runs away because `servo_update_duty()` adds the encoder's whole PCNT count to the angle on every 50 ms cycle, not only the change since the last cycle. The first encoder click starts it, and it never stops while the count is non-zero.
 
-What the log shows (`miniproject_3/src/main.c`, build of 2026-11-06):
+What the log shows (`main/miniproject_3/src/main.c`, build of 2026-11-06):
 
 - Before any rotation: `servo idle, at 0 deg` every 50 ms, `SERVO_DUTY=0`. The status struct says 0°, but `servo_init()` already drove the shaft to 90°.
 - First click (t = 13.1 s): 500 ms later `ENCODER_ANGLE=370 deg`, and `ENCODER_PULSES` still reads 0.
