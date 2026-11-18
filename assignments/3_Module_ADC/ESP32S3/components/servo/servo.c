@@ -57,7 +57,7 @@ bool servo_set_angle(servo_t *s, int32_t cmd_angle_deg)
 {
     if (s == NULL) { ESP_LOGE(TAG, "servo struct init error: servo is null pointer"); return false; }
 
-    if (!servo_update_status(s, cmd_angle_deg)) {  ESP_LOGI(TAG, "status update error, current angle = " PRId32 ", %d cmd = " PRId32 " deg",  s->status.angle_deg, cmd_angle_deg); return false; }
+    if (!servo_update_status(s, cmd_angle_deg)) {  ESP_LOGE(TAG, "status update error, current angle = " PRId32 ", cmd = " PRId32 " deg",  s->status.angle_deg, cmd_angle_deg); return false; }
 
     //ESP_LOGI(*TAG, "servo idle, at %d deg", s->status.achieved_angle_deg
     // Requires duty cycle, not time ms

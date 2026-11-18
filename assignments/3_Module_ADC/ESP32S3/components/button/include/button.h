@@ -41,3 +41,6 @@ void button_init(button_t *btn, const button_config_t *cfg);
  * BTN_EVT_NONE otherwise. What each event does is up to the caller. */
 button_event_t button_poll(button_t *btn, const uint32_t ts, bool pressed);
 
+/* Return a human-readable name for a button_event_t value. */
+const char *button_event_to_str(button_event_t evt);
+

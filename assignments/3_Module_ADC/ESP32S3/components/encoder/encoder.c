@@ -117,18 +117,18 @@ int32_t encoder_update_ticks(encoder_t *enc)
     }
     int32_t delta = count - enc->prev_count;    // raw PCNT counts (edges in X4)
     enc->prev_count = count;
-    if (delta > 0 ) {
-        ESP_LOGW(TAG, "COUNT INCREASED BY %" PRId32, delta);
-    }
-    if (delta < 0 ) {
-        ESP_LOGE(TAG, "COUNT DECREASED BY %" PRId32, delta);
-    }
 
     if (enc->cfg.quadrature_x4) {
         enc->residual += delta;
         int32_t clicks = enc->residual / enc->cfg.counts_per_detent;   // truncates toward 0: symmetric for +/-
         enc->residual -= clicks * enc->cfg.counts_per_detent;
+        if (clicks != 0 ) {
+            ESP_LOGD(TAG, "COUNT CHANGED BY %" PRId32, clicks);
+        }
         return clicks;
+    }
+    if (delta > 0 ) {
+        ESP_LOGD(TAG, "COUNT CHANGED BY %" PRId32, delta);
     }
     return delta;
 }

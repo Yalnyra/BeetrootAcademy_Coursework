@@ -153,13 +153,22 @@ void app_main(void)
         // No: do nothing
 
         
+        /* Log button event every cycle it fires */
+        if (button_event != BTN_EVT_NONE) {
+            ESP_LOGI(TAG,
+                    "BUTTON: pin=%s, evt=%s",
+                    pressed ? "HIGH" : "LOW",
+                    button_event_to_str(button_event)
+                );
+        }
+
         if ((TickType_t)(now - last_log) >= pdMS_TO_TICKS(LOG_PERIOD_MS)) {
             last_log = now;
             ESP_LOGI(TAG,
-                    "SPEED_K=%d, is button pin HIGH = %d, button evt type ? %d, ",
-                    speed_k, 
-                    pressed,
-                    button_event
+                    "SPEED_K=%d, button pin=%s, button evt=%s",
+                    speed_k,
+                    pressed ? "HIGH" : "LOW",
+                    button_event_to_str(button_event)
                 );
 
             ESP_LOGI(TAG,

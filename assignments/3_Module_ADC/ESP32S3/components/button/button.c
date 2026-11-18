@@ -69,3 +69,13 @@ button_event_t button_poll(button_t *btn, uint32_t ts, bool pressed)
     }
     return evt;
 }
+
+const char *button_event_to_str(button_event_t evt)
+{
+    switch (evt) {
+    case BTN_EVT_NONE:  return "BTN_EVT_NONE";
+    case BTN_EVT_SHORT: return "BTN_EVT_SHORT";
+    case BTN_EVT_LONG:  return "BTN_EVT_LONG";
+    default:            return "BTN_EVT_UNKNOWN";
+    }
+}
