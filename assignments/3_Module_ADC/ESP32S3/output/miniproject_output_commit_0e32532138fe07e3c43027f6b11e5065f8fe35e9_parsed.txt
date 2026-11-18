@@ -1,0 +1,702 @@
+# source  : miniproject_output_commit_0e32532138fe07e3c43027f6b11e5065f8fe35e9.txt
+# captured: unknown
+# format  : stripped ANSI -- matches raw serial output
+
+[unknown] I (70266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (70266) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (72266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (72266) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (74266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (74266) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (76266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (76266) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (78266) encoder: COUNT INCREASED BY 1
+[unknown] I (78266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (78266) mini_project_3: ENCODER_ANGLE=10.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (78616) encoder: COUNT INCREASED BY 1
+[unknown] W (78916) encoder: COUNT INCREASED BY 1
+[unknown] W (79216) encoder: COUNT INCREASED BY 1
+[unknown] I (80266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (80266) mini_project_3: ENCODER_ANGLE=40.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (82266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (82266) mini_project_3: ENCODER_ANGLE=40.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (83216) encoder: COUNT DECREASED BY -1
+[unknown] E (83416) encoder: COUNT DECREASED BY -1
+[unknown] E (83566) encoder: COUNT DECREASED BY -1
+[unknown] E (83716) encoder: COUNT DECREASED BY -1
+[unknown] E (83866) encoder: COUNT DECREASED BY -1
+[unknown] E (84066) encoder: COUNT DECREASED BY -1
+[unknown] I (84066) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (84116) encoder: COUNT DECREASED BY -1
+[unknown] I (84116) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] W (84266) encoder: COUNT INCREASED BY 1
+[unknown] I (84266) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] I (84266) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (84266) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (86276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (86276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (87826) encoder: COUNT INCREASED BY 1
+[unknown] W (88126) encoder: COUNT INCREASED BY 1
+[unknown] I (88276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (88276) mini_project_3: ENCODER_ANGLE=20.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (88376) encoder: COUNT DECREASED BY -1
+[unknown] E (88476) encoder: COUNT DECREASED BY -1
+[unknown] E (88626) encoder: COUNT DECREASED BY -1
+[unknown] E (88776) encoder: COUNT DECREASED BY -1
+[unknown] I (88776) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (88976) encoder: COUNT DECREASED BY -1
+[unknown] I (88976) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] W (89076) encoder: COUNT INCREASED BY 1
+[unknown] I (89076) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] E (89626) encoder: COUNT DECREASED BY -1
+[unknown] E (89676) encoder: COUNT DECREASED BY -1
+[unknown] I (89676) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (89776) encoder: COUNT DECREASED BY -1
+[unknown] I (89776) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (89826) encoder: COUNT DECREASED BY -1
+[unknown] I (89826) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (89876) encoder: COUNT DECREASED BY -1
+[unknown] I (89876) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] I (90276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (90276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/-10 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (90326) encoder: COUNT INCREASED BY 1
+[unknown] I (90326) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (90676) encoder: COUNT INCREASED BY 1
+[unknown] W (90976) encoder: COUNT INCREASED BY 1
+[unknown] E (91076) encoder: COUNT DECREASED BY -1
+[unknown] W (91226) encoder: COUNT INCREASED BY 1
+[unknown] W (91576) encoder: COUNT INCREASED BY 1
+[unknown] I (92276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (92276) mini_project_3: ENCODER_ANGLE=30.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (92576) encoder: COUNT INCREASED BY 1
+[unknown] E (92726) encoder: COUNT DECREASED BY -1
+[unknown] E (92826) encoder: COUNT DECREASED BY -1
+[unknown] E (92876) encoder: COUNT DECREASED BY -1
+[unknown] E (92976) encoder: COUNT DECREASED BY -1
+[unknown] W (93126) encoder: COUNT INCREASED BY 1
+[unknown] E (93876) encoder: COUNT DECREASED BY -1
+[unknown] E (94076) encoder: COUNT DECREASED BY -1
+[unknown] I (94276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (94276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/-10 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (94326) encoder: COUNT DECREASED BY -2
+[unknown] I (94326) servo: status update error, current angle = ld, -2 cmd = ld deg
+[unknown] W (94526) encoder: COUNT INCREASED BY 1
+[unknown] I (94526) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] E (94976) encoder: COUNT DECREASED BY -1
+[unknown] E (95076) encoder: COUNT DECREASED BY -1
+[unknown] I (95076) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (95476) encoder: COUNT DECREASED BY -1
+[unknown] I (95476) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] I (96276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (96276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/-10 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (96426) encoder: COUNT DECREASED BY -1
+[unknown] I (96426) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (96626) encoder: COUNT DECREASED BY -1
+[unknown] I (96626) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (96876) encoder: COUNT DECREASED BY -1
+[unknown] I (96876) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (97626) encoder: COUNT DECREASED BY -1
+[unknown] I (97626) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (97776) encoder: COUNT DECREASED BY -1
+[unknown] I (97776) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (97926) encoder: COUNT DECREASED BY -1
+[unknown] I (97926) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] I (98276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (98276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/-10 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (99176) encoder: COUNT INCREASED BY 1
+[unknown] I (99176) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] I (100276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (100276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (102276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (102276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (103176) encoder: COUNT INCREASED BY 1
+[unknown] W (103426) encoder: COUNT INCREASED BY 1
+[unknown] E (103526) encoder: COUNT DECREASED BY -1
+[unknown] E (103626) encoder: COUNT DECREASED BY -1
+[unknown] I (104276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (104276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (104526) encoder: COUNT INCREASED BY 1
+[unknown] E (104626) encoder: COUNT DECREASED BY -1
+[unknown] E (104676) encoder: COUNT DECREASED BY -1
+[unknown] E (104726) encoder: COUNT DECREASED BY -1
+[unknown] I (104726) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] W (104876) encoder: COUNT INCREASED BY 1
+[unknown] I (104876) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] E (105326) encoder: COUNT DECREASED BY -1
+[unknown] E (105376) encoder: COUNT DECREASED BY -1
+[unknown] I (105376) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (105426) encoder: COUNT DECREASED BY -1
+[unknown] I (105426) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (105476) encoder: COUNT DECREASED BY -1
+[unknown] I (105476) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (105576) encoder: COUNT DECREASED BY -1
+[unknown] I (105576) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (105626) encoder: COUNT DECREASED BY -1
+[unknown] I (105626) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] W (105826) encoder: COUNT INCREASED BY 1
+[unknown] I (105826) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] I (106276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (106276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (106426) encoder: COUNT DECREASED BY -1
+[unknown] E (106476) encoder: COUNT DECREASED BY -1
+[unknown] I (106476) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (106576) encoder: COUNT DECREASED BY -1
+[unknown] I (106576) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (107626) encoder: COUNT DECREASED BY -1
+[unknown] I (107626) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (107876) encoder: COUNT DECREASED BY -1
+[unknown] I (107876) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] I (108276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (108276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/-10 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (108576) encoder: COUNT INCREASED BY 1
+[unknown] I (108576) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (108776) encoder: COUNT INCREASED BY 1
+[unknown] W (108876) encoder: COUNT INCREASED BY 1
+[unknown] W (109026) encoder: COUNT INCREASED BY 1
+[unknown] W (109126) encoder: COUNT INCREASED BY 1
+[unknown] W (109276) encoder: COUNT INCREASED BY 1
+[unknown] W (109376) encoder: COUNT INCREASED BY 1
+[unknown] I (110276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (110276) mini_project_3: ENCODER_ANGLE=60.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (112276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (112276) mini_project_3: ENCODER_ANGLE=60.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (114276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (114276) mini_project_3: ENCODER_ANGLE=60.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (114876) encoder: COUNT INCREASED BY 1
+[unknown] W (115126) encoder: COUNT INCREASED BY 1
+[unknown] W (115626) encoder: COUNT INCREASED BY 1
+[unknown] W (115876) encoder: COUNT INCREASED BY 1
+[unknown] I (116276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (116276) mini_project_3: ENCODER_ANGLE=100.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (116426) encoder: COUNT INCREASED BY 1
+[unknown] I (118276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (118276) mini_project_3: ENCODER_ANGLE=110.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (119676) encoder: COUNT DECREASED BY -1
+[unknown] E (119726) encoder: COUNT DECREASED BY -1
+[unknown] E (119826) encoder: COUNT DECREASED BY -1
+[unknown] E (119876) encoder: COUNT DECREASED BY -1
+[unknown] E (119926) encoder: COUNT DECREASED BY -1
+[unknown] E (120026) encoder: COUNT DECREASED BY -1
+[unknown] W (120126) encoder: COUNT INCREASED BY 1
+[unknown] I (120276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (120276) mini_project_3: ENCODER_ANGLE=60.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (120326) encoder: COUNT DECREASED BY -1
+[unknown] E (120376) encoder: COUNT DECREASED BY -1
+[unknown] E (120526) encoder: COUNT DECREASED BY -1
+[unknown] E (120676) encoder: COUNT DECREASED BY -1
+[unknown] E (120726) encoder: COUNT DECREASED BY -1
+[unknown] E (120776) encoder: COUNT DECREASED BY -1
+[unknown] E (120826) encoder: COUNT DECREASED BY -1
+[unknown] E (120876) encoder: COUNT DECREASED BY -1
+[unknown] I (120876) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (121376) encoder: COUNT DECREASED BY -2
+[unknown] I (121376) servo: status update error, current angle = ld, -2 cmd = ld deg
+[unknown] E (121426) encoder: COUNT DECREASED BY -1
+[unknown] I (121426) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (121526) encoder: COUNT DECREASED BY -1
+[unknown] I (121526) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (121576) encoder: COUNT DECREASED BY -1
+[unknown] I (121576) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (121676) encoder: COUNT DECREASED BY -1
+[unknown] I (121676) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (122076) encoder: COUNT DECREASED BY -1
+[unknown] I (122076) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (122126) encoder: COUNT DECREASED BY -1
+[unknown] I (122126) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (122226) encoder: COUNT DECREASED BY -1
+[unknown] I (122226) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] I (122276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (122276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/-10 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (122426) encoder: COUNT INCREASED BY 1
+[unknown] I (122426) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] E (122726) encoder: COUNT DECREASED BY -1
+[unknown] E (122776) encoder: COUNT DECREASED BY -1
+[unknown] I (122776) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (122826) encoder: COUNT DECREASED BY -1
+[unknown] I (122826) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (122876) encoder: COUNT DECREASED BY -1
+[unknown] I (122876) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] E (122926) encoder: COUNT DECREASED BY -1
+[unknown] I (122926) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] W (123826) encoder: COUNT INCREASED BY 1
+[unknown] I (123826) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] I (124276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (124276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (124776) encoder: COUNT INCREASED BY 1
+[unknown] W (125026) encoder: COUNT INCREASED BY 1
+[unknown] E (125226) encoder: COUNT DECREASED BY -1
+[unknown] E (125326) encoder: COUNT DECREASED BY -1
+[unknown] E (125426) encoder: COUNT DECREASED BY -1
+[unknown] W (126176) encoder: COUNT INCREASED BY 1
+[unknown] I (126176) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] I (126276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (126276) mini_project_3: ENCODER_ANGLE=0.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (126576) encoder: COUNT INCREASED BY 1
+[unknown] W (126976) encoder: COUNT INCREASED BY 1
+[unknown] W (127326) encoder: COUNT INCREASED BY 1
+[unknown] W (127776) encoder: COUNT INCREASED BY 1
+[unknown] W (128276) encoder: COUNT INCREASED BY 1
+[unknown] I (128276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (128276) mini_project_3: ENCODER_ANGLE=50.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (129176) encoder: COUNT INCREASED BY 1
+[unknown] W (129326) encoder: COUNT INCREASED BY 1
+[unknown] W (129476) encoder: COUNT INCREASED BY 1
+[unknown] W (129776) encoder: COUNT INCREASED BY 1
+[unknown] W (130026) encoder: COUNT INCREASED BY 1
+[unknown] I (130276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (130276) mini_project_3: ENCODER_ANGLE=100.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (130826) encoder: COUNT INCREASED BY 1
+[unknown] W (130926) encoder: COUNT INCREASED BY 1
+[unknown] W (131076) encoder: COUNT INCREASED BY 1
+[unknown] W (131226) encoder: COUNT INCREASED BY 1
+[unknown] W (131426) encoder: COUNT INCREASED BY 1
+[unknown] W (132076) encoder: COUNT INCREASED BY 1
+[unknown] W (132176) encoder: COUNT INCREASED BY 1
+[unknown] W (132276) encoder: COUNT INCREASED BY 1
+[unknown] I (132276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (132276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] W (132376) encoder: COUNT INCREASED BY 1
+[unknown] W (132676) encoder: COUNT INCREASED BY 1
+[unknown] I (132676) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (132876) encoder: COUNT INCREASED BY 1
+[unknown] I (132876) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (133176) encoder: COUNT INCREASED BY 1
+[unknown] I (133176) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (133526) encoder: COUNT INCREASED BY 1
+[unknown] I (133526) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] I (134276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (134276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/10 deg, ANGLE_ERROR=5.56 deg (0.24%)
+[unknown] W (135276) encoder: COUNT INCREASED BY 1
+[unknown] I (135276) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (135526) encoder: COUNT INCREASED BY 1
+[unknown] I (135526) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] W (135826) encoder: COUNT INCREASED BY 1
+[unknown] I (135826) servo: status update error, current angle = ld, 1 cmd = ld deg
+[unknown] E (136076) encoder: COUNT DECREASED BY -1
+[unknown] I (136076) servo: status update error, current angle = ld, -1 cmd = ld deg
+[unknown] I (136276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (136276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=5.56 deg (0.24%)
+[unknown] I (138276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (138276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=5.56 deg (0.24%)
+[unknown] I (140276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (140276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=5.56 deg (0.24%)
+[unknown] I (142276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (142276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=5.56 deg (0.24%)
+[unknown] I (144276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (144276) mini_project_3: ENCODER_ANGLE=180.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=5.56 deg (0.24%)
+[unknown] E (146226) encoder: COUNT DECREASED BY -2
+[unknown] I (146276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (146276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] E (146426) encoder: COUNT DECREASED BY -1
+[unknown] W (147426) encoder: COUNT INCREASED BY 1
+[unknown] I (148276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (148276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (150276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (150276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (152276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (152276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (154276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (154276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (156276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (156276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (158276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (158276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (160276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (160276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (162276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (162276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (164276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (164276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (166276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (166276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (168276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (168276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (170276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (170276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (172276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (172276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (174276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (174276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (176276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (176276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (178276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (178276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (180276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (180276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (182276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (182276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (184276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (184276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (186276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (186276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (188276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (188276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (190276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (190276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (192276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (192276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (194276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (194276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (196276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (196276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (198276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (198276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (200276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (200276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (202276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (202276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (204276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (204276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (206276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (206276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (208276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (208276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (210276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (210276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (212276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (212276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (214276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (214276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (216276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (216276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (218276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (218276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (220276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (220276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (222276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (222276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (224276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (224276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (226276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (226276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (228276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (228276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (230276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (230276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (232276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (232276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (234276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (234276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (236276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (236276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (238276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (238276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (240276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (240276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (242276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (242276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (244276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (244276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (246276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (246276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (248276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (248276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (250276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (250276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (252276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (252276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (254276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (254276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (256276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (256276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (258276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (258276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (260276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (260276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (262276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (262276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (264276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (264276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (266276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (266276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (268276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (268276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (270276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (270276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (272276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (272276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (274276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (274276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (276276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (276276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (278276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (278276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (280276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (280276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (282276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (282276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (284276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (284276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (286276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (286276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (288276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (288276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (290276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (290276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (292276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (292276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (294276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (294276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (296276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (296276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (298276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (298276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (300276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (300276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (302276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (302276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (304276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (304276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (306276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (306276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (308276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (308276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (310276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (310276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (312276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (312276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (314276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (314276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (316276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (316276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (318276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (318276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (320276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (320276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (322276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (322276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (324276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (324276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (326276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (326276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (328276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (328276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (330276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (330276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (332276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (332276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (334276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (334276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (336276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (336276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (338276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (338276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (340276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (340276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (342276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (342276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (344276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (344276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (346276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (346276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (348276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (348276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (350276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (350276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (352276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (352276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (354276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (354276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (356276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (356276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (358276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (358276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (360276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (360276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (362276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (362276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (364276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (364276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (366276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (366276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (368276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (368276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (370276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (370276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (372276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (372276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (374276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (374276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (376276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (376276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (378276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (378276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (380276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (380276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (382276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (382276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (384276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (384276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (386276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (386276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (388276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (388276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (390276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (390276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (392276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (392276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (394276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (394276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (396276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (396276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (398276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (398276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (400276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (400276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (402276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (402276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (404276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (404276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (406276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (406276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (408276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (408276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (410276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (410276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (412276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (412276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (414276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (414276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (416276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (416276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (418276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (418276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (420276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (420276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLEI (422276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (422276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (424276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (424276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (426276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (426276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (428276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (428276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (430276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (430276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (432276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (432276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (434276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (434276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (436276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (436276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (438276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (438276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (440276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (440276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (442276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (442276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (444276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (444276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (446276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (446276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (448276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (448276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (450276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (450276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (452276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (452276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (454276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (454276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (456276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (456276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (458276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (458276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (460276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (460276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (462276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (462276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (464276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (464276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (466276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (466276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (468276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (468276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (470276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (470276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (472276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (472276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (474276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (474276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (476276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (476276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (478276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (478276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (480276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (480276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (482276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (482276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (484276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (484276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (486276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (486276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (488276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (488276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (490276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (490276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (492276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (492276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (494276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (494276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (496276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (496276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (498276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (498276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (500276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (500276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (502276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (502276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (504276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (504276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (506276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (506276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (508276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (508276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (510276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (510276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (512276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (512276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (514276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (514276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (516276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (516276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (518276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (518276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (520276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (520276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (522276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (522276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (524276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (524276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (526276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (526276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (528276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (528276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (530276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (530276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (532276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (532276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (534276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (534276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (536276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (536276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (538276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (538276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (540276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (540276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (542276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (542276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (544276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (544276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (546276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (546276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (548276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (548276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (550276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (550276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (552276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (552276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (554276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (554276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (556276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (556276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
+[unknown] I (558276) mini_project_3: SPEED_K=2, is button pin HIGH = 0, button evt type ? 0, 
+[unknown] I (558276) mini_project_3: ENCODER_ANGLE=160.00 deg, SERVO_ANGLE=0/0 deg, ANGLE_ERROR=0.00 deg (0.24%)
